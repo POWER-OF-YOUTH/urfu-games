@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: __dirname + "/.env" });
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect(
     // @ts-ignore
     process.env.MONGO_URI, 
