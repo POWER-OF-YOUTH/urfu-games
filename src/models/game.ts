@@ -1,6 +1,18 @@
 import mongoose, { Schema } from 'mongoose';
 
-const gameSchema = new Schema(
+interface IGame {
+    id: string;
+    competencies: Array<string>;
+    image: string;
+    name: string;
+    description: string;
+    rating: number;
+    author: string;
+    participants: Array<string>;
+    creation_date: Date;
+}
+
+const gameSchema = new Schema<IGame>(
     {
         id: {
             type: String,
@@ -43,6 +55,6 @@ const gameSchema = new Schema(
     { versionKey: false }
 )
 
-const Game = mongoose.model("Game", gameSchema);
+const Game = mongoose.model<IGame>("Game", gameSchema);
 
 export default Game;
