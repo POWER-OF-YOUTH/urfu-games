@@ -26,7 +26,7 @@ const gameSchema = new Schema<IGame>(
         },
         image: {
             type: String,
-            default: "none"
+            default: ""
         },
         name: {
             type: String,
@@ -58,3 +58,7 @@ const gameSchema = new Schema<IGame>(
 const Game = mongoose.model<IGame>("Game", gameSchema);
 
 export default Game;
+export {
+    IGame,
+    Game
+};

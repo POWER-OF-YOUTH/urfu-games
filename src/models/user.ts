@@ -7,6 +7,7 @@ interface IUser {
     patronymic: string;
     login: string;
     email: string;
+    password: string;
     privilege: string;
     avatar: string;
     registration_date: Date;
@@ -45,14 +46,18 @@ const userSchema = new Schema<IUser>(
             unique: true,
             index: true,
             lowercase: true
-        },       
+        },    
+        password: {
+            type: String,
+            required: true
+        },
         privilege: {
             type: String,
             default: "user"
         },
         avatar: {
             type: String,
-            default: "none"
+            default: ""
         },
         registration_date: {
             type: Date,
@@ -65,3 +70,7 @@ const userSchema = new Schema<IUser>(
 const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;
+export {
+    IUser,
+    User
+};

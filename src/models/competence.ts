@@ -32,3 +32,7 @@ const competenceSchema = new Schema<ICompetence>(
 const Competence = mongoose.model<ICompetence>("Competence", competenceSchema);
 
 export default Competence;
+export {
+    ICompetence,
+    Competence
+};
