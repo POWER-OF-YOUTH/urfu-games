@@ -1,6 +1,12 @@
 import mongoose, { mongo, Schema } from 'mongoose';
 
-const competenceSchema = new Schema(
+interface ICompetence {
+    id: string;
+    name: string;
+    description: string;
+}
+
+const competenceSchema = new Schema<ICompetence>(
     {
         id: {
             type: String,
@@ -23,6 +29,6 @@ const competenceSchema = new Schema(
     { versionKey: false }
 );
 
-const Competence = mongoose.model("Competence", competenceSchema);
+const Competence = mongoose.model<ICompetence>("Competence", competenceSchema);
 
 export default Competence;

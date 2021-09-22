@@ -1,6 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
 
-const commentSchema = new Schema(
+interface IComment {
+    id: string;
+    game_id: string;
+    author: string;
+    text: string;
+    creation_date: Date;
+}
+
+const commentSchema = new Schema<IComment>(
     {
         id: {
             type: String,
@@ -30,6 +38,6 @@ const commentSchema = new Schema(
     { versionKey: false }
 );
 
-const Comment = mongoose.model("Comment", commentSchema);
+const Comment = mongoose.model<IComment>("Comment", commentSchema);
 
 export default Comment;

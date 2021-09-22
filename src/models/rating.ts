@@ -1,6 +1,14 @@
 import mongoose, { mongo, Schema } from 'mongoose';
 
-const ratingSchema = new Schema(
+interface IRating {
+    id: string;
+    game_id: string;
+    author: string;
+    value: number;
+    creation_date: Date;
+}
+
+const ratingSchema = new Schema<IRating>(
     {
         id: {
             type: String,
@@ -30,6 +38,6 @@ const ratingSchema = new Schema(
     { versionKey: false }
 );
 
-const Rating = mongoose.model("Rating", ratingSchema);
+const Rating = mongoose.model<IRating>("Rating", ratingSchema);
 
 export default Rating;
