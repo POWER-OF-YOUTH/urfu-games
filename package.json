@@ -6,9 +6,9 @@
     "scripts": {
         "prestart": "npm run build",
         "start": "node ./dist/index.js",
-        "mon": "nodemon --ext ts,js,json ./src/index.ts",
-        "copy-files": "",
-        "build": "tsc"
+        "mon": "nodemon --ext ts,js,json,env ./src/index.ts",
+        "copy-files": "copyfiles -f src/.env dist",
+        "build": "tsc && npm run copy-files"
     },
     "keywords": [],
     "author": "PowerOfYouth",

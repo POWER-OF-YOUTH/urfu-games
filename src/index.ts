@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import app from './app';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: __dirname + "/.env" });
 
 mongoose.connect(
     // @ts-ignore
