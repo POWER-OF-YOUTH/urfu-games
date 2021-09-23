@@ -8,5 +8,7 @@ MONGO_URI={uri_адрес_mongodb}
 MONGO_USR={имя_пользователя}
 MONGO_PWD={пароль_пользователя}
 MONGO_DBN={имя_базы_данных}
+JWT_SECRET={jwt_секрет}
+USER_PWD_SALT={соль_для_хеширования_паролей_пользователей}
 ```
 
