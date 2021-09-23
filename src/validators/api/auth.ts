@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+import { body } from "express-validator";
 
-import requestValidator from '../request_validator';
+import requestValidator from "../request_validator";
 
 const signUp = [
     body("login")
@@ -15,7 +15,9 @@ const signUp = [
     body("password")
         .isString()
         .withMessage("Пароль должен быть строкой.")
+        // eslint-disable-next-line no-useless-escape
         .matches("/[0-9a-zA-Z_\-@#%., ]+/g")
+        // eslint-disable-next-line no-useless-escape
         .withMessage("Пароль не соответствует указанному шаблону: /[0-9a-zA-Z_\-@#%., ]+/g")
         .isLength({ min: 6 })
         .withMessage("Минимальная длинна пароля — 6 символов."),

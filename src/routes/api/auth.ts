@@ -1,7 +1,7 @@
-import express from 'express';
+import express from "express";
 
-import authValidator from '../../validators/api/auth';
-import authController from '../../controllers/api/auth';
+import authValidator from "../../validators/api/auth";
+import authController from "../../controllers/api/auth";
 
 const authRouter = express.Router();
 

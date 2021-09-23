@@ -1,9 +1,9 @@
-import { v4 as uuid } from 'uuid';
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import { v4 as uuid } from "uuid";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
-import { IUser, User } from '../../models/user';
+import { IUser, User } from "../../models/user";
 
 type SignUpData = {
     login: string,
@@ -17,10 +17,11 @@ type SignInData = {
 };
 
 function encryptPassword(password: string, salt: string): string {
-    return crypto.createHmac('sha1', salt).update(password).digest('hex')
+    return crypto.createHmac("sha1", salt).update(password).digest("hex");
 }
 
-function generateToken(data: any): string {
+// eslint-disable-next-line @typescript-eslint/ban-types
+function generateToken(data: string | object | Buffer): string {
     return jwt.sign(
         data, 
         <string> process.env.JWT_SECRET, 
@@ -28,7 +29,7 @@ function generateToken(data: any): string {
     );
 }
 
-async function signUp(req: Request, res: Response) {
+async function signUp(req: Request, res: Response): Promise<void> {
     try {
         const data: SignUpData = req.body;
 
@@ -59,7 +60,7 @@ async function signUp(req: Request, res: Response) {
     }
 }
 
-async function signIn(req: Request, res: Response) {
+async function signIn(req: Request, res: Response): Promise<void> {
     try {
         const data: SignInData = req.body;
 
@@ -97,7 +98,7 @@ async function signIn(req: Request, res: Response) {
     }
 }
 
-function signOut(req: Request, res: Response) {
+function signOut(req: Request, res: Response): void {
     res.clearCookie("token");
     res.json({});
 }

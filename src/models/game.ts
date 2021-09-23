@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
 interface IGame {
     id: string;
@@ -53,7 +53,7 @@ const gameSchema = new Schema<IGame>(
         }
     },
     { versionKey: false }
-)
+);
 
 const Game = mongoose.model<IGame>("Game", gameSchema);
 

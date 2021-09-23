@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+import { Request, Response, NextFunction } from "express";
+import { validationResult } from "express-validator";
 
-function requestValidator(req: Request, res: Response, next: any) {
+function requestValidator(req: Request, res: Response, next: NextFunction): void {
     const errors = validationResult(req);
 
     if(!errors.isEmpty())

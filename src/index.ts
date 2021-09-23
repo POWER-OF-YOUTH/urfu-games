@@ -1,13 +1,12 @@
-import mongoose from 'mongoose';
-import app from './app';
-import * as dotenv from 'dotenv';
+import mongoose from "mongoose";
+import app from "./app";
+import * as dotenv from "dotenv";
 
 dotenv.config({ path: __dirname + "/.env" });
 
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true);
 mongoose.connect(
-    // @ts-ignore
-    process.env.MONGO_URI, 
+    <string> process.env.MONGO_URI, 
     {
         useUnifiedTopology: true, 
         useNewUrlParser: true,
@@ -16,8 +15,8 @@ mongoose.connect(
         dbName: process.env.MONGO_DBN
     }
 )
-.then(() => console.log("Successful connection to MongoDB!"))
-.catch(err => { throw err; });
+    .then(() => console.log("Successful connection to MongoDB!"))
+    .catch(err => { throw err; });
 
 const port = Number(process.env.PORT || 8000);
 const hostname = "localhost";
