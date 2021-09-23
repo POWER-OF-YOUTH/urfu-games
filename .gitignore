@@ -2,3 +2,5 @@
 /dist/
 package-lock.json
 .env
+.eslintrc.json
+
