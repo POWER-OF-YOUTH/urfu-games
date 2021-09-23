@@ -15,10 +15,8 @@ const signUp = [
     body("password")
         .isString()
         .withMessage("Пароль должен быть строкой.")
-        // eslint-disable-next-line no-useless-escape
-        .matches("/[0-9a-zA-Z_\-@#%., ]+/g")
-        // eslint-disable-next-line no-useless-escape
-        .withMessage("Пароль не соответствует указанному шаблону: /[0-9a-zA-Z_\-@#%., ]+/g")
+        .matches("[0-9a-zA-Z_\\-@#%., ]+")
+        .withMessage("Пароль не соответствует указанному шаблону: /[0-9a-zA-Z_\\-@#%., ]+/g")
         .isLength({ min: 6 })
         .withMessage("Минимальная длинна пароля — 6 символов."),
     requestValidator
