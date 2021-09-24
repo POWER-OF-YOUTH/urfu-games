@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
-import { ValidationError } from "../utils/api_errors";
+import { ValidationError } from "../utils/errors";
 
 function createCustomValidationResult(req: Request) {
     return validationResult.withDefaults({

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 import { IUser, User } from "../../models/user";
-import { AuthenticationError, DatabaseError } from "../../utils/api_errors";
+import { AuthenticationError, DatabaseError } from "../../utils/errors";
 
 type SignUpData = {
     login: string,
