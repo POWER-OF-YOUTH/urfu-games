@@ -1,11 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
-function requestValidator(req: Request, res: Response, next: NextFunction): void {
-    const errors = validationResult(req);
+import { ValidationError } from "../utils/errors";
 
-    if(!errors.isEmpty())
-        res.status(422).json(errors);
+function createCustomValidationResult(req: Request) {
+    return validationResult.withDefaults({
+        formatter: err => {
+            return new ValidationError(req.originalUrl, err.param, <string> err.location, err.msg);
+        }
+    })(req);
+}
+
+function requestValidator(req: Request, res: Response, next: NextFunction): void {
+    const errors = createCustomValidationResult(req).array();
+
+    if(errors.length > 0)
+        res.status(422).json({ errors });
     else
         next();
 }
