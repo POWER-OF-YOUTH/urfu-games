@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 import { IUser, User } from "../../models/user";
-import { AuthenticationError, DatabaseError } from "../../utils/errors";
+import { LogicError, DatabaseError } from "../../utils/errors";
 
 type SignUpData = {
     login: string,
@@ -36,7 +36,7 @@ async function signUp(req: Request, res: Response): Promise<void> {
 
         if (await User.exists({ email: data.email })) {
             res.status(409).json({ errors: [
-                new AuthenticationError(
+                new LogicError(
                     req.originalUrl, 
                     "Пользователь с указанным email уже существует."
                 )
@@ -44,7 +44,7 @@ async function signUp(req: Request, res: Response): Promise<void> {
         } 
         else if (await User.exists({ login: data.login })) {
             res.status(409).json({ errors: [
-                new AuthenticationError(
+                new LogicError(
                     req.originalUrl, 
                     "Пользователь с указанным login уже существует."
                 )
@@ -79,7 +79,7 @@ async function signIn(req: Request, res: Response): Promise<void> {
 
         if (!await User.exists({ login: data.login })) {
             res.status(401).json({ errors: [
-                new AuthenticationError(
+                new LogicError(
                     req.originalUrl, 
                     "Пользователь с указанным login не существует."
                 )
@@ -93,7 +93,7 @@ async function signIn(req: Request, res: Response): Promise<void> {
             if (data.password != user.password) 
             {
                 res.status(401).json({ errors: [
-                    new AuthenticationError(
+                    new LogicError(
                         req.originalUrl, 
                         "Указан неправильный пароль."
                     )
