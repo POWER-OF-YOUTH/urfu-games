@@ -1,5 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
+enum Role {
+    User,
+    Admin
+}
+
 interface IUser {
     id: string;
     name: string;
@@ -8,7 +13,7 @@ interface IUser {
     login: string;
     email: string;
     password: string;
-    privilege: string;
+    role: Role;
     avatar: string;
     registration_date: Date;
 }
@@ -51,9 +56,9 @@ const userSchema = new Schema<IUser>(
             type: String,
             required: true
         },
-        privilege: {
-            type: String,
-            default: "user"
+        role: {
+            type: Number,
+            default: Role.User
         },
         avatar: {
             type: String,
@@ -72,5 +77,6 @@ const User = mongoose.model<IUser>("User", userSchema);
 export default User;
 export {
     IUser,
-    User
+    User,
+    Role
 };
