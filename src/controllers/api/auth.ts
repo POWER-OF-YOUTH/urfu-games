@@ -90,7 +90,7 @@ async function signIn(req: Request, res: Response): Promise<void> {
 
             const user: IUser = <IUser> await User.findOne({ login: data.login });
 
-            if (data.password != user.password) 
+            if (data.password !== user.password) 
             {
                 res.status(401).json({ errors: [
                     new LogicError(
@@ -101,7 +101,7 @@ async function signIn(req: Request, res: Response): Promise<void> {
                 return;
             }
 
-            const token: string = generateToken({ id: user.id, privilege: user.privilege });
+            const token: string = generateToken({ id: user.id, role: user.role });
 
             res.json({
                 id: user.id,
