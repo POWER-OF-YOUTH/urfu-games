@@ -12,7 +12,9 @@ function checkRole(role: Role): (req: Request, res: Response, next: NextFunction
     return (req: Request, res: Response, next: NextFunction) => {
         const user: IUser = <IUser> req.user;
 
-        if (user.role !== role) {
+        if (user.role & role)
+            next();
+        else {
             res.status(403).json({ errors: [
                 new AccessError(
                     req.originalUrl,
@@ -20,19 +22,19 @@ function checkRole(role: Role): (req: Request, res: Response, next: NextFunction
                 )
             ]});
         }
-        else
-            next();
     };
 }
 
-function checkAuth(options: AuthOptions = { role: Role.User }) {
+function checkAuth(options: AuthOptions = { role: Role.User | Role.Admin }) {
     return [
         expressJWT({ 
             secret: <string> process.env.JWT_SECRET, 
             algorithms: ["HS256"] 
         }),
         (err: any, req: Request, res: Response, next: NextFunction) => {
-            if (err) {
+            if (!err)
+                next();
+            else {
                 res.status(401).json({ errors: [
                     new AccessError(
                         req.originalUrl,
@@ -40,8 +42,6 @@ function checkAuth(options: AuthOptions = { role: Role.User }) {
                     )
                 ]});
             }
-            else 
-                next();
         },
         checkRole(options.role)
     ];
