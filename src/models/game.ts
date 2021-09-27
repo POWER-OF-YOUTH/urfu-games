@@ -9,6 +9,7 @@ interface IGame {
     rating: number;
     author: string;
     participants: Array<string>;
+    url: string;
     creation_date: Date;
 }
 
@@ -37,7 +38,8 @@ const gameSchema = new Schema<IGame>(
             default: ""
         },
         rating: { // Число [0;5]
-            type: Number
+            type: Number,
+            default: 0
         },
         author: {
             type: String,
@@ -46,6 +48,10 @@ const gameSchema = new Schema<IGame>(
         participants: {
             type: [String],
             default: []
+        },
+        url: {
+            type: [String],
+            required: true
         },
         creation_date: {
             type: Date,
