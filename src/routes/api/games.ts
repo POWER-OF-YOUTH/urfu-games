@@ -33,11 +33,11 @@ gamesRouter.post("/",
     body("participants")
         .isArray()
         .optional()
-        .custom(async (ids: Array<string>, data) => {
+        .custom(async (ids: Array<string>, { req }) => {
             for (const id of ids) {
                 if (!await User.exists({ id }))
                     throw new Error("Пользователь с указанным id не существует.");
-                else if (id === data.req.body.author)
+                else if (id === req.body.author)
                     throw new Error("Пользователь не может быть автором и участником одновременно.");
             }
         }),
