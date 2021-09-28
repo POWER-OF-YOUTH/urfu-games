@@ -8,11 +8,10 @@
     text-align: center;
     padding-top: 200px;
     right: 500px;
-    background-color: rgb(233, 233, 233);
-    flex-direction: column;
-
-
-    
-    
+    background-color: rgb(233, 233, 233);    
 }
-
+.Container {
+	width: 1000px;
+	height: 1000px;
+    background-color: rgb(233, 233, 233);
+}
