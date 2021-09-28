@@ -1,0 +1,18 @@
+.Regmenu {
+    
+    margin-left: 700px;
+    margin-right: 400px;
+    height: 220px;
+    width: 300px;
+    align-content: center;
+    text-align: center;
+    padding-top: 200px;
+    right: 500px;
+    background-color: rgb(233, 233, 233);
+    flex-direction: column;
+
+
+    
+    
+}
+

@@ -4,17 +4,15 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 
 function App() {
-  return (
-    <Router>
-        <Switch>
-          <Route path="/" component={MainPage}/>
-          <Route path="/login" component={LoginPage}/>           
-
-        </Switch>
-    </Router>
+  return (  
+      <Router>
+          <Switch>
+              <Route exact path="/" component={MainPage} />
+              <Route exact path="/login" component={LoginPage} />
+          </Switch>            
+      </Router>         
   );
 }
-
 
 
 export default App;

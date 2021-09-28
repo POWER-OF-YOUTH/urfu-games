@@ -1,29 +1,74 @@
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
+import {  BrowserRouter as Router,  Switch,  Route,  Link} from "react-router-dom";
 import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import ListItemButton from '@material-ui/core/ListItemButton';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import LoginPage from "./LoginPage";
+import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { Grid } from '@material-ui/core';
+import style from '../Styles/MainStyle.css';
+import TextField from '@material-ui/core/TextField';
+import { MailRounded } from '@material-ui/icons';
 
 
-export default function ButtonAppBar() {
+export default function SelectedListItem() {
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <Box 
+    component="form"
+    sx={{
+      '& .MuiTextField-root': { m: 1, width: '25ch' },
+    }}
+    noValidate
+    autoComplete="off"> 
+    
 
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
+        <AppBar>
+          <Toolbar>                      
+            <Typography variant="h5">
+              Urfu Games 
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        
+        <div className="Regmenu">
+        <ListItemText primary="Вход в аккаунт" />   
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
+        
+        <List>    
+                 
+
+      
+
+        {/* <TextField
+          error
+          id="outlined-error-helper-text"
+          label="Error"
+          defaultValue="Hello World"
+          helperText="Incorrect entry."
+        /> */}
+        
+          <TextField id="outlined-basic" label="Логин/email" variant="outlined" />
+          <TextField id="outlined-basic" label="Пароль" variant="outlined" />
+            <Link to='/'>
+            <ListItemText primary="Вход" />            
+            </Link>
+            
+
+        </List>
+
+
+      </div>
+
+          
+     
     </Box>
   );
 }
