@@ -2,8 +2,6 @@ import * as React from 'react';
 import {  BrowserRouter as Router,  Switch,  Route,  Link} from "react-router-dom";
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
-import ListItemButton from '@material-ui/core/ListItemButton';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import LoginPage from "./LoginPage";

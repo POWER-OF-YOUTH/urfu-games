@@ -59,10 +59,10 @@ export default function SelectedListItem() {
     },
   }));
   const unityContext = new UnityContext({
-    loaderUrl: "../Game/html5/Build/Unityapp.loader.js",
-    dataUrl: "../Game/html5/Build/html5.data",
-    frameworkUrl: "../Game/html5/Build/html5.framework.js",
-    codeUrl: "../Game/html5/Build/html5.wasm",
+    loaderUrl: "./TestGame/Build/TestGame.loader.js",
+    dataUrl: "./TestGame/Build/TestGame.data",
+    frameworkUrl: "./TestGame/Build/TestGame.framework.js",
+    codeUrl: "./TestGame/Build/TestGame.wasm",
   });
   
 
@@ -97,17 +97,18 @@ export default function SelectedListItem() {
           </Search>
           </Toolbar>
         </AppBar> 
-        <div className="Regmenu">
-          <h1>game</h1>
+        <div >
+
+          <Unity unityContext={unityContext}
+          className='Container'
+          > </Unity>
           
         </div>  
 
 
-      {/* <div className="App">
-      <h1>game</h1>
-      <Unity unityContext={unityContext} >/</Unity>
-      </div> */}
+     
      
     </Box>
+    
   );
 }
