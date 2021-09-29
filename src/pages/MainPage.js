@@ -16,6 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Unity, { UnityContext } from "react-unity-webgl";
+import { Link } from "react-router-dom";
 
 
 export default function SelectedListItem() {
@@ -64,6 +65,10 @@ export default function SelectedListItem() {
     frameworkUrl: "./TestGame/Build/TestGame.framework.js",
     codeUrl: "./TestGame/Build/TestGame.wasm",
   });
+
+  function refreshPage(){ 
+    window.location.reload(); 
+}
   
 
   return (
@@ -97,13 +102,19 @@ export default function SelectedListItem() {
           </Search>
           </Toolbar>
         </AppBar> 
+        
         <div >
+          
+          
 
           <Unity unityContext={unityContext}
           className='Container'
-          > </Unity>
+          > </Unity>         
+          <button className='Button' type="button" onClick={ refreshPage }> <span>Restart</span> </button> 
+
           
         </div>  
+        
 
 
      
