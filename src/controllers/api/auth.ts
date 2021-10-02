@@ -1,10 +1,14 @@
 import { v4 as uuid } from "uuid";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 import { IUser, User } from "../../models/user";
-import { LogicError, DatabaseError } from "../../utils/errors";
+import { LogicError, DatabaseError, AccessError } from "../../utils/errors";
+import { Document } from "mongoose";
+import { matchedData } from "express-validator";
+
+type UserDocument = IUser & Document<any, any, IUser>;
 
 type SignUpData = {
     login: string,
@@ -25,47 +29,32 @@ function encryptPassword(password: string, salt: string): string {
 function generateToken(data: string | object | Buffer): string {
     return jwt.sign(
         data, 
-        <string> process.env.JWT_SECRET, 
+        process.env.JWT_SECRET, 
         { expiresIn: "1d" }
     );
 }
 
 async function signUp(req: Request, res: Response): Promise<void> {
     try {
-        const data: SignUpData = req.body;
+        const data = <SignInData> matchedData(req, { locations: ["body"] });
 
-        if (await User.exists({ email: data.email })) {
-            res.status(409).json({ errors: [
-                new LogicError(
-                    req.originalUrl, 
-                    "Пользователь с указанным email уже существует."
-                )
-            ]});
-        } 
-        else if (await User.exists({ login: data.login })) {
-            res.status(409).json({ errors: [
-                new LogicError(
-                    req.originalUrl, 
-                    "Пользователь с указанным login уже существует."
-                )
-            ]});
-        }  
-        else {
-            data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
+        data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
 
-            const user: IUser = await User.create({ id: uuid(), ...data }); 
-            
-            res.json({
+        const user: UserDocument = await User.create({ id: uuid(), ...data }); 
+        
+        res.json({
+            user: {
                 id: user.id,
                 login: user.login,
                 email: user.email,
+                role: user.role,
                 name: user.name,
                 surname: user.surname,
                 patronymic: user.patronymic,
                 avatar: user.avatar,
                 registration_date: user.registration_date
-            });
-        }
+            }
+        });
     }
     catch (err) {
         console.log(err);
@@ -75,46 +64,39 @@ async function signUp(req: Request, res: Response): Promise<void> {
 
 async function signIn(req: Request, res: Response): Promise<void> {
     try {
-        const data: SignInData = req.body;
+        const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
-        if (!await User.exists({ login: data.login })) {
+        data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
+
+        const user: UserDocument = await User.findOne({ login: data.login });
+
+        if (data.password !== user.password) 
+        {
             res.status(401).json({ errors: [
-                new LogicError(
+                new AccessError(
                     req.originalUrl, 
-                    "Пользователь с указанным login не существует."
+                    "Указан неправильный пароль."
                 )
             ]});
-        } 
-        else {
-            data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
+            return;
+        }
 
-            const user: IUser = <IUser> await User.findOne({ login: data.login });
+        const token: string = generateToken({ id: user.id, role: user.role });
 
-            if (data.password !== user.password) 
-            {
-                res.status(401).json({ errors: [
-                    new LogicError(
-                        req.originalUrl, 
-                        "Указан неправильный пароль."
-                    )
-                ]});
-                return;
-            }
-
-            const token: string = generateToken({ id: user.id, role: user.role });
-
-            res.json({
+        res.json({
+            user: {
                 id: user.id,
                 login: user.login,
                 email: user.email,
+                role: user.role,
                 name: user.name,
                 surname: user.surname,
                 patronymic: user.patronymic,
                 avatar: user.avatar,
                 registration_date: user.registration_date,
-                token
-            });
-        }
+            },
+            token
+        });
     }
     catch (err) {
         console.log(err);
@@ -127,10 +109,47 @@ function signOut(req: Request, res: Response): void {
     res.json({});
 }
 
+async function check(req: Request, res: Response) {
+    try {
+        const userData: any = req.user; // Чтобы TypeScript не выдавал ошибку
+
+        if (!await User.exists({ id: userData.id })) {
+            res.status(401).json({ errors: [
+                new LogicError(
+                    req.originalUrl, 
+                    "Пользователь с указанным id не существует."
+                )
+            ]});
+        }
+        else {
+            const user: UserDocument = await User.findOne({ id: userData.id });
+
+            res.json({ 
+                user: {
+                    id: user.id,
+                    login: user.login,
+                    email: user.email,
+                    role: user.role,
+                    name: user.name,
+                    surname: user.surname,
+                    patronymic: user.patronymic,
+                    avatar: user.avatar,
+                    registration_date: user.registration_date,
+                }
+            });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+    }
+}
+
 const authController = {
     signUp,
     signIn,
-    signOut
+    signOut,
+    check
 };
 
 export default authController;

@@ -1,5 +1,7 @@
 import { body } from "express-validator";
+import { Request } from "express";
 
+import { User } from "../../models/user";
 import requestValidator from "../request_validator";
 
 const signUp = [
@@ -7,16 +9,24 @@ const signUp = [
         .isString()
         .withMessage("Логин должен быть строкой.")
         .notEmpty()
-        .withMessage("Логин не должен быть пустым"),
+        .withMessage("Логин не должен быть пустым")
+        .custom(async (login: string) => {
+            if (await User.exists({ login }))
+                throw new Error("Пользователь с указанным login уже существует.");
+        }),
     body("email")
         .isEmail()
         .withMessage("Email недействителен.")
-        .normalizeEmail(),
+        .normalizeEmail()
+        .custom(async (email: string) => {
+            if (await User.exists({ email }))
+                throw new Error("Пользователь с указанным email уже существует.");
+        }),
     body("password")
         .isString()
         .withMessage("Пароль должен быть строкой.")
         .matches("[0-9a-zA-Z_\\-@#%., ]+")
-        .withMessage("Пароль не соответствует указанному шаблону: /[0-9a-zA-Z_\\-@#%., ]+/g")
+        .withMessage("Пароль не соответствует указанному шаблону: [0-9a-zA-Z_\\-@#%., ]+")
         .isLength({ min: 6 })
         .withMessage("Минимальная длинна пароля — 6 символов."),
     requestValidator
@@ -27,7 +37,11 @@ const signIn = [
         .isString()
         .withMessage("Логин должен быть строкой.")
         .notEmpty()
-        .withMessage("Логин не должен быть пустым"),
+        .withMessage("Логин не должен быть пустым")
+        .custom(async (login: string) => {
+            if (!await User.exists({ login }))
+                throw new Error("Пользователь с указанным login не существует.");
+        }),
     body("password")
         .isString()
         .withMessage("Пароль должен быть строкой.")
@@ -36,9 +50,17 @@ const signIn = [
     requestValidator
 ];
 
+const check = [
+    body("token")
+        .isString()
+        .withMessage("Токен должен быть строкой."),
+    requestValidator
+];
+
 const authValidator = {
     signUp,
-    signIn
+    signIn,
+    check
 };
 
 export default authValidator;

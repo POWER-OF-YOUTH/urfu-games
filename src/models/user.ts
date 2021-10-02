@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 enum Role {
-    User = 1,
-    Admin = 2
+    User = 0b0001,
+    Admin = 0b0011
 }
 
 interface IUser {
