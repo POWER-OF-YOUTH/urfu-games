@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IGame {
     id: string;
@@ -10,6 +10,7 @@ interface IGame {
     author: string;
     participants: Array<string>;
     url: string;
+    uploaded: boolean;
     creation_date: Date;
 }
 
@@ -52,6 +53,10 @@ const gameSchema = new Schema<IGame>(
         url: {
             type: [String],
             required: true
+        },
+        uploaded: {
+            type: Boolean,
+            default: false
         },
         creation_date: {
             type: Date,
