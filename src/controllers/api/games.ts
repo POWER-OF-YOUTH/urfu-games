@@ -7,6 +7,7 @@ import fs from "fs";
 import { DatabaseError, LogicError } from "../../utils/errors";
 import { Game, IGame } from "../../models/game";
 import { Document } from "mongoose";
+import { matchedData } from "express-validator";
 
 type GameDocument = IGame & Document<any, any, IGame>;
 
@@ -50,7 +51,7 @@ async function getGames(req: Request, res: Response): Promise<void> {
 
 async function getGame(req: Request, res: Response): Promise<void> {
     try {
-        const data: GetGameData = <GetGameData> req.params;
+        const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
 
         const game: GameDocument = await Game.findOne({ id: data.id });
 
@@ -75,7 +76,7 @@ async function getGame(req: Request, res: Response): Promise<void> {
 
 async function addGame(req: Request, res: Response) {
     try {
-        const data: AddGameData = <AddGameData> req.body;
+        const data = <AddGameData> matchedData(req, { locations: ["body"] });
         
         const id: string = uuid();
         const game: GameDocument = await Game.create({ 
@@ -108,8 +109,7 @@ const uploadGame = [
         storage: 
             diskStorage({
                 destination(req: Request, file: Express.Multer.File, cb: (error: Error, destination: string) => void) {
-                    // Путь к файлам игры. Example: /games/291391d1-1181-4a9b-bd65-6de742fab9fb
-                    const directory: string = path.join(process.env.PUBLIC_DIR, req.params.id);
+                    const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
 
                     // Создадим директорию, если её не существует
                     if (!fs.existsSync(directory)) 
