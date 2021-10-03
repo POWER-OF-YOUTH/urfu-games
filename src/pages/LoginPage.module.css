@@ -19,19 +19,20 @@
         
 }
 .Button {
-    width: 90%;
+    width: 90%;    
         
 }
 
 .Typography {
     align-content: center;
     text-align: center;
-    position: relative;            
+    position: relative;        
+       
 }
 .Bar {
     align-content: center;
     text-align: center;
     position: relative;
     width: 100%;
-    color:rgb(255, 255, 255);
+
 }
