@@ -2,7 +2,6 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from "path";
 
 import apiRouter from "./routes/api";
 
@@ -17,7 +16,7 @@ app.use(cookieParser());
 app.use(cors());
 
 // static files
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(process.env.PUBLIC_DIR || "/public"));
 
 // routes
 app.use("/api", apiRouter);
