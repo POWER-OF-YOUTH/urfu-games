@@ -129,6 +129,7 @@ const uploadGame = [
                 res.status(400).json({ errors: [
                     new LogicError(req.originalUrl, "Ни одного файла не было загружено.")
                 ]});
+                return;
             }
     
             const game: GameDocument = await Game.findOne({ id: req.params.id });
@@ -150,11 +151,39 @@ const uploadGame = [
     }
 ];
 
+async function deleteGame(req: Request, res: Response) {
+    try {
+        const game: GameDocument = await Game.findOne({ id: req.params.id });
+        const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
+
+        await game.delete();
+        fs.rmSync(directory, { recursive: true }); // Удаляем директорию, содержащую файлы игры
+
+        res.json({
+            id: game.id,
+            competencies: game.competencies,
+            image: game.image,
+            name: game.name,
+            description: game.description,
+            rating: game.rating,
+            author: game.author,
+            participants: game.participants,
+            url: game.url,
+            creation_date: game.creation_date
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+    }
+}
+
 const gamesController = {
     getGames,
     getGame,
     addGame,
-    uploadGame
+    uploadGame,
+    deleteGame
 };
 
 export default gamesController;

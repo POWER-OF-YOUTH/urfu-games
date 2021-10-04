@@ -11,7 +11,7 @@ const getGame = [
             if (!await Game.exists({ id }))
                 throw new Error("Игры с указанным id не существует.");
         }),
-    requestValidator,
+    requestValidator
 ];
 
 const addGame = [
@@ -45,7 +45,7 @@ const addGame = [
                     throw new Error("Пользователь не может быть автором и участником одновременно.");
             }
         }),
-    requestValidator, 
+    requestValidator 
 ];
 
 const uploadGame = [
@@ -55,13 +55,24 @@ const uploadGame = [
             if (!await Game.exists({ id }))
                 throw new Error("Игры с указанным id не существует.");
         }),
-    requestValidator,
+    requestValidator
+];
+
+const deleteGame = [
+    param("id")
+        .isUUID()
+        .custom(async (id: string) => {
+            if (!await Game.exists({ id }))
+                throw new Error("Игры с указанным id не существует.");
+        }),
+    requestValidator
 ];
 
 const gamesValidator = {
     getGame,
     addGame,
-    uploadGame
+    uploadGame,
+    deleteGame
 };
 
 export default gamesValidator;
