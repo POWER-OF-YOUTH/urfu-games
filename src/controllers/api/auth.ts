@@ -120,24 +120,24 @@ async function check(req: Request, res: Response) {
                     "Пользователь с указанным id не существует."
                 )
             ]});
+            return;
         }
-        else {
-            const user: UserDocument = await User.findOne({ id: userData.id });
 
-            res.json({ 
+        const user: UserDocument = await User.findOne({ id: userData.id });
+
+        res.json({ 
                 user: {
-                    id: user.id,
-                    login: user.login,
-                    email: user.email,
-                    role: user.role,
-                    name: user.name,
-                    surname: user.surname,
-                    patronymic: user.patronymic,
-                    avatar: user.avatar,
-                    registration_date: user.registration_date,
-                }
-            });
-        }
+                id: user.id,
+                login: user.login,
+                email: user.email,
+                role: user.role,
+                name: user.name,
+                surname: user.surname,
+                patronymic: user.patronymic,
+                avatar: user.avatar,
+                registration_date: user.registration_date,
+            }
+        });
     }
     catch (err) {
         console.log(err);
