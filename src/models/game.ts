@@ -51,7 +51,7 @@ const gameSchema = new Schema<IGame>(
             default: []
         },
         url: {
-            type: [String],
+            type: String,
             required: true
         },
         uploaded: {

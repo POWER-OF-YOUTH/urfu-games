@@ -157,7 +157,9 @@ async function deleteGame(req: Request, res: Response) {
         const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
 
         await game.delete();
-        fs.rmSync(directory, { recursive: true }); // Удаляем директорию, содержащую файлы игры
+
+        if (fs.existsSync(directory)) // Удаляем директорию, содержащую файлы игры, если она существует
+            fs.rmSync(directory, { recursive: true });
 
         res.json({
             id: game.id,
