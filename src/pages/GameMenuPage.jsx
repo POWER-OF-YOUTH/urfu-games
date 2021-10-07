@@ -11,64 +11,68 @@ const Input = styled('input')({
   display: 'none',
 });
 
-export default function SearchAppBar() {
+
+export default function App() {
   return (
-    <Box >
-      
-      
-      
+    <Box className={styles.All}>
+
+
       <AppBar color='default' >
-        
-        <Toolbar>          
-          <Typography variant="h4">
+        <Toolbar>
+          <Typography variant="h4" sx={{ mr: 5 }} >
             Что-то-Games
           </Typography>
-
-          
-
-
-      
-
-          <Link to="/game">
-            <Button variant="text" className={styles.Button} >темы </Button>         
-          </Link> 
-
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/game">
+            <Button sx={{ m: 1 }} size='large' color="inherit" variant="text"  >темы  </Button>
+          </Link>
+          <Stack >
             <label htmlFor="contained-button-file">
-              <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                <Button variant="text"  component="span" className={styles.Button}>  
-                  Загрузить игру 
-                </Button>
+             <Input accept="image/*" id="contained-button-file" multiple type="file" />
+              <Button sx={{ m: 1 }} size='large' color="inherit" variant="text" component="span" >
+                Загрузить игру
+              </Button>
             </label>
-            <label htmlFor="icon-button-file">
-              <Input accept="image/*" id="icon-button-file" type="file" />
-              <IconButton color="primary" aria-label="upload picture" component="span">          
-            </IconButton>
-            </label>
-          </Stack>        
-          
+          </Stack>
           <Search>
-
             <SearchIconWrapper>
-              <SearchIcon />
+            <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase className={styles.Searchs}
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>          
-            <button variant="text" className={styles.Bar}>Войти </button>            
+            <StyledInputBase className={styles.Searchs}/>
+          </Search>
+            <button variant="text" className={styles.Bar}>Войти </button>
               <Link to="/register">
-            <button variant="text" className={styles.Bar} >Зарегистрироваться </button>         
+            <button variant="text" className={styles.Bar} >Зарегистрироваться </button>
           </Link>
         </Toolbar>
-        
       </AppBar>
+
+
       
-      <Container className={styles.Menu}>
-              
-      {/*       
-       <Card className={styles.Games}>
+      
+
+      <Box className={styles.Tegs} >
+          <Typography variant="h5" sx={{ mb: 1 }}>
+            Популярные теги
+          </Typography>    
+
+          <Typography variant="subtitle1" sx={{ pr: 18 }}>
+            Тег #1 Тег #2 Тег #3  Тег #4
+          </Typography>
+          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/game">
+            <Button size='small' color="inherit" variant="text"  >показать все теги  </Button>         
+          </Link> 
+          <Typography variant="h5" sx={{ mt: 3 }}>
+            Подборка
+          </Typography>
+          <Typography variant="subtitle1" sx={{ my: 0.5 }}>
+            Категория #1 Категория #2 Категория #3 Категория #4
+          </Typography>
+          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/game">
+            <Button size='small' color="inherit" variant="text"  >показать все категории  </Button>         
+          </Link>     
+      </Box>
+            
+       {/* <Card className={styles.Games}>
          <CardActionArea>
             <CardMedia 
             className={styles.Container}
@@ -83,7 +87,50 @@ export default function SearchAppBar() {
           </CardActionArea>
       </Card>              */}
 
-      </Container>
+      
+
+      <Box className={styles.Menu}>
+         <Typography variant="h5" sx={{ ml: 3, mt: 2  }}>
+           Недавно добавленные
+          </Typography>
+        <Card sx={{ maxWidth: 345, ml: 5, mt: 3  }}>
+        <CardMedia
+        component="img"
+        height="140"
+        image="/static/images/cards/contemplative-reptile.jpg"
+        alt="game 1"
+        />
+        <CardContent>
+         <Typography gutterBottom variant="h5" component="div">
+            Игра #1
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            образовательная игра #1 , в ней вы познакомитесь с основами физики
+           </Typography>
+        </CardContent>
+        </Card>
+       
+          <Typography variant="h5" sx={{ ml: 3, mt: 8 }} >
+            Рекомендуемое
+          </Typography>                  
+          <Card sx={{ maxWidth: 345, ml: 5, mt: 3  }}>
+        <CardMedia
+        component="img"
+        height="140"
+        image="/static/images/cards/contemplative-reptile.jpg"
+        alt="game 1"
+        />
+        <CardContent>
+         <Typography gutterBottom variant="h5" component="div">
+            Игра #1
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            образовательная игра #1, в ней вы познакомитесь с основами физики
+           </Typography>
+        </CardContent>
+        </Card>
+      </Box>
+
 
       
 

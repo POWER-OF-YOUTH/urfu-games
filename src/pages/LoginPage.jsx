@@ -18,18 +18,17 @@ export default function App() {
     }}
     > 
        <AppBar color='default'>
-          <Toolbar>                      
+          <Toolbar>
           <Typography variant="h4" className={styles.Bar}>
               Urfu Games 
             </Typography>
           </Toolbar>
-        </AppBar>
-        
+        </AppBar>        
       <div className={styles.menu}>
             <Typography variant="h5" className={styles.line}>
               Вход в аккаунт
-            </Typography>         
-        <List>  
+            </Typography>
+        <List>
 
         {/* <TextField
           error
@@ -38,19 +37,15 @@ export default function App() {
           defaultValue="Hello World"
           helperText="Incorrect entry."
         /> */}
-        
+
           <TextField id="outlined-basic" label="Логин/Email" variant="outlined" className={styles.Button}/>
           <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.Button}/>
-            <Link to="/game">
-            <Button variant="contained" className={styles.Button }  >Войти </Button>         
-            </Link>
-            
+            <Link to="/game" style={{ textDecoration: 'none' }}>
+            <Button variant="contained" className={styles.Button }  >Войти </Button>
+            </Link>            
             {/* <Button onClick={()=>{userApi.signIn()}}> отправить запрос </Button> */}
-
         </List>
-
-      </div>          
-     
+      </div>     
     </Box>
   );
 }

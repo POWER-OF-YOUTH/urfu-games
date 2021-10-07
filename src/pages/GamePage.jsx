@@ -6,7 +6,7 @@ import Unity, { UnityContext } from "react-unity-webgl";
 import { Link } from "react-router-dom";
 import styles from './GamePage.module.css';
 import {Search,SearchIconWrapper,StyledInputBase} from '../styles/Default';
-// import GamePage from './components/GamePage.jsx';
+
 
 
 
@@ -19,35 +19,44 @@ export default function App() {
     codeUrl: "./TestGame/Build/TestGame.wasm",
   });
 
-  function refreshPage(){ 
-    window.location.reload(); 
-}  
+  function refreshPage(){
+    window.location.reload();
+}
 
   return (
     <Box>
         <AppBar color='default'>
-          <Toolbar>                      
-          <Typography  variant="h6"  >
+          <Toolbar>
+          <Typography  variant="h6" sx={{ mr: 5 }} >
           Что-то-Games
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/main">
+            <Button  size='large' color="inherit" variant="text"  > Темы  </Button>
+          </Link>
+          <button variant="text" className={styles.Bar}>Войти </button>
+              <Link to="/register">
+            <button variant="text" className={styles.Bar} >Зарегистрироваться </button>
+          </Link>
           </Toolbar>
-        </AppBar>         
+        </AppBar>
         <div>
           <Unity unityContext={unityContext}
-          className={styles.Container}>           
+          className={styles.Container}>
           </Unity>
-          <button className={styles.Button}  type="button" onClick={ refreshPage }> <span>Restart</span> </button>            
-        </div>           
-    </Box>    
+          <button className={styles.Button}  type="button" onClick={ refreshPage }> <span>Restart</span> </button>
+        </div>
+        {/* <Box className={styles.Menu}>
+         <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
+           Недавно добавленные
+          </Typography>       
+
+          <Typography variant="h5" sx={{ ml: 3, mt: 20 }} >
+            Рекомендуемое
+          </Typography>
+         </Box> */}
+
+        
+    </Box>
   );
 }
 

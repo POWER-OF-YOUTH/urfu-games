@@ -1,8 +1,7 @@
 .Button {
-    margin: 20px;
-    color: rgb(83, 83, 83);
-    text-align: center;
+    margin: 100px;
 }
+
 .Bar {
     float:  right;
     margin: 10px;
@@ -11,35 +10,39 @@
     margin-left:auto;
     display:block;
     position: relative;
+    font-size: 15px;
     padding: 8px 32px;
     font-weight: 600;
     text-align: center;
+}
+.Tegs {
+    min-width: 100px;
+    max-width: 250px;
+    height: 100;    
+    position: absolute;
+    display: inline-block;
+    margin: 6em 2em auto 2em;
+    
+   
     
 }
+
 .Menu {
-    
-    float:  right;
-    position: relative;
-    min-width: 80%;
-    max-width: 90%;
-    min-height: 700px;
-    max-height : 900px;    
-    display: block;     
-    border: 2px solid rgb(224, 224, 224);
-    margin: 200px auto 0;   
+    min-width: 100%;    
+    min-height: 100%;    
+    display: inline-block;    
+    border: 2px solid rgb(219, 219, 219);
+    background-color: rgb(255, 255, 255);
+    margin-left: 300px;
+    margin-top: 100px;
 }
+
 .Searchs {
-    border: 1px solid rgb(202, 202, 202);  
-}
-
-
-/* .Games {
-    max-width: 345;
+    border: 1px solid rgb(202, 202, 202);
 
 }
 
-.Container {
-
-    height: 500;
-
-} */
+.All{
+    height: 960px;
+    background-color: rgb(238, 238, 238);    
+}
