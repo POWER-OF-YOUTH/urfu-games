@@ -1,4 +1,4 @@
-.Container {
+.container {
     position: relative;
 	min-width: 600px;
     max-width: 600px;
@@ -10,15 +10,15 @@
     margin: 100px auto 0;
 }
 
-.Button {
+.button {
     position: relative;
     left: 50%;
     transform: translate(-50%, 0);
 }
-.Searchs {
+.searchs {
     border: 1px solid rgb(202, 202, 202);
 }
-.Bar {
+.bar {
     float:  right;
     margin: 10px;
     color: rgb(0, 0, 0);
@@ -39,7 +39,5 @@
     max-width: 400px;
     min-height: 250px;
     max-height: 450px;     
-    border: 2px solid black;
-    
-    
+    border: 2px solid black;    
 }

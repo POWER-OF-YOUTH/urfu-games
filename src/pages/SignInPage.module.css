@@ -2,32 +2,30 @@
     align-content: center;
     text-align: center;
     position: relative;
-	min-width: 100px;	
+	min-width: 100px;
+	min-height: 250px;
     max-width: 400px;
-    min-height: 250px;
     max-height: 450px;
-    display: block;     
+    display: block;
     border: 2px solid rgb(224, 224, 224);
-    margin: 200px auto 0; 
-    
+    margin: 200px auto 0;    
 }
-
 .line {
     border-bottom: 2px solid rgb(224, 224, 224);
     min-height: 30px;
     max-height: 100px;
-
 }
-
-.Button {
-    width: 90%;   
-
+.button {
+    width: 90%;
 }
-
-.Bar {
+.typography {
+    align-content: center;
+    text-align: center;
+    position: relative;
+}
+.bar {
     align-content: center;
     text-align: center;
     position: relative;
     width: 100%;
-
 }

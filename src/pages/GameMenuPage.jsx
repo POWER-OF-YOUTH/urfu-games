@@ -11,12 +11,9 @@ const Input = styled('input')({
   display: 'none',
 });
 
-
 export default function App() {
   return (
-    <Box className={styles.All}>
-
-
+    <Box className={styles.all}>
       <AppBar color='default' >
         <Toolbar>
           <Typography variant="h4" sx={{ mr: 5 }} >
@@ -37,20 +34,16 @@ export default function App() {
             <SearchIconWrapper>
             <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase className={styles.Searchs}/>
+            <StyledInputBase className={styles.searchs}/>
           </Search>
-            <button variant="text" className={styles.Bar}>Войти </button>
+            <button variant="text" className={styles.bar}>Войти </button>
               <Link to="/register">
-            <button variant="text" className={styles.Bar} >Зарегистрироваться </button>
+            <button variant="text" className={styles.bar} >Зарегистрироваться </button>
           </Link>
         </Toolbar>
-      </AppBar>
-
-
+      </AppBar>   
       
-      
-
-      <Box className={styles.Tegs} >
+      <Box className={styles.tegs} >
           <Typography variant="h5" sx={{ mb: 1 }}>
             Популярные теги
           </Typography>    
@@ -85,11 +78,9 @@ export default function App() {
 
           </CardContent>
           </CardActionArea>
-      </Card>              */}
+      </Card>              */}      
 
-      
-
-      <Box className={styles.Menu}>
+      <Box className={styles.menu}>
          <Typography variant="h5" sx={{ ml: 3, mt: 2  }}>
            Недавно добавленные
           </Typography>
@@ -108,8 +99,7 @@ export default function App() {
             образовательная игра #1 , в ней вы познакомитесь с основами физики
            </Typography>
         </CardContent>
-        </Card>
-       
+        </Card>       
           <Typography variant="h5" sx={{ ml: 3, mt: 8 }} >
             Рекомендуемое
           </Typography>                  
@@ -130,12 +120,6 @@ export default function App() {
         </CardContent>
         </Card>
       </Box>
-
-
-      
-
-
-
     </Box>
   );
 }

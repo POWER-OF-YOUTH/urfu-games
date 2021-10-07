@@ -7,9 +7,6 @@ import { Link } from "react-router-dom";
 import styles from './GamePage.module.css';
 import {Search,SearchIconWrapper,StyledInputBase} from '../styles/Default';
 
-
-
-
 export default function App() {
    
   const unityContext = new UnityContext({
@@ -22,7 +19,6 @@ export default function App() {
   function refreshPage(){
     window.location.reload();
 }
-
   return (
     <Box>
         <AppBar color='default'>
@@ -33,17 +29,17 @@ export default function App() {
           <Link style={{ textDecoration: 'none', color: '#000000' } } to="/main">
             <Button  size='large' color="inherit" variant="text"  > Темы  </Button>
           </Link>
-          <button variant="text" className={styles.Bar}>Войти </button>
+          <button variant="text" className={styles.bar}>Войти </button>
               <Link to="/register">
-            <button variant="text" className={styles.Bar} >Зарегистрироваться </button>
+            <button variant="text" className={styles.bar} >Зарегистрироваться </button>
           </Link>
           </Toolbar>
         </AppBar>
         <div>
           <Unity unityContext={unityContext}
-          className={styles.Container}>
+          className={styles.container}>
           </Unity>
-          <button className={styles.Button}  type="button" onClick={ refreshPage }> <span>Restart</span> </button>
+          <button className={styles.button}  type="button" onClick={ refreshPage }> <span>Restart</span> </button>
         </div>
         {/* <Box className={styles.Menu}>
          <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
@@ -53,9 +49,7 @@ export default function App() {
           <Typography variant="h5" sx={{ ml: 3, mt: 20 }} >
             Рекомендуемое
           </Typography>
-         </Box> */}
-
-        
+         </Box> */}        
     </Box>
   );
 }
