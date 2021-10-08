@@ -48,3 +48,7 @@
 * Сбор информации о прогрессе в играх.
 * Сбор откликов пользователей.
 
+## Ссылки
+[Back-end проекта](https://github.com/POWER-OF-YOUTH/urfu-games-server)
+
+[Front-end проекта](https://github.com/POWER-OF-YOUTH/urfu-games-client)
