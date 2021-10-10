@@ -30,7 +30,7 @@ export default function App() {
             <Button  size='large' color="inherit" variant="text"  > Темы  </Button>
           </Link>
           <button variant="text" className={styles.bar}>Войти </button>
-              <Link to="/register">
+              <Link to="/signup">
             <button variant="text" className={styles.bar} >Зарегистрироваться </button>
           </Link>
           </Toolbar>

@@ -1,13 +1,46 @@
 import * as React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Button, Typography, Toolbar, Box, AppBar, List, TextField  } from '@material-ui/core';
 import styles from './SignInPage.module.css';
+import authAPI from '../utils/api/authAPI';
+import checkAuthentication from '../utils/checkAuthentication';
 
 // import { userApi } from '../utils/api';
 // import GamePage from '../components/GamePage';
 
+export default function SignInPage(props) {
+  const [values, setValues] = React.useState({
+    login: '',
+    password: '',
+  });
 
-export default function App() {
+  const [auth, setAuth] = React.useState(null);
+
+  const [errors, setErorrs] = React.useState([])
+  
+  const handleChange = (prop) => (event) => {
+    const value = event.target.value;
+    setValues({ ...values, [prop]:value });
+    setErorrs([]);
+  };
+
+  const onLogInButtonClick = async () => {
+    const signInResult = await authAPI.signIn(values)
+      if(!signInResult.success){
+        setErorrs(signInResult.errors)
+      }
+      else{
+        localStorage.setItem("user", JSON.stringify(signInResult.data.user))
+        localStorage.setItem("token", signInResult.data.token)
+        props.history.push("/")
+      }
+    console.log(signInResult)
+  }
+
+  React.useEffect(async() => { setAuth(await checkAuthentication()) }, []);
+
+  if(!auth) return(<></>)
+  else if(auth.success) return(<Redirect to="/"/>)
   return (
     <Box sx={{'& .MuiTextField-root': { m: 1 },
     }}
@@ -32,14 +65,15 @@ export default function App() {
           helperText="Incorrect entry."
         /> */}
 
-          <TextField id="outlined-basic" label="Логин/Email" variant="outlined" className={styles.button}/>
-          <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.button}/>
-            <Link to="/game" style={{ textDecoration: 'none' }}>
-            <Button variant="contained" className={styles.button }  >Войти </Button>
-            </Link>            
+          <TextField id="outlined-basic" label="Логин/Email" variant="outlined" className={styles.button} onChange={handleChange("login")}/>
+          <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
+            
+            <Button variant="contained" className={styles.button} onClick={onLogInButtonClick}>Войти </Button>
+                      
             {/* <Button onClick={()=>{userApi.signIn()}}> отправить запрос </Button> */}
         </List>
-      </div>     
+      </div>
+      { errors.length > 0 ? <p className={styles.errorMessage}>{errors[0].message}</p> : <></> }     
     </Box>
   );
 }
