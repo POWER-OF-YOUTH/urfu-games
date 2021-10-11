@@ -31,12 +31,6 @@ export default function App() {
               </Button>
             </label>
           </Stack>
-          {/* <Search>
-            <SearchIconWrapper>
-            <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase className={styles.searchs}/>
-          </Search> */}
           <div className={styles.bar}>
             <Link to="/signup">
               <button variant="text" className={styles.barItem} >Зарегистрироваться </button>
@@ -44,9 +38,6 @@ export default function App() {
             <Link to="/signin">
               <button variant="text" className={styles.barItem}>Войти </button>
             </Link>
-            {/* <Link to="/signup">
-              <button variant="text" className={styles.barItem} >Зарегистрироваться </button>
-            </Link> */}
           </div>
         </Toolbar>
       </AppBar>   
