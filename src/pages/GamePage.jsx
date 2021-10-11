@@ -3,11 +3,16 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Button, Typography, Toolbar, Box, AppBar  } from '@material-ui/core';
 
 import Unity, { UnityContext } from "react-unity-webgl";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from './GamePage.module.css';
 import {Search,SearchIconWrapper,StyledInputBase} from '../styles/Default';
+import { style } from '@material-ui/system';
 
 export default function App() {
+
+  const params = useParams();
+
+  const gameId = params.gameId;
    
   const unityContext = new UnityContext({
     loaderUrl: "./TestGame/Build/TestGame.loader.js",
@@ -23,16 +28,23 @@ export default function App() {
     <Box>
         <AppBar color='default'>
           <Toolbar>
-          <Typography  variant="h6" sx={{ mr: 5 }} >
-          Что-то-Games
+          <Typography  variant="h4" sx={{ mr: 5 }} >
+            UrFU Games
           </Typography>
-          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/main">
-            <Button  size='large' color="inherit" variant="text"  > Темы  </Button>
+          <Link style={{ textDecoration: 'none', color: '#000000' } } to="/game">
+            <Button sx={{ m: 1 }} size='large' color="inherit" variant="text"  >темы  </Button>
           </Link>
-          <button variant="text" className={styles.bar}>Войти </button>
-              <Link to="/signup">
-            <button variant="text" className={styles.bar} >Зарегистрироваться </button>
-          </Link>
+          <div className={styles.bar}>
+            <Link to="/signup">
+              <button className={styles.barItem} variant="text">Зарегистрироваться </button>
+            </Link>
+            <Link to="/signin">
+              <button className={styles.barItem} variant="text">Войти </button>
+            </Link>
+            {/* <Link to="/signup">
+              <button className={styles.barItem} variant="text">Зарегистрироваться </button>
+            </Link> */}
+          </div>
           </Toolbar>
         </AppBar>
         <div>

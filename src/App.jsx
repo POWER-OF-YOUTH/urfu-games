@@ -4,17 +4,16 @@ import GamePage from "./pages/GamePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import GameMenuPage from "./pages/GameMenuPage";
-import TestPage from "./pages/TestPage";
 
 function App() {
   return (  
       <Router>
           <Switch>
               <Route exact path="/signin" component={SignInPage}/>
-              <Route exact path="/game" component={GamePage}/>
               <Route exact path="/signup" component={SignUpPage}/>
+              <Route exact path="/:gameId" component={GamePage}/>
+              {/* <Route exact path="/signup" component={SignUpPage}/> */}
               <Route exact path="/" component={GameMenuPage} />
-              <Route exact path="/test" component={TestPage} />
           </Switch>            
       </Router>         
   );

@@ -16,6 +16,7 @@ export default function SignUpPage(props) {
     login: '',
     email: '',
     password: '',
+    passwordRepeat: '',
   });
 
   const [auth, setAuth] = React.useState(null);
@@ -55,8 +56,8 @@ export default function SignUpPage(props) {
         errors.push(new Error("Пароль должен содержать от 6 до 30 символов."));
     if (!validator.matches(fields.password, "[0-9a-zA-Z_\\-@#%., ]+"))
         errors.push(new Error("Пароль не соответствует указанному шаблону: [0-9a-zA-Z_\\-@#%., ]+."));
-    // if (!validator.equals(fields.password, fields.passwordRepeat))
-    //     errors.push(new Error("Пароли не совпадают."));
+    if (!validator.equals(fields.password, fields.passwordRepeat))
+        errors.push(new Error("Пароли не совпадают."));
     
     return { success: errors.length === 0, errors };
   }
@@ -90,6 +91,7 @@ export default function SignUpPage(props) {
             <TextField id="outlined-basic" label="Логин" variant="outlined" className={styles.button} onChange={handleChange("login")}/>
             <TextField id="outlined-basic" label="Email" variant="outlined" className={styles.button} onChange={handleChange("email")}/>
             <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
+            <TextField id="outlined-basic" label="Повторите пароль" variant="outlined" className={styles.button} onChange={handleChange("passwordRepeat")}/>
           </List>
           <Button variant="contained" className={styles.button} onClick={onRegistrationButtonClick}>Зарегистрироваться </Button>
         </div>

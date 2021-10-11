@@ -3,7 +3,7 @@ import authAPI from "./api/authAPI";
 async function checkAuthentication() {
     const token = localStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("user"));
-    if (currentUser !== null && token) {
+    if (currentUser && token) {
         const response = await authAPI.check(token);
 
         if (response.success) {
