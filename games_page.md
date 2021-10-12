@@ -16,4 +16,4 @@
 * Пользователь имеет возможность фильтровать игры по компетенциям.
 
 ## Диаграмма вариантов использования
-![image](https://user-images.githubusercontent.com/22858278/136548110-63999503-43a2-4e83-98a2-da5565822a20.png)
+![image](https://user-images.githubusercontent.com/22858278/136901437-eb215ada-8cd0-4961-b97a-60203beb32b8.png)
