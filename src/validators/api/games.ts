@@ -19,13 +19,7 @@ const addGame = [
         .isString()
         .isLength({ min: 1, max: 30 })
         .withMessage("Имя должно содержать от 1 до 30 символов."),
-    body("author")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await User.exists({ id }))
-                throw new Error("Пользователь с указанным id не существует.");
-        }),
-    body("competencies")
+   body("competencies")
         .isArray(),
     body("image")
         .isString()
