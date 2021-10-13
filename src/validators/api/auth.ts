@@ -10,6 +10,8 @@ const signUp = [
         .withMessage("Логин должен быть строкой.")
         .notEmpty()
         .withMessage("Логин не должен быть пустым")
+        .matches("[0-9A-Za-z]+")
+        .withMessage("Логин не соответствует указанному шаблону: [0-9A-Za-z]+")
         .custom(async (login: string) => {
             if (await User.exists({ login }))
                 throw new Error("Пользователь с указанным login уже существует.");
@@ -50,17 +52,9 @@ const signIn = [
     requestValidator
 ];
 
-const check = [
-    body("token")
-        .isString()
-        .withMessage("Токен должен быть строкой."),
-    requestValidator
-];
-
 const authValidator = {
     signUp,
     signIn,
-    check
 };
 
 export default authValidator;
