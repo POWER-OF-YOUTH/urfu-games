@@ -24,6 +24,14 @@ type AddGameData = {
     participant: Array<string>
 }
 
+type UpdateGameData = {
+    competencies: Array<string> | undefined,
+    image: string | undefined,
+    name: string | undefined,
+    description: string | undefined,
+    participants: Array<string> | undefined
+}
+
 async function getGames(req: Request, res: Response): Promise<void> {
     try {
         const games: Array<GameDocument> = await Game.find();
@@ -192,12 +200,46 @@ async function deleteGame(req: Request, res: Response) {
     }
 }
 
+async function updateGame(req: Request, res: Response) {
+    try {
+        const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
+        const user: any = req.user;
+        const game: GameDocument = await Game.findOne({ id: req.params.id });
+
+        if (game.author !== user.id && user.role !== Role.Admin) 
+            res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
+        else {
+            game.set(data);
+
+            await game.save();
+
+            res.json({
+                id: game.id,
+                competencies: game.competencies,
+                image: game.image,
+                name: game.name,
+                description: game.description,
+                rating: game.rating,
+                author: game.author,
+                participants: game.participants,
+                url: game.url,
+                creation_date: game.creation_date
+            });
+        }
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+    }
+}
+
 const gamesController = {
     getGames,
     getGame,
     addGame,
     uploadGame,
-    deleteGame
+    deleteGame,
+    updateGame
 };
 
 export default gamesController;
