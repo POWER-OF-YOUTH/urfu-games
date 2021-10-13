@@ -204,7 +204,6 @@ async function updateGame(req: Request, res: Response) {
     try {
         const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
-        console.log(user);
         const game: GameDocument = await Game.findOne({ id: req.params.id });
 
         if (game.author !== user.id && user.role !== Role.Admin) 
