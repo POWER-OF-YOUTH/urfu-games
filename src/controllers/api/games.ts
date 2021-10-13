@@ -3,12 +3,13 @@ import { Request, Response, NextFunction } from "express";
 import multer, { diskStorage } from "multer";
 import path from "path";
 import fs from "fs";
+import { Document } from "mongoose";
+import { matchedData } from "express-validator";
 
 import { DatabaseError, LogicError, AccessError } from "../../utils/errors";
 import { Game, IGame } from "../../models/game";
 import { Role } from "../../models/user";
-import { Document } from "mongoose";
-import { matchedData } from "express-validator";
+import { DTO } from "../../utils/dto/game";
 
 type GameDocument = IGame & Document<any, any, IGame>;
 
@@ -36,20 +37,7 @@ async function getGames(req: Request, res: Response): Promise<void> {
     try {
         const games: Array<GameDocument> = await Game.find();
 
-        res.json(games.map(game => {
-            return {
-                id: game.id,
-                competencies: game.competencies,
-                image: game.image,
-                name: game.name,
-                description: game.description,
-                rating: game.rating,
-                author: game.author,
-                participants: game.participants,
-                url: game.url,
-                creation_date: game.creation_date
-            };
-        }));
+        res.json(games.map(game => new DTO.Game(game)));
     }
     catch (err) {
         console.log(err);
@@ -64,18 +52,7 @@ async function getGame(req: Request, res: Response): Promise<void> {
 
         const game: GameDocument = await Game.findOne({ id: data.id });
 
-        res.json({
-            id: game.id,
-            competencies: game.competencies,
-            image: game.image,
-            name: game.name,
-            description: game.description,
-            rating: game.rating,
-            author: game.author,
-            participants: game.participants,
-            url: game.url,
-            creation_date: game.creation_date
-        });
+        res.json(new DTO.Game(game));
     }
     catch (err) {
         console.log(err);
@@ -96,18 +73,7 @@ async function addGame(req: Request, res: Response) {
             url: `/games/${id}`
         });
 
-        res.json({
-            id: game.id,
-            competencies: game.competencies,
-            image: game.image,
-            name: game.name,
-            description: game.description,
-            rating: game.rating,
-            author: game.author,
-            participants: game.participants,
-            url: game.url,
-            creation_date: game.creation_date
-        });
+        res.json(new DTO.Game(game));
     }
     catch (err) {
         console.log(err);
@@ -180,18 +146,7 @@ async function deleteGame(req: Request, res: Response) {
             if (fs.existsSync(directory)) // Удаляем директорию, содержащую файлы игры, если она существует
                 fs.rmSync(directory, { recursive: true });
 
-            res.json({
-                id: game.id,
-                competencies: game.competencies,
-                image: game.image,
-                name: game.name,
-                description: game.description,
-                rating: game.rating,
-                author: game.author,
-                participants: game.participants,
-                url: game.url,
-                creation_date: game.creation_date
-            });
+            res.json(new DTO.Game(game));
         }
    }
     catch (err) {
@@ -213,18 +168,7 @@ async function updateGame(req: Request, res: Response) {
 
             await game.save();
 
-            res.json({
-                id: game.id,
-                competencies: game.competencies,
-                image: game.image,
-                name: game.name,
-                description: game.description,
-                rating: game.rating,
-                author: game.author,
-                participants: game.participants,
-                url: game.url,
-                creation_date: game.creation_date
-            });
+            res.json(new DTO.Game(game));
         }
     }
     catch(err) {

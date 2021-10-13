@@ -2,11 +2,12 @@ import { v4 as uuid } from "uuid";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { Document } from "mongoose";
+import { matchedData } from "express-validator";
 
 import { IUser, User } from "../../models/user";
 import { LogicError, DatabaseError, AccessError } from "../../utils/errors";
-import { Document } from "mongoose";
-import { matchedData } from "express-validator";
+import { DTO } from "../../utils/dto/user";
 
 type UserDocument = IUser & Document<any, any, IUser>;
 
@@ -36,25 +37,13 @@ function generateToken(data: string | object | Buffer): string {
 
 async function signUp(req: Request, res: Response): Promise<void> {
     try {
-        const data = <SignInData> matchedData(req, { locations: ["body"] });
+        const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
         data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
 
         const user: UserDocument = await User.create({ id: uuid(), ...data }); 
         
-        res.json({
-            user: {
-                id: user.id,
-                login: user.login,
-                email: user.email,
-                role: user.role,
-                name: user.name,
-                surname: user.surname,
-                patronymic: user.patronymic,
-                avatar: user.avatar,
-                registration_date: user.registration_date
-            }
-        });
+        res.json({ user: new DTO.User(user) });
     }
     catch (err) {
         console.log(err);
@@ -78,26 +67,14 @@ async function signIn(req: Request, res: Response): Promise<void> {
                     "Указан неправильный пароль."
                 )
             ]});
-            return;
         }
-
-        const token: string = generateToken({ id: user.id, role: user.role });
-
-        res.json({
-            user: {
-                id: user.id,
-                login: user.login,
-                email: user.email,
-                role: user.role,
-                name: user.name,
-                surname: user.surname,
-                patronymic: user.patronymic,
-                avatar: user.avatar,
-                registration_date: user.registration_date,
-            },
-            token
-        });
-    }
+        else {
+            res.json({ 
+                user: new DTO.User(user), 
+                token: generateToken({ id: user.id, role: user.role }) 
+            });
+        }
+   }
     catch (err) {
         console.log(err);
         res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
@@ -120,24 +97,12 @@ async function check(req: Request, res: Response) {
                     "Пользователь с указанным id не существует."
                 )
             ]});
-            return;
         }
+        else {
+            const user: UserDocument = await User.findOne({ id: userData.id });
 
-        const user: UserDocument = await User.findOne({ id: userData.id });
-
-        res.json({ 
-                user: {
-                id: user.id,
-                login: user.login,
-                email: user.email,
-                role: user.role,
-                name: user.name,
-                surname: user.surname,
-                patronymic: user.patronymic,
-                avatar: user.avatar,
-                registration_date: user.registration_date,
-            }
-        });
+            res.json({ user: new DTO.User(user) });
+        }
     }
     catch (err) {
         console.log(err);
