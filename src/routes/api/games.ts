@@ -15,5 +15,6 @@ gamesRouter.delete("/:id",
     gamesValidator.deleteGame, 
     gamesController.deleteGame
 );
+gamesRouter.put("/:id", validateToken, gamesValidator.updateGame, gamesController.updateGame);
 
 export default gamesRouter;
