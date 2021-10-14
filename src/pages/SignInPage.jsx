@@ -66,7 +66,7 @@ export default function SignInPage(props) {
         /> */}
 
           <TextField id="outlined-basic" label="Логин/Email" variant="outlined" className={styles.button} onChange={handleChange("login")}/>
-          <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
+          <TextField id="outlined-basic" label="Пароль" type="password" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
             
             <Button variant="contained" className={styles.button} onClick={onLogInButtonClick}>Войти </Button>
                       

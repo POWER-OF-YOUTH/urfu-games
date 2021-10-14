@@ -90,8 +90,8 @@ export default function SignUpPage(props) {
           /> */}        
             <TextField id="outlined-basic" label="Логин" variant="outlined" className={styles.button} onChange={handleChange("login")}/>
             <TextField id="outlined-basic" label="Email" variant="outlined" className={styles.button} onChange={handleChange("email")}/>
-            <TextField id="outlined-basic" label="Пароль" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
-            <TextField id="outlined-basic" label="Повторите пароль" variant="outlined" className={styles.button} onChange={handleChange("passwordRepeat")}/>
+            <TextField id="outlined-basic" label="Пароль" type="password" variant="outlined" className={styles.button} onChange={handleChange("password")}/>
+            <TextField id="outlined-basic" label="Повторите пароль" type="password" variant="outlined" className={styles.button} onChange={handleChange("passwordRepeat")}/>
           </List>
           <Button variant="contained" className={styles.button} onClick={onRegistrationButtonClick}>Зарегистрироваться </Button>
         </div>

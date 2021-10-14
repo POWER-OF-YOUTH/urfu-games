@@ -5,8 +5,6 @@ import { Button, Typography, Toolbar, Box, AppBar  } from '@material-ui/core';
 import Unity, { UnityContext } from "react-unity-webgl";
 import { Link, useParams } from "react-router-dom";
 import styles from './GamePage.module.css';
-import {Search,SearchIconWrapper,StyledInputBase} from '../styles/Default';
-import { style } from '@material-ui/system';
 
 export default function App() {
 

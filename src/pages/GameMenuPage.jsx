@@ -42,7 +42,7 @@ export default function App() {
         </Toolbar>
       </AppBar>   
       
-      <Box className={styles.tegs} >
+      <Box className={styles.tags} >
           <Typography variant="h5" sx={{ mb: 1 }}>
             Популярные теги
           </Typography>    
