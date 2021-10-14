@@ -15,7 +15,7 @@ interface IUser {
     password: string;
     role: Role;
     avatar: string;
-    registration_date: Date;
+    createdAt: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -64,7 +64,7 @@ const userSchema = new Schema<IUser>(
             type: String,
             default: ""
         },
-        registration_date: {
+        createdAt: {
             type: Date,
             default: Date.now()
         }

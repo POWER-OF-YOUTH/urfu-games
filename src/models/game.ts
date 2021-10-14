@@ -11,7 +11,7 @@ interface IGame {
     participants: Array<string>;
     url: string;
     uploaded: boolean;
-    creation_date: Date;
+    createdAt: Date;
 }
 
 const gameSchema = new Schema<IGame>(
@@ -58,7 +58,7 @@ const gameSchema = new Schema<IGame>(
             type: Boolean,
             default: false
         },
-        creation_date: {
+        createdAt: {
             type: Date,
             default: Date.now()
         }
