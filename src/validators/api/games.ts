@@ -23,9 +23,6 @@ const addGame = [
         .withMessage("Название игры не соответсвует шаблону: [0-9A-Za-z]+"),
     body("competencies")
         .isArray(),
-    body("image")
-        .optional()
-        .isString(),
     body("description")
         .optional()
         .isString()

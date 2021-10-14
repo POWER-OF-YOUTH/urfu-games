@@ -19,7 +19,6 @@ type GetGameData = {
 
 type AddGameData = {
     competencies: Array<string>,
-    image: string,
     name: string,
     description: string,
     participant: Array<string>
@@ -27,7 +26,6 @@ type AddGameData = {
 
 type UpdateGameData = {
     competencies: Array<string> | undefined,
-    image: string | undefined,
     name: string | undefined,
     description: string | undefined,
     participants: Array<string> | undefined
