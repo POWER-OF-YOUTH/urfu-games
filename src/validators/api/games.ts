@@ -4,17 +4,7 @@ import User from "../../models/user";
 import Game from "../../models/game";
 import requestValidator from "../request_validator";
 
-const getGame = [
-    param("id")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
-    requestValidator
-];
-
-const addGame = [
+export const addGame = [
     body("name")
         .isString()
         .isLength({ min: 1, max: 30 })
@@ -41,7 +31,7 @@ const addGame = [
     requestValidator 
 ];
 
-const uploadGame = [
+export const getGame = [
     param("id")
         .isUUID()
         .custom(async (id: string) => {
@@ -51,17 +41,7 @@ const uploadGame = [
     requestValidator
 ];
 
-const deleteGame = [
-    param("id")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
-    requestValidator
-];
-
-const updateGame = [
+export const updateGame = [
     param("id")
         .isUUID()
         .custom(async (id: string) => {
@@ -97,14 +77,24 @@ const updateGame = [
             }
         }),
     requestValidator      
-]
+];
 
-const gamesValidator = {
-    getGame,
-    addGame,
-    uploadGame,
-    deleteGame,
-    updateGame
-};
+export const uploadGame = [
+    param("id")
+        .isUUID()
+        .custom(async (id: string) => {
+            if (!await Game.exists({ id }))
+                throw new Error("Игры с указанным id не существует.");
+        }),
+    requestValidator
+];
 
-export default gamesValidator;
+export const deleteGame = [
+    param("id")
+        .isUUID()
+        .custom(async (id: string) => {
+            if (!await Game.exists({ id }))
+                throw new Error("Игры с указанным id не существует.");
+        }),
+    requestValidator
+];

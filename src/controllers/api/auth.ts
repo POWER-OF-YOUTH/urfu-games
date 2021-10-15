@@ -35,7 +35,7 @@ function generateToken(data: string | object | Buffer): string {
     );
 }
 
-async function signUp(req: Request, res: Response): Promise<void> {
+export async function signUp(req: Request, res: Response): Promise<void> {
     try {
         const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
@@ -51,7 +51,7 @@ async function signUp(req: Request, res: Response): Promise<void> {
     }
 }
 
-async function signIn(req: Request, res: Response): Promise<void> {
+export async function signIn(req: Request, res: Response): Promise<void> {
     try {
         const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
@@ -81,12 +81,12 @@ async function signIn(req: Request, res: Response): Promise<void> {
     }
 }
 
-function signOut(req: Request, res: Response): void {
+export function signOut(req: Request, res: Response): void {
     res.clearCookie("token");
     res.json({});
 }
 
-async function check(req: Request, res: Response) {
+export async function check(req: Request, res: Response) {
     try {
         const userData: any = req.user; // Чтобы TypeScript не выдавал ошибку
 
@@ -110,11 +110,3 @@ async function check(req: Request, res: Response) {
     }
 }
 
-const authController = {
-    signUp,
-    signIn,
-    signOut,
-    check
-};
-
-export default authController;

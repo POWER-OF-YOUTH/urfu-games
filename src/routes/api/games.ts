@@ -1,7 +1,7 @@
 import express from "express";
 
-import gamesValidator from "../../validators/api/games";
-import gamesController from "../../controllers/api/games";
+import * as gamesValidator from "../../validators/api/games";
+import * as gamesController from "../../controllers/api/games";
 import validateToken from "../../validators/validateToken";
 
 const gamesRouter = express.Router();

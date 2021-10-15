@@ -1,7 +1,7 @@
 import express from "express";
 
-import authValidator from "../../validators/api/auth";
-import authController from "../../controllers/api/auth";
+import * as authValidator from "../../validators/api/auth";
+import * as authController from "../../controllers/api/auth";
 import validateToken from "../../validators/validateToken";
 
 const authRouter = express.Router();

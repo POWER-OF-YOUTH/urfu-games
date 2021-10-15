@@ -4,7 +4,7 @@ import { Request } from "express";
 import { User } from "../../models/user";
 import requestValidator from "../request_validator";
 
-const signUp = [
+export const signUp = [
     body("login")
         .isString()
         .withMessage("Логин должен быть строкой.")
@@ -34,7 +34,7 @@ const signUp = [
     requestValidator
 ];
 
-const signIn = [
+export const signIn = [
     body("login")
         .isString()
         .withMessage("Логин должен быть строкой.")
@@ -52,9 +52,3 @@ const signIn = [
     requestValidator
 ];
 
-const authValidator = {
-    signUp,
-    signIn,
-};
-
-export default authValidator;

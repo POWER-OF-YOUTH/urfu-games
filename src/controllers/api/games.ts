@@ -31,7 +31,7 @@ type UpdateGameData = {
     participants: Array<string> | undefined
 }
 
-async function getGames(req: Request, res: Response): Promise<void> {
+export async function getGames(req: Request, res: Response): Promise<void> {
     try {
         const games: Array<GameDocument> = await Game.find();
 
@@ -43,7 +43,7 @@ async function getGames(req: Request, res: Response): Promise<void> {
     }
 }
 
-async function getGame(req: Request, res: Response): Promise<void> {
+export async function getGame(req: Request, res: Response): Promise<void> {
     try {
         const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
         const user: any = req.user;
@@ -58,7 +58,7 @@ async function getGame(req: Request, res: Response): Promise<void> {
     }
 }
 
-async function addGame(req: Request, res: Response) {
+export async function addGame(req: Request, res: Response) {
     try {
         const data = <AddGameData> matchedData(req, { locations: ["body"] });
         const user: any = req.user;
@@ -79,7 +79,7 @@ async function addGame(req: Request, res: Response) {
     }
 }
 
-function uploadGame(req: Request, res: Response) {
+export function uploadGame(req: Request, res: Response) {
     return [
         multer({ 
             storage: 
@@ -128,7 +128,7 @@ function uploadGame(req: Request, res: Response) {
     ]
 }
 
-async function deleteGame(req: Request, res: Response) {
+export async function deleteGame(req: Request, res: Response) {
     try {
         const game: GameDocument = await Game.findOne({ id: req.params.id });
         const user: any = req.user;
@@ -153,7 +153,7 @@ async function deleteGame(req: Request, res: Response) {
     }
 }
 
-async function updateGame(req: Request, res: Response) {
+export async function updateGame(req: Request, res: Response) {
     try {
         const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
@@ -175,13 +175,3 @@ async function updateGame(req: Request, res: Response) {
     }
 }
 
-const gamesController = {
-    getGames,
-    getGame,
-    addGame,
-    uploadGame,
-    deleteGame,
-    updateGame
-};
-
-export default gamesController;
