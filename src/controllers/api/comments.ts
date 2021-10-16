@@ -16,15 +16,6 @@ type AddCommentData = {
     text: string
 }
 
-type GetCommentData = {
-    id: string
-}
-
-type GetCommentsData = {
-    gameId: string | undefined,
-    author: string | undefined
-}
-
 export async function addComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <AddCommentData> matchedData(req, { locations: [ "params" ] });
@@ -44,6 +35,10 @@ export async function addComment(req: Request, res: Response, next: NextFunction
     }
 }
 
+type GetCommentData = {
+    id: string
+}
+
 export async function getComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetCommentData> matchedData(req, { locations: [ "params" ] });
@@ -56,6 +51,11 @@ export async function getComment(req: Request, res: Response, next: NextFunction
     }
 }
 
+type GetCommentsData = {
+    gameId: string | undefined,
+    author: string | undefined
+}
+
 export async function getComments(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetCommentsData> matchedData(req, { locations: [ "query" ] });
@@ -66,5 +66,4 @@ export async function getComments(req: Request, res: Response, next: NextFunctio
     catch (err) {
         next(err);
     }
-    
 }
