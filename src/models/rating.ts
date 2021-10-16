@@ -2,10 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 interface IRating {
     id: string;
-    game_id: string;
+    gameId: string;
     author: string;
     value: number;
-    creation_date: Date;
+    createdAt: Date;
 }
 
 const ratingSchema = new Schema<IRating>(
@@ -16,7 +16,7 @@ const ratingSchema = new Schema<IRating>(
             required: true,
             index: true
         },
-        game_id: {
+        gameId: {
             type: String,
             required: true,
             index: true
@@ -30,7 +30,7 @@ const ratingSchema = new Schema<IRating>(
             type: Number,
             required: true
         },
-        creation_date: {
+        createdAt: {
             type: Date,
             default: Date.now()
         }

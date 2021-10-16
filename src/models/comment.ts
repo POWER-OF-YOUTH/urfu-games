@@ -2,10 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 interface IComment {
     id: string;
-    game_id: string;
+    gameId: string;
     author: string;
     text: string;
-    creation_date: Date;
+    createdAt: Date;
 }
 
 const commentSchema = new Schema<IComment>(
@@ -16,7 +16,7 @@ const commentSchema = new Schema<IComment>(
             index: true,
             unique: true
         },
-        game_id: {
+        gameId: {
             type: String,
             required: true,
             index: true
@@ -30,7 +30,7 @@ const commentSchema = new Schema<IComment>(
             type: String,
             required: true
         },
-        creation_date: {
+        createdAt: {
             type: Date,
             default: Date.now()
         }
