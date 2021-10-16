@@ -31,19 +31,18 @@ type UpdateGameData = {
     participants: Array<string> | undefined
 }
 
-export async function getGames(req: Request, res: Response): Promise<void> {
+export async function getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const games: Array<GameDocument> = await Game.find();
 
         res.json(games.map(game => new DTO.Game(game)));
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export async function getGame(req: Request, res: Response): Promise<void> {
+export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
         const user: any = req.user;
@@ -53,12 +52,11 @@ export async function getGame(req: Request, res: Response): Promise<void> {
         res.json(new DTO.Game(game));
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export async function addGame(req: Request, res: Response) {
+export async function addGame(req: Request, res: Response, next: NextFunction) {
     try {
         const data = <AddGameData> matchedData(req, { locations: ["body"] });
         const user: any = req.user;
@@ -74,12 +72,11 @@ export async function addGame(req: Request, res: Response) {
         res.json(new DTO.Game(game));
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export function uploadGame(req: Request, res: Response) {
+export function uploadGame(req: Request, res: Response, next: NextFunction) {
     return [
         multer({ 
             storage: 
@@ -99,7 +96,7 @@ export function uploadGame(req: Request, res: Response) {
                 })
         })
             .array("files", 50),
-        async (req: Request, res: Response) => {
+        async (req: Request, res: Response, next: NextFunction) => {
             try {
                 if (req.files.length === 0) {
                     res.status(400).json({ errors: [
@@ -121,14 +118,13 @@ export function uploadGame(req: Request, res: Response) {
                 res.json({ filesLoaded });
             }
             catch (err) {
-                console.log(err);
-                res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+                next(err);
             }
         }
     ]
 }
 
-export async function deleteGame(req: Request, res: Response) {
+export async function deleteGame(req: Request, res: Response, next: NextFunction) {
     try {
         const game: GameDocument = await Game.findOne({ id: req.params.id });
         const user: any = req.user;
@@ -146,14 +142,13 @@ export async function deleteGame(req: Request, res: Response) {
 
             res.json(new DTO.Game(game));
         }
-   }
+    }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export async function updateGame(req: Request, res: Response) {
+export async function updateGame(req: Request, res: Response, next: NextFunction) {
     try {
         const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
@@ -170,8 +165,7 @@ export async function updateGame(req: Request, res: Response) {
         }
     }
     catch(err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 

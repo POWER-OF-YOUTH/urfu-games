@@ -3,11 +3,13 @@ import DatabaseError from "./database_error";
 import LogicError from "./logic_error";
 import ValidationError from "./validation_error";
 import AccessError from "./access_error";
+import UnexpectedError from "./unexpected_error";
 
 export {
     APIError,
     DatabaseError,
     LogicError,
     ValidationError,
-    AccessError
+    AccessError,
+    UnexpectedError
 };

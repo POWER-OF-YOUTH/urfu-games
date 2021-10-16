@@ -35,7 +35,7 @@ function generateToken(data: string | object | Buffer): string {
     );
 }
 
-export async function signUp(req: Request, res: Response): Promise<void> {
+export async function signUp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
@@ -46,12 +46,11 @@ export async function signUp(req: Request, res: Response): Promise<void> {
         res.json({ user: new DTO.User(user) });
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export async function signIn(req: Request, res: Response): Promise<void> {
+export async function signIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <SignUpData> matchedData(req, { locations: ["body"] });
 
@@ -74,19 +73,18 @@ export async function signIn(req: Request, res: Response): Promise<void> {
                 token: generateToken({ id: user.id, role: user.role }) 
             });
         }
-   }
+    }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
-export function signOut(req: Request, res: Response): void {
+export function signOut(req: Request, res: Response, next: NextFunction): void {
     res.clearCookie("token");
     res.json({});
 }
 
-export async function check(req: Request, res: Response) {
+export async function check(req: Request, res: Response, next: NextFunction) {
     try {
         const userData: any = req.user; // Чтобы TypeScript не выдавал ошибку
 
@@ -105,8 +103,7 @@ export async function check(req: Request, res: Response) {
         }
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl) ]});
+        next(err);
     }
 }
 
