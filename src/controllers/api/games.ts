@@ -8,6 +8,7 @@ import { matchedData } from "express-validator";
 
 import { DatabaseError, LogicError, AccessError } from "../../utils/errors";
 import { Game, IGame } from "../../models/game";
+import { Comment, IComment } from "../../models/comment";
 import { Role } from "../../models/user";
 import { DTO } from "../../utils/dto/game";
 
@@ -139,6 +140,8 @@ export async function deleteGame(req: Request, res: Response, next: NextFunction
 
             if (fs.existsSync(directory)) // Удаляем директорию, содержащую файлы игры, если она существует
                 fs.rmSync(directory, { recursive: true });
+
+            await Comment.deleteMany({ gameId: game.id }); // Удаляем комментарии, относящиеся к игре
 
             res.json(new DTO.Game(game));
         }
