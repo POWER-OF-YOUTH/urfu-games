@@ -6,6 +6,28 @@ import validateToken from "../../validators/validateToken";
 
 const commentsRouter = express.Router();
 
-commentsRouter.post("/comments", commentsValidator.addComment, commentsController.addComment);
+commentsRouter.post("/", 
+    validateToken, 
+    commentsValidator.addComment, 
+    commentsController.addComment
+);
+commentsRouter.get("/", 
+    commentsValidator.getComments, 
+    commentsController.getComments
+);
+commentsRouter.get("/:id", 
+    commentsValidator.getComment, 
+    commentsController.getComment
+);
+commentsRouter.put("/:id", 
+    validateToken,
+    commentsValidator.updateComment, 
+    commentsController.updateComment
+);
+commentsRouter.delete("/:id", 
+    validateToken,
+    commentsValidator.deleteComment,
+    commentsController.deleteComment
+);
 
 export default commentsRouter;
