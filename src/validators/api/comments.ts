@@ -41,7 +41,7 @@ export const getComment = [
         .isUUID()
         .custom(async (id: string) => {
             if (!await Comment.exists({ id }))
-                throw new Error("Комментария с указанным id не существует.")
+                throw new Error("Комментария с указанным id не существует.");
         }),
     requestValidator
 ];
@@ -51,7 +51,7 @@ export const updateComment = [
         .isUUID()
         .custom(async (id: string) => {
             if (!await Comment.exists({ id }))
-                throw new Error("Комментария с указанным id не существует.")
+                throw new Error("Комментария с указанным id не существует.");
         }),
     body("text")
         .isString()
@@ -63,7 +63,7 @@ export const deleteComment = [
         .isUUID()
         .custom(async (id: string) => {
             if (!await Comment.exists({ id }))
-                throw new Error("Комментария с указанным id не существует.")
+                throw new Error("Комментария с указанным id не существует.");
         }),
     requestValidator
 ];

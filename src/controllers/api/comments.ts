@@ -3,9 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { Document } from "mongoose";
 
-import { DatabaseError, LogicError, AccessError } from "../../utils/errors";
+import { AccessError } from "../../utils/errors";
 import { Comment, IComment } from "../../models/comment";
-import { Game, IGame } from "../../models/game";
 import { Role } from "../../models/user";
 import { DTO } from "../../utils/dto/comment";
 
