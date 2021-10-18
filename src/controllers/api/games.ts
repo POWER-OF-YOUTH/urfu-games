@@ -77,53 +77,51 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export function uploadGame(req: Request, res: Response, next: NextFunction) {
-    return [
-        multer({ 
-            storage: 
-                diskStorage({
-                    destination(req: Request, file: Express.Multer.File, cb: (error: Error, destination: string) => void) {
-                        const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
+export const uploadGame = [
+    multer({ 
+        storage: 
+            diskStorage({
+                destination(req: Request, file: Express.Multer.File, cb: (error: Error, destination: string) => void) {
+                    const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
 
-                        // Создадим директорию, если её не существует
-                        if (!fs.existsSync(directory)) 
-                            fs.mkdirSync(directory, { recursive: true });
+                    // Создадим директорию, если её не существует
+                    if (!fs.existsSync(directory)) 
+                        fs.mkdirSync(directory, { recursive: true });
 
-                        cb(null, directory);
-                    },
-                    filename(req: Request, file: Express.Multer.File, cb: (error: Error, filename: string) => void) {
-                        cb(null, file.originalname);
-                    }
-                })
-        })
-            .array("files", 50),
-        async (req: Request, res: Response, next: NextFunction) => {
-            try {
-                if (req.files.length === 0) {
-                    res.status(400).json({ errors: [
-                        new LogicError(req.originalUrl, "Ни одного файла не было загружено.")
-                    ]});
-                    return;
+                    cb(null, directory);
+                },
+                filename(req: Request, file: Express.Multer.File, cb: (error: Error, filename: string) => void) {
+                    cb(null, file.originalname);
                 }
-        
-                const game: GameDocument = await Game.findOne({ id: req.params.id });
-        
-                const filesLoaded: Array<string> = [];
-                for (const file of <Array<Express.Multer.File>> req.files)
-                    filesLoaded.push(file.originalname);
-        
-                game.uploaded = true; 
-        
-                await game.save();
-        
-                res.json({ filesLoaded });
+            })
+    })
+        .array("files", 50),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (req.files.length === 0) {
+                res.status(400).json({ errors: [
+                    new LogicError(req.originalUrl, "Ни одного файла не было загружено.")
+                ]});
+                return;
             }
-            catch (err) {
-                next(err);
-            }
+    
+            const game: GameDocument = await Game.findOne({ id: req.params.id });
+    
+            const filesLoaded: Array<string> = [];
+            for (const file of <Array<Express.Multer.File>> req.files)
+                filesLoaded.push(file.originalname);
+    
+            game.uploaded = true; 
+    
+            await game.save();
+    
+            res.json({ filesLoaded });
         }
-    ]
-}
+        catch (err) {
+            next(err);
+        }
+    }
+]
 
 export async function deleteGame(req: Request, res: Response, next: NextFunction) {
     try {
