@@ -8,26 +8,23 @@
     max-height: 450px;
     display: block;     
     border: 2px solid rgb(224, 224, 224);
-    margin: 200px auto 0; 
-    
+    margin: 200px auto 0;     
 }
-
 .line {
     border-bottom: 2px solid rgb(224, 224, 224);
     min-height: 30px;
     max-height: 100px;
-
 }
-
-.Button {
-    width: 90%;   
-
+.button {
+    width: 90%;
 }
-
-.Bar {
+.bar {
     align-content: center;
     text-align: center;
     position: relative;
     width: 100%;
-
+}
+.errorMessage {
+    color: red;
+    text-align: center;
 }

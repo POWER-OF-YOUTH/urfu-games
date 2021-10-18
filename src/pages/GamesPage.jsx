@@ -1,18 +1,15 @@
 import * as React from 'react';
-import SearchIcon from '@material-ui/icons/Search';
 import { Button, Typography, Toolbar, Box, AppBar, Stack, IconButton, styled, 
   Card, CardContent  , CardMedia, CardActionArea,  Container, CssBaseline   } from '@material-ui/core';
-import {Search,SearchIconWrapper,StyledInputBase} from '../styles/Default';
 import { Link } from "react-router-dom";
-import styles from './GameMenuPage.module.css';
+import styles from './GamesPage.module.css';
 import test from '../components/GameImg.jpg';
-// import image from '../components/GameImage.jpg';
 
 const Input = styled('input')({
   display: 'none',
 });
 
-export default function App() {
+export default function GamesPage() {
   return (
     <Box className={styles.all}>
       <AppBar color='default' >
@@ -42,7 +39,7 @@ export default function App() {
         </Toolbar>
       </AppBar>   
       
-      <Box className={styles.tags} >
+      <Box className={styles.tegs} >
           <Typography variant="h5" sx={{ mb: 1 }}>
             Популярные теги
           </Typography>    
@@ -63,21 +60,6 @@ export default function App() {
             <Button size='small' color="inherit" variant="text"  >показать все категории  </Button>         
           </Link>     
       </Box>
-            
-       {/* <Card className={styles.Games}>
-         <CardActionArea>
-            <CardMedia 
-            className={styles.Container}
-            image="/components/GameImage.jpg" 
-            titile="games" />
-          <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-
-          </CardContent>
-          </CardActionArea>
-      </Card>              */}      
 
       <Box className={styles.menu}>
          <Typography variant="h5" sx={{ ml: 3, mt: 2  }}>

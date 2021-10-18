@@ -1,45 +1,67 @@
-.Container {
-    position: relative;
-	min-width: 600px;
-    max-width: 600px;
-	min-height: 400px;
-    max-height: 400px;
-    display: block;
-    border: 2px solid black;
-    background: rgb(233, 233, 233);
-    margin: 100px auto 0;
-}
-
-.Button {
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
-.Searchs {
-    border: 1px solid rgb(202, 202, 202);
-}
-.Bar {
-    float:  right;
+.barItem {
+    float: right;
     margin: 10px;
     color: rgb(0, 0, 0);
-    border: 1px solid rgb(201, 201, 201);
-    margin-left:auto;
-    display:block;
+    display: block;
     position: relative;
     font-size: 15px;
     padding: 8px 32px;
     font-weight: 600;
     text-align: center;
 }
-.menu {
-    align-content: center;
+.bar {
+    margin-left: auto;
+}
+.menu{
+
     text-align: center;
     position: relative;
-	min-width: 100px;	
-    max-width: 400px;
-    min-height: 250px;
-    max-height: 450px;     
-    border: 2px solid black;
+	min-width: 300px;	
+    max-width: 1250px;
+    min-height: 700px;
+    max-height: 700px;
+    display: block;     
+    border: 2px solid rgb(224, 224, 224);
+    margin: 90px auto 0;    
+}
+.maininf{
+
+    text-align: center;
+    position: relative;
+	min-width: 1000px;	
+    max-width: 1250px;
+    min-height: 400px;
+    max-height: 400px;
+    display: inline-block;     
+    border: 2px solid rgb(224, 224, 224);
+    margin-top: 30px;   
+    margin-bottom: 30px; 
+}
+
+.text {
+    float: right;
+    border: 2px solid rgb(224, 224, 224);
+    min-width: 400px;	
+    max-width: 450px;
+    min-height: 400px;
+    max-height: 400px;
     
-    
+
+}
+.button {
+    width: 80%;
+    height: 50px;
+    float: inline-end;
+}
+.about {
+    border: 2px solid rgb(224, 224, 224);
+    min-width: 400px;	
+    max-width: 450px;
+    display: inline-block;  
+    min-width: 1000px;	
+    max-width: 1250px;    
+    text-align: center;
+    position: relative;
+
+
 }
