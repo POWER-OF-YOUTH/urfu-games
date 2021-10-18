@@ -6,55 +6,19 @@ import fs from "fs";
 import { Document } from "mongoose";
 import { matchedData } from "express-validator";
 
-import { DatabaseError, LogicError, AccessError } from "../../utils/errors";
+import { LogicError, AccessError } from "../../utils/errors";
 import { Game, IGame } from "../../models/game";
-import { Comment, IComment } from "../../models/comment";
+import Comment from "../../models/comment";
 import { Role } from "../../models/user";
 import { DTO } from "../../utils/dto/game";
 
 type GameDocument = IGame & Document<any, any, IGame>;
-
-type GetGameData = {
-    id: string
-};
 
 type AddGameData = {
     competencies: Array<string>,
     name: string,
     description: string,
     participant: Array<string>
-}
-
-type UpdateGameData = {
-    competencies: Array<string> | undefined,
-    name: string | undefined,
-    description: string | undefined,
-    participants: Array<string> | undefined
-}
-
-export async function getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const games: Array<GameDocument> = await Game.find();
-
-        res.json(games.map(game => new DTO.Game(game)));
-    }
-    catch (err) {
-        next(err);
-    }
-}
-
-export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
-        const user: any = req.user;
-
-        const game: GameDocument = await Game.findOne({ id: data.id });
-
-        res.json(new DTO.Game(game));
-    }
-    catch (err) {
-        next(err);
-    }
 }
 
 export async function addGame(req: Request, res: Response, next: NextFunction) {
@@ -73,6 +37,61 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
         res.json(new DTO.Game(game));
     }
     catch (err) {
+        next(err);
+    }
+}
+
+type GetGameData = {
+    id: string
+};
+
+export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
+        const game: GameDocument = await Game.findOne({ id: data.id });
+
+        res.json(new DTO.Game(game));
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
+export async function getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const games: Array<GameDocument> = await Game.find();
+
+        res.json(games.map(game => new DTO.Game(game)));
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
+type UpdateGameData = {
+    competencies: Array<string> | undefined,
+    name: string | undefined,
+    description: string | undefined,
+    participants: Array<string> | undefined
+}
+
+export async function updateGame(req: Request, res: Response, next: NextFunction) {
+    try {
+        const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
+        const user: any = req.user;
+        const game: GameDocument = await Game.findOne({ id: req.params.id });
+
+        if (game.author !== user.id && user.role !== Role.Admin) 
+            res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
+        else {
+            game.set(data);
+
+            await game.save();
+
+            res.json(new DTO.Game(game));
+        }
+    }
+    catch(err) {
         next(err);
     }
 }
@@ -102,37 +121,42 @@ export const uploadGame = [
                 res.status(400).json({ errors: [
                     new LogicError(req.originalUrl, "Ни одного файла не было загружено.")
                 ]});
-                return;
             }
+            else {
+                const game: GameDocument = await Game.findOne({ id: req.params.id });
     
-            const game: GameDocument = await Game.findOne({ id: req.params.id });
+                const filesLoaded: Array<string> = [];
+                for (const file of <Array<Express.Multer.File>> req.files)
+                    filesLoaded.push(file.originalname);
     
-            const filesLoaded: Array<string> = [];
-            for (const file of <Array<Express.Multer.File>> req.files)
-                filesLoaded.push(file.originalname);
+                game.uploaded = true; 
     
-            game.uploaded = true; 
+                await game.save();
     
-            await game.save();
-    
-            res.json({ filesLoaded });
+                res.json({ filesLoaded });
+            }
         }
         catch (err) {
             next(err);
         }
     }
-]
+];
+
+type DeleteGameData = {
+    id: string
+}
 
 export async function deleteGame(req: Request, res: Response, next: NextFunction) {
     try {
-        const game: GameDocument = await Game.findOne({ id: req.params.id });
+        const data = <DeleteGameData> matchedData(req, { locations: [ "params" ] });
+        const game: GameDocument = await Game.findOne({ id: data.id });
         const user: any = req.user;
 
         // Если игра не принадлежит пользователю и он не является администратором
         if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
-            const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
+            const directory: string = path.join(process.env.PUBLIC_DIR, "/games", data.id);
 
             await game.delete();
 
@@ -145,27 +169,6 @@ export async function deleteGame(req: Request, res: Response, next: NextFunction
         }
     }
     catch (err) {
-        next(err);
-    }
-}
-
-export async function updateGame(req: Request, res: Response, next: NextFunction) {
-    try {
-        const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
-        const user: any = req.user;
-        const game: GameDocument = await Game.findOne({ id: req.params.id });
-
-        if (game.author !== user.id && user.role !== Role.Admin) 
-            res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
-        else {
-            game.set(data);
-
-            await game.save();
-
-            res.json(new DTO.Game(game));
-        }
-    }
-    catch(err) {
         next(err);
     }
 }
