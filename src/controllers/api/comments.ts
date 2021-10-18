@@ -78,7 +78,7 @@ export async function updateComment(req: Request, res: Response, next: NextFunct
         const user: any = req.user;
         const comment: CommentDocument = await Comment.findOne({ id: data.id });
 
-        if (comment.author !== user.id && user.role !== Role.Admin)
+        if (comment.author !== user.id)
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
             comment.set({ text: data.text });
