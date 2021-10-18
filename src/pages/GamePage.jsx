@@ -1,29 +1,32 @@
 import * as React from 'react';
-import SearchIcon from '@material-ui/icons/Search';
-import { Button, Typography, Toolbar, Box, AppBar  } from '@material-ui/core';
 
-import Unity, { UnityContext } from "react-unity-webgl";
+import { Button, Typography, Toolbar, Box, AppBar, Rating  } from '@material-ui/core';
+
 import { Link, useParams } from "react-router-dom";
 import styles from './GamePage.module.css';
+import test from '../components/GameImg.jpg';
+import StarIcon from '@material-ui/icons/Star';
 
-export default function App() {
+const labels = {
+  0.5: '0.5',
+  1: '1',
+  1.5: '1.5',
+  2: '2',
+  2.5: '2.5',
+  3: '3',
+  3.5: '3.5',
+  4: '4',
+  4.5: '4.5',
+  5: '5',
+};
 
-  const params = useParams();
+export default function GamePage() {
+  const [value, setValue] = React.useState(2);
+  const [hover, setHover] = React.useState(-1);
 
-  const gameId = params.gameId;
-   
-  const unityContext = new UnityContext({
-    loaderUrl: "./TestGame/Build/TestGame.loader.js",
-    dataUrl: "./TestGame/Build/TestGame.data",
-    frameworkUrl: "./TestGame/Build/TestGame.framework.js",
-    codeUrl: "./TestGame/Build/TestGame.wasm",
-  });
 
-  function refreshPage(){
-    window.location.reload();
-}
   return (
-    <Box>
+    <Box >
         <AppBar color='default'>
           <Toolbar>
           <Typography  variant="h4" sx={{ mr: 5 }} >
@@ -45,21 +48,54 @@ export default function App() {
           </div>
           </Toolbar>
         </AppBar>
-        <div>
-          <Unity unityContext={unityContext}
-          className={styles.container}>
-          </Unity>
-          <button className={styles.button}  type="button" onClick={ refreshPage }> <span>Restart</span> </button>
-        </div>
-        {/* <Box className={styles.Menu}>
-         <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
-           Недавно добавленные
-          </Typography>       
+        <Box className={styles.menu}>
+            <div className={styles.maininf}>
+            <img src={test} />
+            <Box className={styles.text}>
+                <Typography align="left" variant="h4" sx={{  mt: 2  }}>
+                Название
+                </Typography>
+                <Typography  align="left" variant="h6" sx={{  mt: 1  }} >
+                  Автор: 
+                </Typography>
+                <Typography align="left" variant="h6" sx={{  mt: 1, mb: 20  }} >
+                  Участники: 
+                </Typography>
+                {/* <Typography align="left" variant="h6" sx={{  mt: 1  }} >
+                  Компетенции: 
+                </Typography> */}
+                <Rating
+                  name="hover-feedback"
+                  value={value}
+                  precision={0.5}
+                  onChange={(event, newValue) => {
+                  setValue(newValue);}}
+                  onChangeActive={(event, newHover) => {
+                  setHover(newHover);
+                  }}
+                  emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}/>
+                  {value !== null && (
+                  <Box >{labels[hover !== -1 ? hover : value]}
+                  </Box>  
+                )}
+                <Link style={{ textDecoration: 'none', color: '#000000' } } to="/games/:gameId">
+                <Button className={styles.button} size='large' variant="contained" color="success" >Играть  </Button>         
+                </Link> 
+                
+                
+                </Box>
 
-          <Typography variant="h5" sx={{ ml: 3, mt: 20 }} >
-            Рекомендуемое
-          </Typography>
-         </Box> */}        
+
+            </div>
+            <Box className={styles.about}> 
+            <Typography align="left" variant="h6" >
+              Описание 
+            </Typography>
+
+            </Box>
+
+        </Box>
+
     </Box>
   );
 }
