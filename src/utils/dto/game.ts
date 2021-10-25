@@ -11,7 +11,7 @@ export namespace DTO {
         public readonly author: string;
         public readonly participants: Array<string>;
         public readonly url: string;
-        public readonly createdAt: string;
+        public readonly createdAt: Date;
 
         constructor(game: IGame) {
             this.id = game.id;
@@ -23,7 +23,7 @@ export namespace DTO {
             this.author = game.author;
             this.participants = game.participants;
             this.url = game.url;
-            this.createdAt = game.createdAt.toUTCString();
+            this.createdAt = game.createdAt;
         }
     }
 }

@@ -10,7 +10,7 @@ export namespace DTO {
         public readonly surname: string;
         public readonly patronymic: string;
         public readonly avatar: string;
-        public readonly createdAt: string;
+        public readonly createdAt: Date;
 
         constructor(user: IUser) {
             this.id = user.id;
@@ -21,7 +21,7 @@ export namespace DTO {
             this.surname = user.surname;
             this.patronymic = user.patronymic;
             this.avatar = user.avatar;
-            this.createdAt = user.createdAt.toUTCString();
+            this.createdAt = user.createdAt;
         }
     }
 }
