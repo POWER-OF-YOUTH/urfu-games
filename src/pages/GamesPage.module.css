@@ -1,17 +1,38 @@
-.button {
-    margin: 100px;
+html,
+body {   
+    width: 100%;
+    background-color: rgb(240, 240, 240);
 }
-.bar {
-    margin-left: auto;
+.allbar{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
 }
-.barItem {
-    float:  right;
-    margin: 10px;
-    color: rgb(0, 0, 0);
-    /* border: 1px solid rgb(201, 201, 201);
-    margin-left:auto; */
-    display:block;
-    position: relative;
+.logotip {
+    flex-grow: 1;
+    align-content: center;
+    text-align:start;    
+}
+.infbutton {
+    flex-grow: 10;    
+    align-content: center;
+    text-align: start;
+}
+.regbutton{    
+    flex-grow: 1;
+    text-align: end;    
+}
+.regbutton1{          
+    margin: 10px;   
+    font-size: 15px;
+    padding: 8px 32px;
+    font-weight: 600;
+    background-color: #18A0FB;
+    color: #ffffff;
+    border: 2px solid #18A0FB;
+}
+.regbutton2{        
     font-size: 15px;
     padding: 8px 32px;
     font-weight: 600;
@@ -26,19 +47,40 @@
     margin: 6em 2em auto 2em;   
 }
 .menu {
-    min-width: 100%;    
-    min-height: 100%;    
-    display: inline-block;    
-    border: 2px solid rgb(219, 219, 219);
-    background-color: rgb(255, 255, 255);
-    margin-left: 300px;
-    margin-top: 100px;
+    flex-grow: 10;    
+    background-color: rgb(255, 255, 255);    
+    margin-top: 20px;
+    border: 2px solid rgb(207, 207, 207);
 }
-.Searchs {
-    border: 1px solid rgb(202, 202, 202);
+.menuButton{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+}
 
+.recommend {
+    flex-grow: 10;    
+    background-color: rgb(255, 255, 255);    
+    margin-top: 20px;    
+    display: flex;
 }
-.All{
-    height: 960px;
-    background-color: rgb(238, 238, 238);    
+.allgame {
+    flex-grow: 10;    
+    background-color: rgb(255, 255, 255);    
+    margin-top: 20px;    
+    display: flex;
+}
+.ratingContainer {
+    
+    align-content: center;
+    text-align: center;
+    display: flex;        
+    
+}
+.rating {    
+    align-content: center;
+    text-align: center;
+    display: flex;
+   
 }
