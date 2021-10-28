@@ -1,15 +1,23 @@
 import * as React from "react";
-import { 
-    Button, 
-    Typography, 
-    Toolbar, 
-    Box, 
-    AppBar, 
-    Stack, 
-    styled, 
-    Card, 
-    CardContent, 
-    CardMedia, 
+import SearchIcon from "@material-ui/icons/Search";
+import { blue, deepPurple } from '@material-ui/core/colors';
+import {
+    Button,
+    Typography,
+    Toolbar,
+    Box,
+    AppBar,
+    Stack,
+    IconButton,
+    styled,
+    Card,
+    CardContent,
+    CardMedia,
+    CardActionArea,
+    Container,
+    CssBaseline,
+    Rating,
+    Avatar 
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import styles from "./GamesPage.module.css";
@@ -19,6 +27,23 @@ const Input = styled("input")({
     display: "none",
 });
 
+// Добавить компетенции как в игре
+// const competencies = [
+//     {
+//         name: "Математика"
+//     },
+//     {
+//         name: "Физика",
+//         color: "purple"
+//     },
+//     {
+//         name: "Химия",
+//         color: "darkred"
+//     }
+// ].map((competence, i) => (
+//     <Competence key={i} color={competence.color}>{competence.name}</Competence>
+// ));
+
 export default function GamesPage() {
     return (
         <Box className={styles.all}>
@@ -26,7 +51,7 @@ export default function GamesPage() {
                 <Toolbar>
                     <Typography variant="h4" sx={{ mr: 5 }} >
                         UrFU Games
-                    </Typography>
+                    </Typography>                    
                     <div className={styles.infbutton}>
                         <Link style={{ textDecoration: "none", color: "#000000" }} to="/profile">
                             <Button sx={{ m: 1 }} size="large" color="inherit" variant="text">
@@ -40,18 +65,18 @@ export default function GamesPage() {
                             </Button>
                         </label>
                     </div>
-                    <div className={styles.regbutton}>
+                    <Avatar sx={{ bgcolor: blue[500], mr: 3  }}>L</Avatar>
+                    <Typography variant="h6" className={styles.logotip}>
+                        #Login
+                    </Typography> 
+                    {/* <div className={styles.regbutton}>
                         <Link to="/signin">
-                            <button className={styles.regbutton1}>
-                                Войти{" "}
-                            </button>
+                            <button className={styles.regbutton1}>Войти </button>
                         </Link>
                         <Link to="/signup">
-                            <button  className={styles.regbutton2}>
-                                Зарегистрироваться{" "}
-                            </button>
+                            <button className={styles.regbutton2}>Зарегистрироваться </button>
                         </Link>
-                    </div>
+                    </div> */}
                 </Toolbar>
             </AppBar>
             <Box className={styles.mainmenu}>
@@ -99,15 +124,19 @@ export default function GamesPage() {
                         <Typography variant="h5" sx={{ ml: 3, mt: 2 }} className={styles.recommendButton}>
                             Рекомендуемые
                         </Typography>
-                        <Link to="/games/:gameId/play">
-                            <Typography variant="h5" sx={{ mr: 3, mt: 2 }} style={{ textDecoration: "none", color: "#000000" }} >
+                        <Link to="/games/:gameId">
+                            <Typography
+                                variant="h5"
+                                sx={{ mr: 3, mt: 2 }}
+                                style={{ textDecoration: "none", color: "#000000" }}
+                            >
                                 Показать все
                             </Typography>
                         </Link>
                     </Box>
                     <Box className={styles.recommend}>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent className={styles.darkbox}>
@@ -125,7 +154,7 @@ export default function GamesPage() {
                         </Card>
                         {/* ОСТОРОЖНО ТУТ ИДЁТ КАПИПАСТ CARD */}
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -142,7 +171,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -159,7 +188,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -176,7 +205,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -193,7 +222,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent className={styles.darkbox}>
@@ -215,7 +244,7 @@ export default function GamesPage() {
                     </Typography>
                     <Box className={styles.allgame}>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -233,7 +262,7 @@ export default function GamesPage() {
                         </Card>
                         {/* ОСТОРОЖНО ТУТ ИДЁТ КАПИПАСТ CARD */}
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -250,7 +279,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -267,7 +296,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -284,7 +313,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent>
@@ -301,7 +330,7 @@ export default function GamesPage() {
                             </CardContent>
                         </Card>
                         <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId/play">
+                            <Link to="/games/:gameId">
                                 <CardMedia component="img" height="180" image={test} alt="game 1" />
                             </Link>
                             <CardContent className={styles.darkbox}>
