@@ -7,18 +7,7 @@ async function signUp(data) {
         body: JSON.stringify(data)
     });
 
-    const responseData = await response.json();
-
-    if (response.ok) {
-        return { 
-            success: true,
-            data: responseData
-        };
-    }
-    return {
-        success: false,
-        errors: responseData.errors.map(err => new Error(err.detail))
-    };
+    return response;
 }
 
 async function signIn(data) {
@@ -30,37 +19,7 @@ async function signIn(data) {
         body: JSON.stringify(data)
     });
 
-    const responseData = await response.json();
-
-    if (response.ok) {
-        return { 
-            success: true,
-            data: responseData
-        };
-    }
-    return {
-        success: false,
-        errors: responseData.errors.map(err => new Error(err.detail))
-    };
-}
-
-async function signOut() {
-    const response = await fetch("/api/auth/signout", {
-        method: "POST"
-    });
-
-    const responseData = await response.json();
-
-    if (response.ok) {
-        return { 
-            success: true,
-            data: responseData
-        };
-    }
-    return {
-        success: false,
-        errors: responseData.errors.map(err => new Error(err.detail))
-    };
+    return response;
 }
 
 async function check(token) {
@@ -71,24 +30,12 @@ async function check(token) {
         }
     });
 
-    const responseData = await response.json();
-
-    if (response.ok) {
-        return { 
-            success: true,
-            data: responseData
-        };
-    }
-    return {
-        success: false,
-        errors: responseData.errors.map(err => new Error(err.detail))
-    };
+    return response;
 }
 
 const authAPI = {
     signUp,
     signIn,
-    signOut,
     check
 };
 
