@@ -1,29 +1,48 @@
-.menu {
+.wrapper {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signUpForm {
+    background-color: white;
+    width: 400px;
     align-content: center;
     text-align: center;
-    position: relative;
-	min-width: 100px;	
-    max-width: 400px;
-    min-height: 250px;
-    max-height: 450px;
-    display: block;     
     border: 2px solid rgb(224, 224, 224);
-    margin: 200px auto 0;     
 }
-.line {
+
+.signUpFormBody {
+    padding: 10px;
+}
+
+.field {
+    width: 100%;
+}
+
+.fieldsContainer {
+    display: grid;
+    grid-row-gap: 10px;
+}
+
+.title {
     border-bottom: 2px solid rgb(224, 224, 224);
-    min-height: 30px;
-    max-height: 100px;
 }
-.button {
-    width: 90%;
+
+.registerButton {
+    width: 100%;
+    margin-top: 10px !important;
 }
+
 .bar {
     align-content: center;
     text-align: center;
     position: relative;
     width: 100%;
 }
+
 .errorMessage {
     color: red;
     text-align: center;
