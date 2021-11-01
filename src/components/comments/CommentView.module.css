@@ -1,0 +1,67 @@
+.containerNormalMode, .containerEditMode {
+    display: grid;
+    grid-column-gap: 10px;
+    background-color: white;
+}
+.containerNormalMode {
+    grid-template-columns: 50px minmax(0, 1fr) 35px;
+}
+
+.containerEditMode {
+    grid-template-columns: 50px minmax(0, 1fr);
+}
+
+.editInput {
+    width: 100%;
+}
+
+.commentBody {
+    width: 100%;
+}
+
+.author {
+    font-weight: bold;
+    margin-right: 10px;
+    margin-right: 10px;
+}
+
+.creationDate {
+    color: #919191;
+}
+
+.avatarFrame {
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar {
+    display: block;
+    width: 100%;
+}
+
+.text {
+    overflow-wrap: break-word;
+}
+
+.moreButton {
+    width: 100%;
+    height: fit-content;
+}
+
+.moreIcon {
+    color: black;
+}
+
+.buttonsContainer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: right;
+}
+
+.cancelButton {
+}
+
+.saveButton {
+    background-color: green !important;
+    margin-left: 10px !important;
+}
