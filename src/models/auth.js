@@ -29,7 +29,7 @@ const AuthStore = types
         user: types.maybeNull(User),
         token: types.maybeNull(types.string),
         errors: types.optional(types.array(APIError), []),
-        isLoading: true,
+        isLoading: false,
         authenticated: false
     })
     .actions(self => ({
@@ -47,8 +47,11 @@ const AuthStore = types
             else {
                 const response = yield authAPI.signUp(data); 
                 const json = yield response.json();
-    
-                applySnapshot(self, json);
+
+                if (response.ok)
+                    applySnapshot(self, json);
+                else
+                    self.errors = json.errors;
             }
             
             self.isLoading = false;
@@ -61,13 +64,15 @@ const AuthStore = types
             const response = yield authAPI.signIn(data);
             const json = yield response.json();
 
-            applySnapshot(self, json);
-
             if (response.ok) {
+                applySnapshot(self, json);
+
                 self.authenticated = response.ok;
 
                 localStorage.setItem("token", json.token);
             }
+            else
+                self.errors = json.errors;
 
             self.isLoading = false;
         }),
@@ -81,9 +86,13 @@ const AuthStore = types
                 const response = yield authAPI.check(self.token);
                 const json = yield response.json();
 
-                applySnapshot(self, json);
+                if (response.ok) {
+                    applySnapshot(self, json);
 
-                self.authenticated = response.ok;
+                    self.authenticated = true;
+                }
+                else
+                    self.errors = json.errors;
             }
 
             self.isLoading = false;
