@@ -7,7 +7,8 @@ import { Redirect } from "react-router-dom";
 import { 
     Button, 
     Typography, 
-    TextField 
+    TextField,
+    Alert
 } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 
@@ -28,8 +29,10 @@ function SignUpPage(props) {
             props.history.push("/signin");
     };
   
-    const error = authStore.errors.length > 0 ? 
-        <p className={styles.errorMessage}>{authStore.errors[0].message}</p> 
+    const alert = authStore.errors.length > 0 ? 
+        <Alert className={styles.alert} severity="error">
+            {authStore.errors[0].message}
+        </Alert>
         : 
         <></>; 
     return authStore.authenticated ? 
@@ -40,7 +43,7 @@ function SignUpPage(props) {
                 <Header />
                 <div className={styles.wrapper}>
                     <SignUpForm onSubmit={handleFormSubmit} />
-                    {error}
+                    {alert}
                 </div>
             </>
         );

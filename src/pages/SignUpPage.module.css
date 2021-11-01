@@ -43,7 +43,6 @@
     width: 100%;
 }
 
-.errorMessage {
-    color: red;
-    text-align: center;
+.alert {
+    margin-top: 20px;
 }
