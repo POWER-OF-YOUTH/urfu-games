@@ -1,7 +1,20 @@
-import { body, param } from "express-validator";
+import { body, param, query, oneOf } from "express-validator";
 
 import User from "../../models/user";
 import requestValidator from "../request_validator";
+
+export const getUsers = [
+    query("id")
+        .optional()
+        .customSanitizer(id => {
+            if (!Array.isArray(id))
+                return [ id ];
+            return id;
+        }),
+    query("id.*")
+        .isUUID(),
+    requestValidator
+];
 
 export const getUser = [
     param("id")

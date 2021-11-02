@@ -8,9 +8,19 @@ import { DTO } from "../../utils/dto/user";
 
 type UserDocument = IUser & Document<any, any, IUser>;
 
+type GetUsersData = {
+    id: Array<string> | undefined
+};
+
 export async function getUsers(req: Request, res: Response, next: NextFunction) {
     try {
-        const users = await User.find();
+        const data = <GetUsersData> matchedData(req, { locations: [ "query" ] });
+
+        let users: Array<UserDocument> = [];
+        if (data.id)
+            users = await User.find({id: {$in: data.id}});
+        else
+            users = await User.find();
 
         res.json(users.map(u => new DTO.User(u)));
     }
