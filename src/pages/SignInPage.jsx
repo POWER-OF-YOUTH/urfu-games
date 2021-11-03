@@ -1,81 +1,98 @@
-import * as React from "react";
-import {  Redirect } from "react-router-dom";
+import React, { 
+    useState, 
+    useContext
+} from "react";
+
+import { Redirect } from "react-router-dom";
 import { 
     Button, 
     Typography, 
-    Toolbar, 
-    Box, 
-    AppBar, 
-    List, 
-    TextField
+    TextField,
+    Alert
 } from "@material-ui/core";
-import styles from "./SignInPage.module.css";
-import authAPI from "../utils/api/authAPI";
-import checkAuthentication from "../utils/checkAuthentication";
+import { observer } from "mobx-react-lite";
 
-export default function SignInPage(props) {
-    const [values, setValues] = React.useState({
+import Header from "../components/Header";
+import { RootStoreContext } from "../models/root";
+
+import styles from "./SignInPage.module.css";
+
+function SignInPage(props) {
+    const rootStore = useContext(RootStoreContext);
+    const authStore = rootStore.authStore;
+
+    const handleFormSubmit = async (values) => {
+        await authStore.signIn(values);
+
+        // Если в процессе входа ошибок не возникло
+        if (authStore.errors.length === 0)
+            props.history.push("/games");
+    };
+  
+    const alert = authStore.errors.length > 0 ? 
+        <Alert className={styles.alert} severity="error">
+            {authStore.errors[0].message}
+        </Alert>
+        : 
+        <></>; 
+    return authStore.authenticated ? 
+        (
+            <Redirect to="/games" />
+        ) : (
+            <>
+                <Header />
+                <div className={styles.wrapper}>
+                    <SignInForm onSubmit={handleFormSubmit} />
+                    {alert}
+                </div>
+            </>
+        );
+}
+
+function SignInForm({ onSubmit, onChange }) {
+    const [values, setValues] = useState({
         login: "",
         password: "",
     });
-    const [auth, setAuth] = React.useState(null);
-    const [errors, setErorrs] = React.useState([]);
-  
-    const handleChange = (prop) => (event) => {
-        const value = event.target.value;
-        setValues({ ...values, [prop]:value });
-        setErorrs([]);
+
+    const handleFieldChange = (name) => (evt) => {
+        const value = evt.target.value;
+        setValues({ ...values, [name]: value });
     };
 
-    const onLogInButtonClick = async () => {
-        const signInResult = await authAPI.signIn(values);
-        if(!signInResult.success) {
-            setErorrs(signInResult.errors);
-        }
-        else {
-            localStorage.setItem("user", JSON.stringify(signInResult.data.user));
-            localStorage.setItem("token", signInResult.data.token);
-            props.history.push("/");
-        }
-    };
+    const handleSubmit = () => onSubmit(values);
 
-    React.useEffect(async() => { setAuth(await checkAuthentication()); }, []);
-
-    const Input = ({ label, name, type = "text", ...props }) => (
-        <TextField 
-            id="outlined-basic" 
-            variant="outlined" 
-            className={styles.button} 
-            label={label} 
-            type={type}
-            onChange={handleChange({name})} 
-            {...props}
-        />
-    );
-    if(!auth) return(<></>);
-    else if(auth.success) return(<Redirect to="/"/>);
     return (
-        <Box sx={{"& .MuiTextField-root": { m: 1 }}}> 
-            <AppBar color="default">
-                <Toolbar>
-                    <Typography variant="h4" className={styles.bar}>
-                        Urfu Games 
-                    </Typography>
-                </Toolbar>
-            </AppBar>        
-            <div className={styles.menu}>
-                <Typography variant="h5" className={styles.line}>
-                    Вход в аккаунт
-                </Typography>
-                <List>
-                    <Input label="Логин/Email" name="login" />
-                    <Input label="Пароль" type="password" />
-                    <Button variant="contained" className={styles.button} onClick={onLogInButtonClick}>
-                        Войти
-                    </Button>
-                </List>
+        <div className={styles.signInForm}>
+            <Typography variant="h5" className={styles.title}>Вход</Typography>
+            <div className={styles.signInFormBody}>
+                <div className={styles.fieldsContainer}>
+                    <TextField 
+                        id="outlined-basic" 
+                        variant="outlined" 
+                        className={styles.field} 
+                        label="Логин"
+                        onChange={handleFieldChange("login")} 
+                    />
+                    <TextField 
+                        id="outlined-basic" 
+                        variant="outlined" 
+                        className={styles.field} 
+                        label="Пароль"
+                        type="password"
+                        onChange={handleFieldChange("password")} 
+                    />
+                </div>
+                <Button 
+                    className={styles.registerButton} 
+                    variant="contained" 
+                    onClick={handleSubmit}
+                >
+                    Войти
+                </Button>
             </div>
-            { errors.length > 0 ? <p className={styles.errorMessage}>{errors[0].message}</p> : <></> }     
-        </Box>
+        </div>
     );
 }
+
+export default observer(SignInPage);
