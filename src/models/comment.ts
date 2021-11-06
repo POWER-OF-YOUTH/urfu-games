@@ -1,9 +1,10 @@
 import mongoose, { Schema } from "mongoose";
+import { IUser } from "./user";
 
 interface IComment {
     id: string;
     gameId: string;
-    author: string;
+    author: IUser;
     text: string;
     createdAt: Date;
 }
@@ -22,7 +23,8 @@ const commentSchema = new Schema<IComment>(
             index: true
         },
         author: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "User",
             required: true,
             index: true
         },

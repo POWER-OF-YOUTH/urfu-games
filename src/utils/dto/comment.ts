@@ -1,19 +1,17 @@
-import { IComment } from "../../models/comment";
+import UserDTO from "./user";
 
-export namespace DTO {
-    export class Comment {
-        public readonly id: string;
-        public readonly gameId: string;
-        public readonly author: string;
-        public readonly text: string;
-        public readonly createdAt: Date;
+export default class CommentDTO {
+    public readonly id: string;
+    public readonly gameId: string;
+    public readonly author: UserDTO;
+    public readonly text: string;
+    public readonly createdAt: Date;
 
-        constructor(comment: IComment) {
-            this.id = comment.id;
-            this.gameId = comment.gameId;
-            this.author = comment.author;
-            this.text = comment.text;
-            this.createdAt = comment.createdAt;
-        }
+    constructor(data: any) {
+        this.id = data.id;
+        this.gameId = data.gameId;
+        this.author = new UserDTO(data.author);
+        this.text = data.text;
+        this.createdAt = data.createdAt;
     }
 }

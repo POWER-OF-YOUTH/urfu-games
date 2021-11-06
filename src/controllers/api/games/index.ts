@@ -6,11 +6,11 @@ import fs from "fs";
 import { Document } from "mongoose";
 import { matchedData } from "express-validator";
 
-import { LogicError, AccessError } from "../../utils/errors";
-import { Game, IGame } from "../../models/game";
-import Comment from "../../models/comment";
-import { Role } from "../../models/user";
-import { DTO } from "../../utils/dto/game";
+import { LogicError, AccessError } from "../../../utils/errors";
+import { Game, IGame } from "../../../models/game";
+import Comment from "../../../models/comment";
+import { Role } from "../../../models/user";
+import GameDTO from "../../../utils/dto/game";
 
 type GameDocument = IGame & Document<any, any, IGame>;
 
@@ -34,7 +34,7 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
             url: `/games/${id}`
         });
 
-        res.json(new DTO.Game(game));
+        res.json(new GameDTO(game));
     }
     catch (err) {
         next(err);
@@ -42,15 +42,15 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
 }
 
 type GetGameData = {
-    id: string
+    gameId: string
 };
 
 export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
-        const game: GameDocument = await Game.findOne({ id: data.id });
+        const game: GameDocument = await Game.findOne({ id: data.gameId });
 
-        res.json(new DTO.Game(game));
+        res.json(new GameDTO(game));
     }
     catch (err) {
         next(err);
@@ -61,7 +61,7 @@ export async function getGames(req: Request, res: Response, next: NextFunction):
     try {
         const games: Array<GameDocument> = await Game.find();
 
-        res.json(games.map(game => new DTO.Game(game)));
+        res.json(games.map(game => new GameDTO(game)));
     }
     catch (err) {
         next(err);
@@ -69,6 +69,7 @@ export async function getGames(req: Request, res: Response, next: NextFunction):
 }
 
 type UpdateGameData = {
+    gameId: string,
     competencies: Array<string> | undefined,
     name: string | undefined,
     description: string | undefined,
@@ -77,9 +78,9 @@ type UpdateGameData = {
 
 export async function updateGame(req: Request, res: Response, next: NextFunction) {
     try {
-        const data = <UpdateGameData> matchedData(req, { locations: [ "body" ] });
+        const data = <UpdateGameData> matchedData(req, { locations: [ "body", "params" ] });
         const user: any = req.user;
-        const game: GameDocument = await Game.findOne({ id: req.params.id });
+        const game: GameDocument = await Game.findOne({ id: data.gameId });
 
         if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
@@ -88,7 +89,7 @@ export async function updateGame(req: Request, res: Response, next: NextFunction
 
             await game.save();
 
-            res.json(new DTO.Game(game));
+            res.json(new GameDTO(game));
         }
     }
     catch(err) {
@@ -143,20 +144,20 @@ export const uploadGame = [
 ];
 
 type DeleteGameData = {
-    id: string
+    gameId: string
 }
 
 export async function deleteGame(req: Request, res: Response, next: NextFunction) {
     try {
         const data = <DeleteGameData> matchedData(req, { locations: [ "params" ] });
-        const game: GameDocument = await Game.findOne({ id: data.id });
+        const game: GameDocument = await Game.findOne({ id: data.gameId });
         const user: any = req.user;
 
         // Если игра не принадлежит пользователю и он не является администратором
         if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
-            const directory: string = path.join(process.env.PUBLIC_DIR, "/games", data.id);
+            const directory: string = path.join(process.env.PUBLIC_DIR, "/games", data.gameId);
 
             await game.delete();
 
@@ -165,7 +166,7 @@ export async function deleteGame(req: Request, res: Response, next: NextFunction
 
             await Comment.deleteMany({ gameId: game.id }); // Удаляем комментарии, относящиеся к игре
 
-            res.json(new DTO.Game(game));
+            res.json(new GameDTO(game));
         }
     }
     catch (err) {

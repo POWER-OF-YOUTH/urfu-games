@@ -4,7 +4,8 @@ import { matchedData } from "express-validator";
 
 import { AccessError } from "../../utils/errors";
 import { User, IUser } from "../../models/user";
-import { DTO } from "../../utils/dto/user";
+
+import UserDTO from "../../utils/dto/user";
 
 type UserDocument = IUser & Document<any, any, IUser>;
 
@@ -22,7 +23,7 @@ export async function getUsers(req: Request, res: Response, next: NextFunction) 
         else
             users = await User.find();
 
-        res.json(users.map(u => new DTO.User(u)));
+        res.json(users.map(u => new UserDTO(u)));
     }
     catch (err) {
         next(err);
@@ -38,7 +39,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
         const data = <GetUserData> matchedData(req, { locations: [ "params" ]});
         const user: UserDocument = await User.findOne({ id: data.id });
 
-        res.json(new DTO.User(user));
+        res.json(new UserDTO(user));
     }
     catch (err) {
         next(err);
@@ -66,7 +67,7 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
 
             await user.save();
 
-            res.json(new DTO.User(user));
+            res.json(new UserDTO(user));
         }
     }
     catch (err) {

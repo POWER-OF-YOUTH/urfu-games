@@ -1,8 +1,8 @@
 import { body, param } from "express-validator";
 
-import User from "../../models/user";
-import Game from "../../models/game";
-import requestValidator from "../request_validator";
+import User from "../../../models/user";
+import Game from "../../../models/game";
+import requestValidator from "../../request_validator";
 
 export const addGame = [
     body("name")
@@ -32,7 +32,7 @@ export const addGame = [
 ];
 
 export const getGame = [
-    param("id")
+    param("gameId")
         .isUUID()
         .custom(async (id: string) => {
             if (!await Game.exists({ id }))
@@ -42,7 +42,7 @@ export const getGame = [
 ];
 
 export const updateGame = [
-    param("id")
+    param("gameId")
         .isUUID()
         .custom(async (id: string) => {
             if (!await Game.exists({ id }))
@@ -80,7 +80,7 @@ export const updateGame = [
 ];
 
 export const uploadGame = [
-    param("id")
+    param("gameId")
         .isUUID()
         .custom(async (id: string) => {
             if (!await Game.exists({ id }))
@@ -90,7 +90,7 @@ export const uploadGame = [
 ];
 
 export const deleteGame = [
-    param("id")
+    param("gameId")
         .isUUID()
         .custom(async (id: string) => {
             if (!await Game.exists({ id }))

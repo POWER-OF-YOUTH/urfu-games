@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { Document } from "mongoose";
 
-import { AccessError } from "../../utils/errors";
-import { Comment, IComment } from "../../models/comment";
-import { Role } from "../../models/user";
-import { DTO } from "../../utils/dto/comment";
+import { AccessError } from "../../../utils/errors";
+import { Comment, IComment } from "../../../models/comment";
+import { Role, User } from "../../../models/user";
+import CommentDTO from "../../../utils/dto/comment";
 
 type CommentDocument = IComment & Document<any, any, IComment>;
 
@@ -17,17 +17,19 @@ type AddCommentData = {
 
 export async function addComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <AddCommentData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
+        const data = <AddCommentData> matchedData(req, { locations: [ "body", "params" ] });
 
         const id: string = uuid();
+        const author = await User.findOne({ id: user.id });
         const comment: CommentDocument = await Comment.create({
             ...data,
             id,
-            author: user.id
-        });
-        
-        res.json(new DTO.Comment(comment));
+            author: author._id
+        })
+            .then(c => c.populate("author").execPopulate());
+
+        res.json(new CommentDTO(comment));
     }
     catch (err) {
         next(err);
@@ -35,15 +37,17 @@ export async function addComment(req: Request, res: Response, next: NextFunction
 }
 
 type GetCommentData = {
-    id: string
+    commentId: string
 }
 
 export async function getComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetCommentData> matchedData(req, { locations: [ "params" ] });
-        const comment: CommentDocument = await Comment.findOne({ id: data.id });
+        const comment: CommentDocument = await Comment
+            .findOne({ id: data.commentId })
+            .populate("author");
 
-        res.json(new DTO.Comment(comment));
+        res.json(new CommentDTO(comment));
     }
     catch (err) {
         next(err);
@@ -52,15 +56,16 @@ export async function getComment(req: Request, res: Response, next: NextFunction
 
 type GetCommentsData = {
     gameId: string | undefined,
-    author: string | undefined
 }
 
 export async function getComments(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <GetCommentsData> matchedData(req, { locations: [ "query" ] });
-        const comments = await Comment.find(data);
+        const data = <GetCommentsData> matchedData(req, { locations: [ "params" ] });
+        const comments = await Comment
+            .find({ gameId: data.gameId })
+            .populate("author");
 
-        res.json(comments.map(c => new DTO.Comment(c)));
+        res.json(comments.map(c => new CommentDTO(c)));
     }
     catch (err) {
         next(err);
@@ -68,24 +73,26 @@ export async function getComments(req: Request, res: Response, next: NextFunctio
 }
 
 type UpdateCommentData = {
-    id: string,
+    commentId: string,
     text: string
 }
 
 export async function updateComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <UpdateCommentData> matchedData(req, { locations: [ "params", "body" ] });
         const user: any = req.user;
-        const comment: CommentDocument = await Comment.findOne({ id: data.id });
+        const data = <UpdateCommentData> matchedData(req, { locations: [ "params", "body" ] });
+        const comment: CommentDocument = await Comment
+            .findOne({ id: data.commentId })
+            .populate("author");
 
-        if (comment.author !== user.id)
+        if (comment.author.id !== user.id)
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
             comment.set({ text: data.text });
 
             await comment.save();
 
-            res.json(new DTO.Comment(comment));
+            res.json(new CommentDTO(comment));
         }
     }
     catch (err) {
@@ -94,21 +101,23 @@ export async function updateComment(req: Request, res: Response, next: NextFunct
 }
 
 type DeleteCommentData = {
-    id: string
+    commentId: string
 }
 
 export async function deleteComment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <DeleteCommentData> matchedData(req, { locations: [ "params" ] });
         const user: any = req.user;
-        const comment: CommentDocument = await Comment.findOne({ id: data.id });
+        const data = <DeleteCommentData> matchedData(req, { locations: [ "params" ] });
+        const comment: CommentDocument = await Comment
+            .findOne({ id: data.commentId })
+            .populate("author");
 
-        if (comment.author !== user.id && user.role !== Role.Admin)
+        if (comment.author.id !== user.id && user.role !== Role.Admin)
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
             await comment.delete();
 
-            res.json(new DTO.Comment(comment));
+            res.json(new CommentDTO(comment));
         }
     }
     catch (err) {

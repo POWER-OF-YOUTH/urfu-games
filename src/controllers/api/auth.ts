@@ -7,7 +7,8 @@ import { matchedData } from "express-validator";
 
 import { IUser, User } from "../../models/user";
 import { LogicError, DatabaseError, AccessError } from "../../utils/errors";
-import { DTO } from "../../utils/dto/user";
+
+import UserDTO from "../../utils/dto/user";
 
 type UserDocument = IUser & Document<any, any, IUser>;
 
@@ -43,7 +44,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction): P
 
         const user: UserDocument = await User.create({ id: uuid(), ...data }); 
         
-        res.json({ user: new DTO.User(user) });
+        res.json({ user: new UserDTO(user) });
     }
     catch (err) {
         next(err);
@@ -69,7 +70,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction): P
         }
         else {
             res.json({ 
-                user: new DTO.User(user), 
+                user: new UserDTO(user), 
                 token: generateToken({ id: user.id, role: user.role }) 
             });
         }
@@ -99,7 +100,7 @@ export async function check(req: Request, res: Response, next: NextFunction) {
         else {
             const user: UserDocument = await User.findOne({ id: userData.id });
 
-            res.json({ user: new DTO.User(user) });
+            res.json({ user: new UserDTO(user) });
         }
     }
     catch (err) {

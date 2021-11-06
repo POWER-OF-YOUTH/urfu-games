@@ -1,8 +1,8 @@
 import express from "express";
 
-import * as commentsController from "../../controllers/api/comments";
-import * as commentsValidator from "../../validators/api/comments";
-import validateToken from "../../validators/validateToken";
+import * as commentsController from "../../../controllers/api/games/comments";
+import * as commentsValidator from "../../../validators/api/games/comments";
+import validateToken from "../../../validators/validateToken";
 
 const commentsRouter = express.Router();
 
@@ -15,16 +15,16 @@ commentsRouter.get("/",
     commentsValidator.getComments, 
     commentsController.getComments
 );
-commentsRouter.get("/:id", 
+commentsRouter.get("/:commentId", 
     commentsValidator.getComment, 
     commentsController.getComment
 );
-commentsRouter.put("/:id", 
+commentsRouter.put("/:commentId", 
     validateToken,
     commentsValidator.updateComment, 
     commentsController.updateComment
 );
-commentsRouter.delete("/:id", 
+commentsRouter.delete("/:commentId", 
     validateToken,
     commentsValidator.deleteComment,
     commentsController.deleteComment
