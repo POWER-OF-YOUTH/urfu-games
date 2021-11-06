@@ -33,8 +33,7 @@ const commentSchema = new Schema<IComment>(
             required: true
         },
         createdAt: {
-            type: Date,
-            default: Date.now()
+            type: Date
         }
     },
     { versionKey: false }

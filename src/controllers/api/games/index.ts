@@ -31,7 +31,8 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
             ...data,
             id,
             author: user.id,
-            url: `/games/${id}`
+            url: `/games/${id}`,
+            createdAt: Date.now()
         });
 
         res.json(new GameDTO(game));

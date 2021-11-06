@@ -25,7 +25,8 @@ export async function addComment(req: Request, res: Response, next: NextFunction
         const comment: CommentDocument = await Comment.create({
             ...data,
             id,
-            author: author._id
+            author: author._id,
+            createdAt: Date.now()
         })
             .then(c => c.populate("author").execPopulate());
 

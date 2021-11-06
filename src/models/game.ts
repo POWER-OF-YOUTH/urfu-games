@@ -59,8 +59,7 @@ const gameSchema = new Schema<IGame>(
             default: false
         },
         createdAt: {
-            type: Date,
-            default: Date.now()
+            type: Date
         }
     },
     { versionKey: false }

@@ -31,8 +31,7 @@ const ratingSchema = new Schema<IRating>(
             required: true
         },
         createdAt: {
-            type: Date,
-            default: Date.now()
+            type: Date
         }
     },
     { versionKey: false }

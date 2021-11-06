@@ -38,11 +38,11 @@ function generateToken(data: string | object | Buffer): string {
 
 export async function signUp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <SignUpData> matchedData(req, { locations: ["body"] });
+        const data = <SignUpData> matchedData(req, { locations: [ "body" ] });
 
         data.password = encryptPassword(data.password, <string> process.env.USER_PWD_SALT);
 
-        const user: UserDocument = await User.create({ id: uuid(), ...data }); 
+        const user: UserDocument = await User.create({ id: uuid(), createdAt: Date.now(), ...data }); 
         
         res.json({ user: new UserDTO(user) });
     }
