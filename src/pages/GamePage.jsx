@@ -3,11 +3,11 @@ import React, {
     useContext
 } from "react";
 import { useParams } from "react-router-dom";
-import { 
-    Button, 
+import {
+    Button,
     Rating
-} from "@material-ui/core";
-import SettingsIcon from "@material-ui/icons/Settings";
+} from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { NavLink } from "react-router-dom";
 import { observer, useLocalObservable } from "mobx-react-lite";
 

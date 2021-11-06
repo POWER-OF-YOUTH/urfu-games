@@ -1,10 +1,10 @@
 import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { 
     Button, 
     TextField,
     IconButton
-} from "@material-ui/core";
+} from "@mui/material";
 
 import styles from "./CommentForm.module.css";
 

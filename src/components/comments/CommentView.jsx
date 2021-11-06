@@ -1,8 +1,7 @@
 import React, {
     useState,
     useRef,
-    useContext,
-    useEffect
+    useContext
 } from "react";
 import {
     IconButton,
@@ -10,8 +9,8 @@ import {
     MenuItem,
     TextField,
     Button
-} from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+} from "@mui/material";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { formatRelative } from "date-fns";
 import { ru } from "date-fns/locale";
 import { observer } from "mobx-react-lite";
