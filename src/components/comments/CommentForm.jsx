@@ -11,7 +11,9 @@ import styles from "./CommentForm.module.css";
 function CommentForm({ onSubmit }) {
     const inputRef = React.useRef(null);
 
-    const clearInput = () => { inputRef.current.value = ""; };
+    const clearInput = () => { 
+        inputRef.current.value = ""; 
+    };
     
     const handleClearButtonClick = () => {
         clearInput();

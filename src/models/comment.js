@@ -1,21 +1,33 @@
 import { types, flow, applySnapshot } from "mobx-state-tree";
-import { values, observable } from "mobx";
+import { values } from "mobx";
 
-import { DateTime, APIError } from "./custom";
+import { DateTime } from "./custom";
+import { User } from "./user";
+import * as usersAPI from "../utils/api/usersAPI";
 import * as commentsAPI from "../utils/api/commentsAPI";
+
+const Author = User;
 
 const Comment = types
     .model({
         id: types.identifier,
         gameId: types.string,
-        author: types.string,
+        author: Author,
         text: types.string,
         createdAt: DateTime
     })
     .actions(self => ({
-        update(text) {
+        update: flow(function* (text) {
+            const previousText = self.text;
             self.text = text;
-        }
+
+            const token = localStorage.getItem("token");
+
+            const response = yield commentsAPI.updateComment(token, self.gameId, self.id, text);
+
+            if (!response.ok) 
+                self.text = previousText;
+        })
     }));
 
 const CommentsStore = types
@@ -33,17 +45,14 @@ const CommentsStore = types
     }))
     .actions(self => ({
         afterCreate() {
-            self.getComments();
+            self.loadComments();
         },
-        getComments: flow(function* () {
-            const options = {};
-            //options.gameId = self.gameId;
-
-            const response = yield commentsAPI.getComments(options);
+        loadComments: flow(function* () {
+            const response = yield commentsAPI.getComments(self.gameId);
             
-            let json = yield response.json();
-
             if (response.ok) {
+                const json = yield response.json();
+
                 const comments = {};
 
                 // Преобразуем массив комментариев в Map
@@ -61,13 +70,16 @@ const CommentsStore = types
             if (response.ok)
                 self.comments.put(json);
         }),
-        deleteComment: flow(function *(id) {
+        deleteComment: flow(function* (commentId) {
+            const comment = self.comments[commentId];
+            self.comments.delete(commentId);
+
             const token = localStorage.getItem("token");
             
-            const response = yield commentsAPI.deleteComment(token, id);
+            const response = yield commentsAPI.deleteComment(token, self.gameId, commentId);
             
-            if (response.ok)
-                self.comments.delete(id);
+            if (!response.ok)
+                self.comments.put(comment);
         })
     }));
 

@@ -1,5 +1,9 @@
-import React from "react";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import React, {
+    useState,
+    useRef,
+    useContext,
+    useEffect
+} from "react";
 import {
     IconButton,
     Menu,
@@ -7,16 +11,22 @@ import {
     TextField,
     Button
 } from "@material-ui/core";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { formatRelative } from "date-fns";
 import { ru } from "date-fns/locale";
 import { observer } from "mobx-react-lite";
 
+import { RootStoreContext } from "../../models/root";
+
 import styles from "./CommentView.module.css";
 
-function CommentView({ comment, store }) {
-    const [menuAnchorElement, setMenuAnchorElement] = React.useState(null);
-    const [isEditing, setIsEditing] = React.useState(false);
-    const inputRef = React.useRef(null);
+function CommentView({ store, comment }) {
+    const rootStore = useContext(RootStoreContext);
+    const authStore = rootStore.authStore;
+
+    const [menuAnchorElement, setMenuAnchorElement] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const inputRef = useRef(null);
     const isMenuOpen = Boolean(menuAnchorElement);
 
     // usefull functions
@@ -46,6 +56,11 @@ function CommentView({ comment, store }) {
     };
 
     // render blocks
+    const author = (
+        <span className={styles.author}>
+            {comment.author.login}
+        </span>
+    );
     const avatarBlock = (
         <div>
             <div className={styles.avatarFrame}>
@@ -78,8 +93,15 @@ function CommentView({ comment, store }) {
                 onClose={handleMenuClose} 
                 MenuListProps={{"aria-labelledby": "basic-button"}}
             >
-                <MenuItem onClick={handleChangeButtonClick}>Изменить</MenuItem>
-                <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem>
+                { authStore.authenticated && authStore.user.id == comment.author.id 
+                    ? <MenuItem onClick={handleChangeButtonClick}>Изменить</MenuItem>
+                    : <></>
+                }
+                { authStore.authenticated && authStore.user.id == comment.author.id 
+                    ? <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem> 
+                    : <></>
+                }
+                                
             </Menu>
         </div>
     );
@@ -87,7 +109,7 @@ function CommentView({ comment, store }) {
         <div className={styles.containerNormalMode}>
             {avatarBlock}
             <div className= {styles.commentBody}>
-                <span className={styles.author}>{comment.author}</span>
+                {author}
                 {dateBlock}
                 <div className={styles.textContainer}>
                     <span className={styles.text}>
@@ -102,7 +124,7 @@ function CommentView({ comment, store }) {
         <div className={styles.containerEditMode}>
             {avatarBlock}
             <div className={styles.commentBody}>
-                <span className={styles.author}>{comment.author}</span>
+                {author}
                 {dateBlock}
                 <TextField
                     className={styles.editInput}

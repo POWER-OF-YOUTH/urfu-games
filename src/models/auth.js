@@ -59,12 +59,12 @@ const AuthStore = types
         signIn: flow(function* (data) {
             self.isLoading = true;
 
-            self.errors.clear();
-
             const response = yield authAPI.signIn(data);
             const json = yield response.json();
 
             if (response.ok) {
+                self.errors.clear();
+
                 applySnapshot(self, json);
 
                 self.authenticated = response.ok;
@@ -79,7 +79,6 @@ const AuthStore = types
         check: flow(function* () {
             self.isLoading = true;   
 
-            self.errors.clear();
 
             self.token = localStorage.getItem("token");
             if (self.token) {
@@ -87,6 +86,8 @@ const AuthStore = types
                 const json = yield response.json();
 
                 if (response.ok) {
+                    self.errors.clear();
+
                     applySnapshot(self, json);
 
                     self.authenticated = true;
