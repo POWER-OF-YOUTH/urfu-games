@@ -62,7 +62,7 @@ const userSchema = new Schema<IUser>(
         },
         avatar: {
             type: String,
-            default: ""
+            default: "/public/avatars/default-avatar.png"
         },
         createdAt: {
             type: Date

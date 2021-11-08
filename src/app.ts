@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
+import path from "path";
 import { Request, Response, NextFunction } from "express";
 
 import { DatabaseError, UnexpectedError } from "./utils/errors";
@@ -16,7 +17,9 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // static files
-app.use(express.static(process.env.PUBLIC_DIR || "/public"));
+app.use("/public", express.static(
+    path.join(process.cwd(), "/public"))
+);
 
 // routes
 app.use("/api", apiRouter);
