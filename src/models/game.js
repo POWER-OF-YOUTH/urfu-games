@@ -6,10 +6,7 @@ import {
 } from "mobx-state-tree";
 
 import { DateTime } from "./custom";
-import { User } from "./user";
 import * as gamesAPI from "../utils/api/gamesAPI";
-
-const Author = User;
 
 const Game = types
     .model({
