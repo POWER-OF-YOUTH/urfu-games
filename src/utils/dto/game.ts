@@ -11,6 +11,7 @@ export default class GameDTO {
     public readonly participants: Array<string>;
     public readonly url: string;
     public readonly createdAt: Date;
+    public readonly uploaded: boolean;
 
     constructor(game: IGame) {
         this.id = game.id;
@@ -23,5 +24,6 @@ export default class GameDTO {
         this.participants = game.participants;
         this.url = game.url;
         this.createdAt = game.createdAt;
+        this.uploaded = game.uploaded;
     }
 }
