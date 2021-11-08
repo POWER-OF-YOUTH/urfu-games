@@ -63,7 +63,7 @@ function CommentView({ store, comment }) {
     const avatarBlock = (
         <div>
             <div className={styles.avatarFrame}>
-                <img className={styles.avatar} src="/default-avatar.png" alt="Аватар" /> 
+                <img className={styles.avatar} src={comment.author.avatar} alt="Аватар" /> 
             </div>
         </div>
     );
