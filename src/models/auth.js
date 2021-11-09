@@ -94,9 +94,17 @@ const AuthStore = types
                 else
                     self.errors = json.errors;
             }
+            else {
+                self.authenticated = false;
+            }
 
             self.isLoading = false;
-        })
+        }),
+        logout() {
+            localStorage.removeItem("token");
+            
+            self.authenticated = false;
+        }
     }));
 
 export default AuthStore;
