@@ -8,7 +8,7 @@ export async function addGame(data) {
 
     try {
         const response = await fetch(url, {
-            ...apiConfig.defaultRequestInit,
+            ...apiConfig.getDefaultRequestInit(),
             method: "POST",
             body: JSON.stringify(data)
             
@@ -26,7 +26,7 @@ export async function getGame(gameId) {
 
     try {
         const response = await fetch(url, {
-            ...apiConfig.defaultRequestInit,
+            ...apiConfig.getDefaultRequestInit(),
             method: "GET"
         });
 
@@ -42,7 +42,7 @@ export async function getGames() {
 
     try {
         const response = await fetch(url, {
-            ...apiConfig.defaultRequestInit,
+            ...apiConfig.getDefaultRequestInit(),
             method: "GET"
         });
 
@@ -61,7 +61,7 @@ export async function updateGame(gameId, data) {
 
     try {
         const response = await fetch(url, {
-            ...apiConfig.defaultRequestInit,
+            ...apiConfig.getDefaultRequestInit(),
             method: "PUT",
             body: JSON.stringify(data)
         });
@@ -78,7 +78,7 @@ export async function deleteGame(gameId) {
 
     try {
         const response = await fetch(url, {
-            ...apiConfig.defaultRequestInit,
+            ...apiConfig.getDefaultRequestInit(),
             method: "DELETE",
         });
 
