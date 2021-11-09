@@ -35,8 +35,7 @@ const Game = types
 
             applySnapshot(self, newData);
             
-            const token = localStorage.getItem("token");
-            const response = yield gamesAPI.updateGame(token, self.id, data);
+            const response = yield gamesAPI.updateGame(self.id, data);
 
             if (!response.ok)
                 applySnapshot(self, oldData);
@@ -78,8 +77,7 @@ const GamesStore = types
             
             self.games.delete(gameId);
 
-            const token = localStorage.getItem("token");
-            const response = yield gamesAPI.deleteGame(token, gameId);
+            const response = yield gamesAPI.deleteGame(gameId);
 
             if (!response.ok) 
                 self.games.put(game);

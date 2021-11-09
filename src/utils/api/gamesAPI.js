@@ -1,16 +1,15 @@
+import * as apiConfig from "../../helpers/apiConfig";
+
 /**
  * @param {{ name: string, description?: string, participants?: Array<string>, competencies?: Array<string> }} data
  */
-export async function addGame(token, data) {
-    const url = "/api/games";
+export async function addGame(data) {
+    const url = apiConfig.APIURL + "/games";
 
     try {
         const response = await fetch(url, {
+            ...apiConfig.defaultRequestInit,
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
             body: JSON.stringify(data)
             
         });
@@ -23,10 +22,11 @@ export async function addGame(token, data) {
 }
 
 export async function getGame(gameId) {
-    const url = `/api/games/${gameId}`;
+    const url = apiConfig.APIURL + `/games/${gameId}`;
 
     try {
         const response = await fetch(url, {
+            ...apiConfig.defaultRequestInit,
             method: "GET"
         });
 
@@ -38,10 +38,11 @@ export async function getGame(gameId) {
 }
 
 export async function getGames() {
-    const url = `/api/games`;
+    const url = apiConfig.APIURL + `/games`;
 
     try {
         const response = await fetch(url, {
+            ...apiConfig.defaultRequestInit,
             method: "GET"
         });
 
@@ -55,16 +56,13 @@ export async function getGames() {
 /**
  * @param {{ name: string, description?: string, participants?: Array<string>, competencies?: Array<string> }} data
  */
-export async function updateGame(token, gameId, data) {
-    const url = `/api/games/${gameId}`;
+export async function updateGame(gameId, data) {
+    const url = apiConfig.APIURL + `/games/${gameId}`;
 
     try {
         const response = await fetch(url, {
+            ...apiConfig.defaultRequestInit,
             method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify(data)
         });
 
@@ -75,15 +73,13 @@ export async function updateGame(token, gameId, data) {
     }
 }
 
-export async function deleteGame(token, gameId) {
-    const url = `/api/games/${gameId}`;
+export async function deleteGame(gameId) {
+    const url = apiConfig.APIURL + `/games/${gameId}`;
 
     try {
         const response = await fetch(url, {
+            ...apiConfig.defaultRequestInit,
             method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
         });
 
         return response;
