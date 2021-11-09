@@ -22,6 +22,11 @@ const Game = types
         uploaded: types.boolean,
         createdAt: DateTime
     })
+    .views(self => ({
+        get rating() {
+            return self.rating;
+        }
+    }))
     .actions(self => ({
         rate(rate) { /* TODO: Rates */ },
         update: flow(function* (data) {
