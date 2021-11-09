@@ -4,14 +4,24 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import { RootStore, RootStoreContext } from "./models/root";
+
+/* MobX заметки */
+/*
+    Если мы переходим между страницами сайта с помощью компонента Link,
+    хранилище, передаваемое через контекст, сохраняет своё состояние, 
+    т.е. не пересоздаётся.
+
+    Если обновить страницу, хранилище будет создано заново.
+*/
+
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <RootStoreContext.Provider value={RootStore.create()}>
+            <App />
+        </RootStoreContext.Provider>
     </React.StrictMode>,
     document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
