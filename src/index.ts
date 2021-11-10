@@ -4,12 +4,9 @@ dotenv.config();
 import mongoose from "mongoose";
 import app from "./app";
 
-mongoose.set("useCreateIndex", true);
 mongoose.connect(
     <string> process.env.MONGO_URI, 
     {
-        useUnifiedTopology: true, 
-        useNewUrlParser: true,
         user: process.env.MONGO_USR,
         pass: process.env.MONGO_PWD,
         dbName: process.env.MONGO_DBN
