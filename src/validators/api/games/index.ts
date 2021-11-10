@@ -1,7 +1,5 @@
 import { body, param } from "express-validator";
 
-import User from "../../../models/user";
-import Game from "../../../models/game";
 import requestValidator from "../../request_validator";
 
 export const addGame = [
@@ -12,42 +10,39 @@ export const addGame = [
         .matches("[0-9A-Za-z]+")
         .withMessage("Название игры не соответсвует шаблону: [0-9A-Za-z]+"),
     body("competencies")
+        .default([])
         .isArray(),
+    body("competencies.*")
+        .isUUID(),
     body("description")
         .optional()
         .isString()
         .isLength({ min: 0, max: 500 }),
     body("participants")
-        .optional()
-        .isArray()
-        .custom(async (ids: Array<string>, { req }) => {
-            for (const id of ids) {
-                if (!await User.exists({ id }))
-                    throw new Error("Пользователь с указанным id не существует.");
-                else if (id === req.body.author)
-                    throw new Error("Пользователь не может быть автором и участником одновременно.");
+        .default([])
+        .isArray(),
+    body("participants.*")
+        .isUUID()
+        .custom((id: string, { req }) => {
+            if (id === req.user.id) {
+                return Promise.reject(
+                    new Error("Пользователь не может быть автором и участником одновременно.")
+                );
             }
+            return Promise.resolve();
         }),
     requestValidator 
 ];
 
 export const getGame = [
     param("gameId")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
+        .isUUID(),
     requestValidator
 ];
 
 export const updateGame = [
     param("gameId")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
+        .isUUID(),
     body("name")
         .optional()
         .isString()
@@ -67,34 +62,28 @@ export const updateGame = [
         .isLength({ min: 0, max: 500 }),
     body("participants")
         .optional()
-        .isArray()
-        .custom(async (ids: Array<string>, { req }) => {
-            for (const id of ids) {
-                if (!await User.exists({ id }))
-                    throw new Error("Пользователь с указанным id не существует.");
-                else if (id === req.body.author)
-                    throw new Error("Пользователь не может быть автором и участником одновременно.");
+        .isArray(),
+    body("participants.*")
+        .isUUID()
+        .custom((id: string, { req }) => {
+            if (id === req.user.id) {
+                return Promise.reject(
+                    new Error("Пользователь не может быть автором и участником одновременно.")
+                );
             }
+            return Promise.resolve();
         }),
     requestValidator      
 ];
 
 export const uploadGame = [
     param("gameId")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
+        .isUUID(),
     requestValidator
 ];
 
 export const deleteGame = [
     param("gameId")
-        .isUUID()
-        .custom(async (id: string) => {
-            if (!await Game.exists({ id }))
-                throw new Error("Игры с указанным id не существует.");
-        }),
+        .isUUID(),
     requestValidator
 ];

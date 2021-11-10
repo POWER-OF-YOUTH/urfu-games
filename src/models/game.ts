@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+import { IUser } from "./user";
+
 interface IGame {
     id: string;
     competencies: Array<string>;
@@ -7,8 +9,22 @@ interface IGame {
     name: string;
     description: string;
     rating: number;
-    author: string;
-    participants: Array<string>;
+    author: Schema.Types.ObjectId;
+    participants: Array<Schema.Types.ObjectId>;
+    url: string;
+    uploaded: boolean;
+    createdAt: Date;
+}
+
+interface IGamePopulated {
+    id: string;
+    competencies: Array<string>;
+    image: string;
+    name: string;
+    description: string;
+    rating: number;
+    author: IUser;
+    participants: Array<IUser>;
     url: string;
     uploaded: boolean;
     createdAt: Date;
@@ -43,11 +59,16 @@ const gameSchema = new Schema<IGame>(
             default: 0
         },
         author: {
-            type: String,
-            required: true
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+            index: true
         },       
         participants: {
-            type: [String],
+            type: [{
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            }],
             default: []
         },
         url: {
@@ -67,8 +88,12 @@ const gameSchema = new Schema<IGame>(
 
 const Game = mongoose.model<IGame>("Game", gameSchema);
 
+type GameDocument = IGame & Document<any, any, IGame>;
+
 export default Game;
 export {
     IGame,
-    Game
+    IGamePopulated,
+    Game,
+    GameDocument
 };

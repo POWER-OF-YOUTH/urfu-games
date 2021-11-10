@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { IUser } from "./user";
 
 interface IComment {
@@ -41,8 +41,11 @@ const commentSchema = new Schema<IComment>(
 
 const Comment = mongoose.model<IComment>("Comment", commentSchema);
 
+type CommentDocument = IComment & Document<any, any, IComment>;
+
 export default Comment;
 export {
     IComment,
-    Comment
+    Comment,
+    CommentDocument
 };

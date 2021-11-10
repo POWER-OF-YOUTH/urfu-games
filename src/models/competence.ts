@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface ICompetence {
     id: string;
@@ -31,8 +31,11 @@ const competenceSchema = new Schema<ICompetence>(
 
 const Competence = mongoose.model<ICompetence>("Competence", competenceSchema);
 
+type CompetenceDocument = ICompetence & Document<any, any, ICompetence>;
+
 export default Competence;
 export {
     ICompetence,
-    Competence
+    Competence,
+    CompetenceDocument
 };

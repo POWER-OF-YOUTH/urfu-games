@@ -28,7 +28,7 @@ export async function addComment(req: Request, res: Response, next: NextFunction
             author: author._id,
             createdAt: Date.now()
         })
-            .then(c => c.populate("author").execPopulate());
+            .then(c => c.populate("author"));
 
         res.json(new CommentDTO(comment));
     }

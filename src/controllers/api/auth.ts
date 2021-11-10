@@ -2,15 +2,13 @@ import { v4 as uuid } from "uuid";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { Document } from "mongoose";
 import { matchedData } from "express-validator";
 
-import { IUser, User } from "../../models/user";
+import { User, UserDocument } from "../../models/user";
 import { LogicError, DatabaseError, AccessError } from "../../utils/errors";
 
 import UserDTO from "../../utils/dto/user";
 
-type UserDocument = IUser & Document<any, any, IUser>;
 
 type SignUpData = {
     login: string,

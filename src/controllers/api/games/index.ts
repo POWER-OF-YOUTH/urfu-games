@@ -3,39 +3,63 @@ import { Request, Response, NextFunction } from "express";
 import multer, { diskStorage } from "multer";
 import path from "path";
 import fs from "fs";
-import { Document } from "mongoose";
 import { matchedData } from "express-validator";
 
 import { LogicError, AccessError } from "../../../utils/errors";
-import { Game, IGame } from "../../../models/game";
+import { Competence, CompetenceDocument } from "../../../models/competence";
+import { User, UserDocument, Role } from "../../../models/user";
+import { Game, GameDocument, IGamePopulated } from "../../../models/game";
 import Comment from "../../../models/comment";
-import { Role } from "../../../models/user";
 import GameDTO from "../../../utils/dto/game";
 
-type GameDocument = IGame & Document<any, any, IGame>;
 
 type AddGameData = {
     competencies: Array<string>,
     name: string,
     description: string,
-    participant: Array<string>
+    participants: Array<string>
 }
 
 export async function addGame(req: Request, res: Response, next: NextFunction) {
     try {
-        const data = <AddGameData> matchedData(req, { locations: ["body"] });
+        const data = <AddGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
-        
-        const id: string = uuid();
-        const game: GameDocument = await Game.create({ 
-            ...data,
-            id,
-            author: user.id,
-            url: `/games/${id}`,
-            createdAt: Date.now()
-        });
 
-        res.json(new GameDTO(game));
+        const author = await User.findOne({ id: user.id });
+        const participants: Array<UserDocument> = await User.find({ 
+            id: { $in: data.participants }
+        });
+        const competencies: Array<CompetenceDocument> = await Competence.find({ 
+            id: { $in: data.competencies }
+        });
+        if (participants.length !== data.participants.length) {
+            res.status(422).json({ errors: [
+                new LogicError(req.originalUrl, "Один или несколько участников не найдены.")
+            ]});
+        }
+        else if (competencies.length !== data.competencies.length) {
+            res.status(422).json({ errors: [
+                new LogicError(req.originalUrl, "Одна или несколько компетенций не найдены.")
+            ]});
+        }
+        else {
+            // Create game entity
+            const id: string = uuid();
+            const game: GameDocument = await Game.create({ 
+                ...data,
+                id,
+                author: author._id,
+                participants: participants.map(p => p._id),
+                url: path.join("/public", process.env.PUBLIC_GAMES_SUBDIR, id),
+                createdAt: Date.now()
+            });
+
+            await game.populate("author");
+            await game.populate("participants");
+
+            // @ts-ignore
+            res.json(new GameDTO(game));
+        }
     }
     catch (err) {
         next(err);
@@ -49,9 +73,18 @@ type GetGameData = {
 export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
-        const game: GameDocument = await Game.findOne({ id: data.gameId });
+        const game: IGamePopulated = await Game
+            .findOne({ id: data.gameId })
+            .populate("author")
+            .populate("participants");
 
-        res.json(new GameDTO(game));
+        if (!game) {
+            res.status(404).json({ errors: [ 
+                new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
+            ]});
+        }
+        else
+            res.json(new GameDTO(<IGamePopulated> game));
     }
     catch (err) {
         next(err);
@@ -60,9 +93,12 @@ export async function getGame(req: Request, res: Response, next: NextFunction): 
 
 export async function getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const games: Array<GameDocument> = await Game.find();
+        const games: Array<IGamePopulated> = await Game
+            .find()
+            .populate("author")
+            .populate("participants");
 
-        res.json(games.map(game => new GameDTO(game)));
+        res.json(games.map(g => new GameDTO(g)));
     }
     catch (err) {
         next(err);
@@ -83,13 +119,27 @@ export async function updateGame(req: Request, res: Response, next: NextFunction
         const user: any = req.user;
         const game: GameDocument = await Game.findOne({ id: data.gameId });
 
+        if (!game) {
+            res.status(404).json({ errors: [ 
+                new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
+            ]});
+        }
         if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
+            if (data.participants) { // convert participants ids to _id
+                const participants = await User.find({ id: { $in: data.participants }});
+                data.participants = participants.map(p => p._id);
+            }
+
             game.set(data);
 
             await game.save();
 
+            await game.populate("author");
+            await game.populate("participants");
+
+            // @ts-ignore
             res.json(new GameDTO(game));
         }
     }
@@ -99,11 +149,20 @@ export async function updateGame(req: Request, res: Response, next: NextFunction
 }
 
 export const uploadGame = [
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (!Game.exists({ id: req.params.id })) {
+            res.status(422).json({ errors: [ 
+                new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
+            ]});
+        }
+        else
+            next();
+    },
     multer({ 
         storage: 
             diskStorage({
                 destination(req: Request, file: Express.Multer.File, cb: (error: Error, destination: string) => void) {
-                    const directory: string = path.join(process.env.PUBLIC_DIR, "/games", req.params.id);
+                    const directory: string = path.join("/public", process.env.PUBLIC_GAMES_SUBDIR, req.params.id);
 
                     // Создадим директорию, если её не существует
                     if (!fs.existsSync(directory)) 
@@ -154,19 +213,29 @@ export async function deleteGame(req: Request, res: Response, next: NextFunction
         const game: GameDocument = await Game.findOne({ id: data.gameId });
         const user: any = req.user;
 
-        // Если игра не принадлежит пользователю и он не является администратором
-        if (game.author !== user.id && user.role !== Role.Admin) 
+        if (!game) {
+            res.status(422).json({ errors: [ 
+                new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
+            ]});
+        }
+        else if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
-            const directory: string = path.join(process.env.PUBLIC_DIR, "/games", data.gameId);
+            const directory: string = path.join("/public" + process.env.PUBLIC_GAMES_SUBDIR, data.gameId);
 
             await game.delete();
 
-            if (fs.existsSync(directory)) // Удаляем директорию, содержащую файлы игры, если она существует
+            // Удаляем директорию, содержащую файлы игры, если она существует
+            if (fs.existsSync(directory))
                 fs.rmSync(directory, { recursive: true });
 
-            await Comment.deleteMany({ gameId: game.id }); // Удаляем комментарии, относящиеся к игре
+            // Удаляем комментарии, относящиеся к игре
+            await Comment.deleteMany({ gameId: game.id }); 
 
+            await game.populate("author");
+            await game.populate("participants");
+
+            // @ts-ignore
             res.json(new GameDTO(game));
         }
     }
