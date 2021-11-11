@@ -1,6 +1,6 @@
 import * as React from "react";
 import SearchIcon from "@material-ui/icons/Search";
-import { blue, deepPurple } from '@material-ui/core/colors';
+import { blue, deepPurple } from "@material-ui/core/colors";
 import {
     Button,
     Typography,
@@ -17,92 +17,52 @@ import {
     Container,
     CssBaseline,
     Rating,
-    Avatar 
+    Avatar,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import styles from "./GamesPage.module.css";
 import test from "../components/GameImg.jpg";
+import Header from "../components/Header";
+import Competence from "../components/Competence";
+// import image from '../components/GameImage.jpg';
 
 const Input = styled("input")({
     display: "none",
 });
 
-// Добавить компетенции как в игре
-// const competencies = [
-//     {
-//         name: "Математика"
-//     },
-//     {
-//         name: "Физика",
-//         color: "purple"
-//     },
-//     {
-//         name: "Химия",
-//         color: "darkred"
-//     }
-// ].map((competence, i) => (
-//     <Competence key={i} color={competence.color}>{competence.name}</Competence>
-// ));
-
 export default function GamesPage() {
     return (
-        <Box className={styles.all}>
-            <AppBar color="default" >
-                <Toolbar>
-                    <Typography variant="h4" sx={{ mr: 5 }} >
-                        UrFU Games
-                    </Typography>                    
-                    <div className={styles.infbutton}>
-                        <Link style={{ textDecoration: "none", color: "#000000" }} to="/profile">
-                            <Button sx={{ m: 1 }} size="large" color="inherit" variant="text">
-                                Кабинет
-                            </Button>
-                        </Link>
-                        <label htmlFor="contained-button-file">
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                            <Button sx={{ m: 1 }} size="large" color="inherit" variant="text" component="span">
-                                Загрузить игру
-                            </Button>
-                        </label>
-                    </div>
-                    <Avatar sx={{ bgcolor: blue[500], mr: 3  }}>L</Avatar>
-                    <Typography variant="h6" className={styles.logotip}>
-                        #Login
-                    </Typography> 
-                    {/* <div className={styles.regbutton}>
-                        <Link to="/signin">
-                            <button className={styles.regbutton1}>Войти </button>
-                        </Link>
-                        <Link to="/signup">
-                            <button className={styles.regbutton2}>Зарегистрироваться </button>
-                        </Link>
-                    </div> */}
-                </Toolbar>
-            </AppBar>
+        <Box>
+            <Header />
             <Box className={styles.mainmenu}>
                 <Box className={styles.tags}>
                     <Typography variant="h5" sx={{ mb: 1 }}>
                         Компетенции
                     </Typography>
-                    <Typography variant="subtitle1" sx={{ pr: 18 }}>
-                        Тег #1 Тег #2 Тег #3 Тег #4
-                    </Typography>
-                    <Link style={{ textDecoration: "none", color: "#000000" }} to="/:gameId">
-                        <Button size="small" color="inherit" variant="text">
-                            показать все теги{" "}
-                        </Button>
-                    </Link>
-                    <Typography variant="h5" sx={{ mt: 3 }}>
-                        Подборки
-                    </Typography>
-                    <Typography variant="subtitle1" sx={{ my: 0.5 }}>
-                        Категория #1 Категория #2 Категория #3 Категория #4
-                    </Typography>
-                    <Link style={{ textDecoration: "none", color: "#000000" }} to="/:gameId">
-                        <Button size="small" color="inherit" variant="text">
-                            показать все категории{" "}
-                        </Button>
-                    </Link>
+                    <Competence color="red" width="100px">
+                        <span> Тег #1 </span>
+                    </Competence>
+                    <Competence color="#CC00FF" width="100px">
+                        <span> Тег #2 </span>
+                    </Competence>
+                    <Competence color="#00BBFF" width="100px">
+                        <span> Тег #3 </span>
+                    </Competence>
+                    <Competence color="#5500FF" width="100px">
+                        <span> Тег #4 </span>
+                    </Competence>
+                    <Competence color="green" width="220px">
+                        <span> Тег #5 </span>
+                    </Competence>
+                    <Competence color="#FF8800" width="60px">
+                        <span> Тег #6 </span>
+                    </Competence>
+                    <Competence color="#00FFCC" width="60px">
+                        <span> Тег #7 </span>
+                    </Competence>
+                    <Competence color="#9900FF" width="60px">
+                        <span> Тег #8 </span>
+                    </Competence>
                 </Box>
                 {/* <Card className={styles.Games}>
             <CardActionArea>
@@ -124,11 +84,10 @@ export default function GamesPage() {
                         <Typography variant="h5" sx={{ ml: 3, mt: 2 }} className={styles.recommendButton}>
                             Рекомендуемые
                         </Typography>
-                        <Link to="/games/:gameId">
+                        <Link to="/games/:gameId"  style={{color: "#000000" }}>
                             <Typography
                                 variant="h5"
-                                sx={{ mr: 3, mt: 2 }}
-                                style={{ textDecoration: "none", color: "#000000" }}
+                                sx={{ mr: 3, mt: 2 }}                                
                             >
                                 Показать все
                             </Typography>
@@ -346,6 +305,7 @@ export default function GamesPage() {
                                 </div>
                             </CardContent>
                         </Card>
+                        
                     </Box>
                 </Box>
             </Box>

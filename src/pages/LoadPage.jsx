@@ -3,6 +3,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Button, Typography, Toolbar, Box, AppBar } from "@material-ui/core";
 import { Link, useParams } from "react-router-dom";
 import styles from "./LoadPage.module.css";
+import  Header  from "../components/Header";
 
 export default function App() {
 

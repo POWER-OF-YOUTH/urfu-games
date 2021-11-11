@@ -38,18 +38,26 @@ body {
     font-weight: 600;
     text-align: center;
 }
-.tegs {
-    min-width: 100px;
-    max-width: 250px;
-    height: 100;    
-    position: absolute;
-    display: inline-block;
-    margin: 6em 2em auto 2em;   
+.mainmenu {
+    min-width: 100%;
+    min-height: 100vh;
+    flex: 1 1 auto;
+    margin: 0 2em auto auto;
+    display: flex;
+    flex-direction: row;    
 }
+.tags {
+    flex-grow: 1;
+    min-width: 265px;
+    max-width: 265px;
+    min-height: 100vh;
+    margin: 1em 2em auto 24px;
+}
+
+
 .menu {
     flex-grow: 10;    
     background-color: rgb(255, 255, 255);    
-    margin-top: 20px;
     border: 2px solid rgb(207, 207, 207);
 }
 .menuButton{
