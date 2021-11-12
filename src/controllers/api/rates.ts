@@ -24,6 +24,21 @@ export async function submitRate(req: Request, res: Response, next: NextFunction
         const data = <SubmitRateType> matchedData(req, { locations: ["body"] });
         const user: any = req.user;
 
+        const filter = {
+            gameId: data.gameId,
+            author: user.id
+        };
+        const existingRate = await Rating.findOne(filter);
+
+        if (existingRate.author) {
+            const updated = await Rating.findOneAndUpdate(filter, {
+                value: data.value,
+                createdAt: new Date()
+            }, { returnOriginal: false });
+            res.json(new DTO.Rate(updated));
+            return;
+        }
+
         const id: string = uuid();
         const rate: RateDocument = await Rating.create({ 
             ...data,
