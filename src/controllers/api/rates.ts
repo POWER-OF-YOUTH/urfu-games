@@ -7,6 +7,7 @@ import { v4 as uuid } from "uuid";
 import { IRating, Rating } from "../../models/rating";
 import { DTO } from "../../utils/dto/rate";
 import Game from "../../models/game";
+import User from "../../models/user";
 
 type RateDocument = IRating & Document<any, any, IRating>;
 
@@ -67,10 +68,24 @@ export async function getRates(req: Request, res: Response, next: NextFunction):
         }
 
         const filter: any = {};
-        if (data.gameId)
+        if (data.gameId) {
+            if (!await Game.exists({ id: data.gameId })) {
+                res.status(404).json({ errors: [
+                    new LogicError(req.originalUrl, "Игры не существует.")
+                ]});
+                return;
+            }
             filter.gameId = data.gameId;
-        if (data.authorId)
+        }
+        if (data.authorId) {
+            if (!await User.exists({ id: data.authorId })) {
+                res.status(404).json({ errors: [
+                    new LogicError(req.originalUrl, "Пользователя не существует.")
+                ]});
+                return;
+            }
             filter.author = data.authorId;
+        }
 
         const rates = await Rating.find(filter);
         res.json(rates.map(rate => new DTO.Rate(rate)));
