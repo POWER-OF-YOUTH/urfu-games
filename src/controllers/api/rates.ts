@@ -6,6 +6,7 @@ import { Document } from "mongoose";
 import { v4 as uuid } from "uuid";
 import { IRating, Rating } from "../../models/rating";
 import { DTO } from "../../utils/dto/rate";
+import Game from "../../models/game";
 
 type RateDocument = IRating & Document<any, any, IRating>;
 
@@ -30,12 +31,13 @@ export async function submitRate(req: Request, res: Response, next: NextFunction
         };
         const existingRate = await Rating.findOne(filter);
 
-        if (existingRate.author) {
+        if (existingRate?.author) {
             const updated = await Rating.findOneAndUpdate(filter, {
                 value: data.value,
                 createdAt: new Date()
             }, { returnOriginal: false });
             res.json(new DTO.Rate(updated));
+            updateGameRating(data.gameId);
             return;
         }
 
@@ -46,8 +48,8 @@ export async function submitRate(req: Request, res: Response, next: NextFunction
             author: user.id,
             createdAt: Date.now() // Отстрел ноги в будущем, I think
         });
-        
         res.json(new DTO.Rate(rate));
+        updateGameRating(data.gameId);
     }
     catch (err) {
         next(err);
@@ -71,10 +73,42 @@ export async function getRates(req: Request, res: Response, next: NextFunction):
             filter.author = data.authorId;
 
         const rates = await Rating.find(filter);
-
         res.json(rates.map(rate => new DTO.Rate(rate)));
     }
     catch (err) {
         next(err)
+    }
+}
+
+async function updateGameRating(gameId: string) {
+    try {
+        const aggregations = await Rating.aggregate([
+            {
+                $match: {
+                    gameId: {
+                        $eq: gameId
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$gameId",
+                    avgRating: {
+                        $avg: "$value"
+                    }
+                }
+            }
+        ]);
+        aggregations.map(aggregation => {
+            Game.updateOne({ id: aggregation._id }, { rating: aggregation.avgRating })
+            .then(x => {
+                console.info(`Successfully update rating to ${aggregation.avgRating} for game ${gameId}`)
+            }).catch(error => {
+                console.error(`Error during update rating for game ${gameId}: ${error}`)
+            })
+        });
+    }
+    catch (error) {
+        console.error(`Error during update rating for game ${gameId}: ${error}`);
     }
 }
