@@ -10,3 +10,13 @@ export const submitRate = [
         .isNumeric(),
     requestValidator
 ]
+
+export const getRates = [
+    body('gameId')
+        .optional()
+        .isUUID(),
+    body('authorId')
+        .optional()
+        .isUUID(),
+    requestValidator
+]
