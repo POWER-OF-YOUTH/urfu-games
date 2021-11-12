@@ -7,7 +7,9 @@ export const submitRate = [
         .isUUID()
         .custom(containsGame),
     body('value')
-        .isNumeric(),
+        .isNumeric()
+        .custom(x => x >= 0 && x <= 5)
+        .withMessage("Оценка должна быть в диапазоне [0, 5]"),
     requestValidator
 ]
 
