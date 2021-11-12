@@ -6,5 +6,7 @@ export const submitRate = [
     body('gameId')
         .isUUID()
         .custom(containsGame),
+    body('value')
+        .isNumeric(),
     requestValidator
 ]

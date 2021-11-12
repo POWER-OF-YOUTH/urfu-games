@@ -18,13 +18,12 @@ export async function submitRate(req: Request, res: Response, next: NextFunction
         const data = <SubmitRateType> matchedData(req, { locations: ["body"] });
         const user: any = req.user;
 
-        console.log(data);
-
         const id: string = uuid();
         const rate: RateDocument = await Rating.create({ 
             ...data,
             id,
             author: user.id,
+            createdAt: Date.now() // Отстрел ноги в будущем, I think
         });
         
         res.json(new DTO.Rate(rate));

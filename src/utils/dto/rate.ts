@@ -12,6 +12,7 @@ export namespace DTO {
             if (rate === undefined)
                 return;
             this.id = rate.id;
+            console.log(rate);
             this.gameId = rate.gameId;
             this.author = rate.author;
             this.value = rate.value;
