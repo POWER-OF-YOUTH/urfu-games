@@ -21,6 +21,10 @@ function SignInPage(props) {
     const rootStore = useContext(RootStoreContext);
     const authStore = rootStore.authStore;
 
+    React.useEffect(() => {
+        authStore.clearErrors();
+    }, []);
+
     const handleFormSubmit = async (values) => {
         await authStore.signIn(values);
 
@@ -40,7 +44,7 @@ function SignInPage(props) {
             <Redirect to="/games" />
         ) : (
             <>
-                <Header />
+                <Header variant="hideall" />
                 <div className={styles.wrapper}>
                     <SignInForm onSubmit={handleFormSubmit} />
                     {alert}

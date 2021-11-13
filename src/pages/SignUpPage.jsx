@@ -21,6 +21,10 @@ function SignUpPage(props) {
     const rootStore = useContext(RootStoreContext);
     const authStore = rootStore.authStore;
 
+    React.useEffect(() => {
+        authStore.clearErrors();
+    }, []);
+
     const handleFormSubmit = async (values) => {
         await authStore.signUp(values);
 
@@ -40,7 +44,7 @@ function SignUpPage(props) {
             <Redirect to="/games" />
         ) : (
             <>
-                <Header />
+                <Header variant="hideall" />
                 <div className={styles.wrapper}>
                     <SignUpForm onSubmit={handleFormSubmit} />
                     {alert}

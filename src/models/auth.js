@@ -104,6 +104,9 @@ const AuthStore = types
             localStorage.removeItem("token");
             
             self.authenticated = false;
+        },
+        clearErrors() {
+            self.errors.clear();
         }
     }));
 

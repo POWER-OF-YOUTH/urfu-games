@@ -20,12 +20,34 @@ import { RootStoreContext } from "../models/root";
 
 import styles from "./Header.module.css";
 
-function Header({ className = "" }) {
+/*
+ * @param {{ variant: "standard" | "hidebuttons" | "hideall" }}
+ */
+function Header({ variant = "standard" }) {
     const rootStore = React.useContext(RootStoreContext);
     const authStore = rootStore.authStore;
+
     const [menuAnchorElement, setMenuAnchorElement] = React.useState(null);
     const [isMobile, setIsMobile] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+    let showAuthButtons, showUser;
+    if (variant === "standard") {
+        showAuthButtons = true;
+        showUser = true;
+    }
+    else if (variant === "hidebuttons") {
+        showAuthButtons = false;
+        showUser = true;
+    }
+    else if (variant === "hideall") {
+        showAuthButtons = false;
+        showUser = false;
+    }
+    else {
+        showAuthButtons = true;
+        showUser = true;
+    }
 
     React.useEffect(() => {
         window.addEventListener("resize", () => setIsMobile(window.innerWidth < 1000));
@@ -40,18 +62,40 @@ function Header({ className = "" }) {
     };
     const handleLogoutClick = () => {
         authStore.logout();
+        setIsMenuOpen(false);
     };
 
     return (
-        <div className={`${styles.container} ${className}`}>
-            <div className={styles.logoContainer}>
-                <Link to="/" className={styles.logo}>
-                    { isMobile ? "UG" : "UrFU Games" }
-                </Link>
-            </div>
-            {authStore.authenticated ? 
-                <>
-                    <User user={authStore.user} onClick={handleUserClick} /> 
+        <>
+            <div className={styles.spacer}>
+                <header>
+                    <div className={styles.logoContainer}>
+                        <Link to="/" className={styles.logo}>
+                            { isMobile ? "UG" : "UrFU Games" }
+                        </Link>
+                    </div>
+                    {!authStore.isLoading ? 
+                        authStore.authenticated ?
+                            showUser ? <User user={authStore.user} onClick={handleUserClick} /> : <></> 
+                            : 
+                            showAuthButtons ?
+                                <div className={styles.authButtonsContainer}>
+                                    <NavLink className={styles.signInButton} to="/signin">
+                                        <Button variant="contained" size="small">
+                                            Войти
+                                        </Button>
+                                    </NavLink>
+                                    <NavLink className={styles.signUpButton} to="/signup">
+                                        <Button variant="contained" size="small">
+                                            Зарегистрироваться
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                                :
+                                <></>
+                        :
+                        <></>
+                    }
                     <Popper 
                         className={styles.menuPopper}
                         open={isMenuOpen}
@@ -84,22 +128,9 @@ function Header({ className = "" }) {
                             </Slide>
                         }
                     </Popper>
-                </>
-                : 
-                <div className={styles.authButtonsContainer}>
-                    <NavLink className={styles.signInButton} to="/signin">
-                        <Button variant="contained" size="small">
-                            Войти
-                        </Button>
-                    </NavLink>
-                    <NavLink className={styles.signUpButton} to="/signup">
-                        <Button variant="contained" size="small">
-                            Зарегистрироваться
-                        </Button>
-                    </NavLink>
-                </div>
-            }
-        </div>
+                </header>
+            </div>
+        </>
     );
 }
 
