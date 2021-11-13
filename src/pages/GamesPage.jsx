@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import { blue, deepPurple } from "@material-ui/core/colors";
 import {
@@ -24,11 +24,13 @@ import styles from "./GamesPage.module.css";
 import test from "../components/GameImg.jpg";
 import Header from "../components/Header";
 import Competence from "../components/Competence";
+import Popup from "../components/Dialog";
 // import image from '../components/GameImage.jpg';
 
 const Input = styled("input")({
     display: "none",
 });
+const [openPopup, setOpenPopup] = useState(false);
 
 export default function GamesPage() {
     return (
@@ -36,9 +38,11 @@ export default function GamesPage() {
             <Header />
             <Box className={styles.mainmenu}>
                 <Box className={styles.tags}>
-                    <Typography variant="h5" sx={{ mb: 1 }}>
-                        Компетенции
-                    </Typography>
+                    <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
+                        <Typography variant="h5" sx={{ mb: 1 }}>
+                            Компетенции
+                        </Typography>
+                    </Popup>
                     <Competence color="red" width="100px">
                         <span> Тег #1 </span>
                     </Competence>
@@ -84,11 +88,8 @@ export default function GamesPage() {
                         <Typography variant="h5" sx={{ ml: 3, mt: 2 }} className={styles.recommendButton}>
                             Рекомендуемые
                         </Typography>
-                        <Link to="/games/:gameId"  style={{color: "#000000" }}>
-                            <Typography
-                                variant="h5"
-                                sx={{ mr: 3, mt: 2 }}                                
-                            >
+                        <Link to="/games/:gameId" style={{ color: "#000000" }}>
+                            <Typography variant="h5" sx={{ mr: 3, mt: 2 }}>
                                 Показать все
                             </Typography>
                         </Link>
@@ -305,7 +306,6 @@ export default function GamesPage() {
                                 </div>
                             </CardContent>
                         </Card>
-                        
                     </Box>
                 </Box>
             </Box>
