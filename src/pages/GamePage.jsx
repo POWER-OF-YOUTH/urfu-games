@@ -131,14 +131,18 @@ function GamePage({ history }) {
                                                         Играть
                                                     </Button>
                                                 </NavLink>
-                                                <NavLink 
-                                                    className={styles.settingsButtonLink} 
-                                                    to={`/games/${params.gameId}/settings`}
-                                                >
-                                                    <Button className={styles.settingsButton} variant="contained">
-                                                        <SettingsIcon />
-                                                    </Button>
-                                                </NavLink>
+                                                { authStore.authenticated && authStore.user.id === game.author.id ? 
+                                                    <NavLink 
+                                                        className={styles.settingsButtonLink} 
+                                                        to={`/games/${params.gameId}/settings`}
+                                                    >
+                                                        <Button className={styles.settingsButton} variant="contained">
+                                                            <SettingsIcon />
+                                                        </Button>
+                                                    </NavLink>
+                                                    : 
+                                                    <></> 
+                                                }
                                             </div>
                                         </div>
                                     </div>

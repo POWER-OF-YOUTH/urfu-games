@@ -53,7 +53,7 @@ const CommentsStore = types
                 const comments = {};
 
                 // Преобразуем массив комментариев в Map
-                json.forEach((c) => { comments[c.id] = c; }); 
+                json.forEach((c) => comments[c.id] = c); 
 
                 self.comments = comments;
             }
