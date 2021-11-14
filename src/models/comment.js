@@ -44,9 +44,6 @@ const CommentsStore = types
         }
     }))
     .actions(self => ({
-        afterCreate() {
-            self.loadComments();
-        },
         loadComments: flow(function* () {
             const response = yield commentsAPI.getComments(self.gameId);
             

@@ -4,26 +4,37 @@
 
 body {
     background-color: #f4f4f4;
+    height: 100vh;
 }
 
 .wrapper {
     display: flex;
     max-width: 1000px;
-    padding-top: 45px;
     margin: 0 auto;
+}
+
+.paper {
+    box-shadow: 0 0 10px -4px black;
+    background-color: white;
+    min-height: 100vh;
+    width: 1000px;
+}
+
+.contentWrapper {
+    padding: 60px;
 }
 
 .content {
     display: grid;
     row-gap: 20px;
-    box-shadow: 0 0 10px -4px black;
-    background-color: white;
-    padding: 40px 60px 200px 60px;
 }
 
 .topBlock {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: 520px minmax(0, 340px);
+    grid-column-gap: 20px;
+    height: fit-content;
+    overflow-wrap: break-word;
 }
 
 .caption {
@@ -31,7 +42,6 @@ body {
 }
 
 .cover {
-    flex: 2;
 }
 
 .cover img {
@@ -40,10 +50,9 @@ body {
 }
 
 .gameData {
-    display: flex;
-    flex-flow: column wrap;
-    flex-basis: 350px;
-    margin-left: 20px;
+    display: grid;
+    height: 100%;
+    width: 100%;
 }
 
 .competencies *:nth-child(n) {
@@ -103,32 +112,28 @@ body {
 }
 
 .name {
-    line-height: 20px;
+    position: relative;
+    top: -6px;
+    max-width: 340px;
     order: -1;
+    line-height: 30px;
     font-family: "Roboto" sans-serif;
     font-size: 30px;
     font-weight: bold;
     margin: 0;
-    text-overflow: ellipsis;
-    white-space: pre-wrap;
     overflow-wrap: break-word;
 }
 
 @media (max-width: 1000px) {
-    .header .logo {
-        margin-left: 15px;
-        font-family: "Roboto" sans-serif;
-        font-size: 30px;
-        font-weight: bold;
-        text-decoration: none;
-        color: black;
-    }
     .content {
         padding: 0;
         padding-bottom: 200px;
     }
     .topBlock {
         flex-direction: column;
+    }
+    .cover {
+        width: 100%;
     }
     .gameData {
         margin: 0;
