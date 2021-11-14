@@ -13,7 +13,6 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
 
 import Header from "../components/Header";
-import LoadingScreen from "../components/LoadingScreen";
 import {
     CommentForm,
     CommentsListView
