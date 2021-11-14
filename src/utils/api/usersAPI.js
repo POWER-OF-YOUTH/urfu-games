@@ -1,5 +1,7 @@
+import * as apiConfig from "../../helpers/apiConfig";
+
 export async function getUsers(ids = []) {
-    let url = "/api/users";
+    let url = apiConfig.APIURL + "/api/users";
     url += "?" + ids.map(id => `id=${id}`).join("&");
 
     try {
@@ -14,9 +16,11 @@ export async function getUsers(ids = []) {
     }
 }
 
-export async function getUser(id) {
+export async function getUser(userId) {
+    const url = apiConfig.APIURL + `/api/users/${userId}`;
+
     try {
-        const response = await fetch(`/api/users/${id}`, {
+        const response = await fetch(url, {
             method: "GET"
         });
 
@@ -28,17 +32,17 @@ export async function getUser(id) {
 }
 
 /**
- * @param {string} id
+ * @param {string} userId
  * @param {{ name?: string, surname?: string, patronymic?: string, email?: string }} data
  */
-export async function updateUser(id, data = {}) {
+export async function updateUser(userId, data = {}) {
+    const url = apiConfig.APIURL + `/api/users/${userId}`;
+
     try {
-        const response = await fetch(`/api/users/${id}`, {
+        const response = await fetch(url, {
+            ...apiConfig.getDefaultRequestInit(),
             method: "PUT",
             body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
         });
 
         return response;
