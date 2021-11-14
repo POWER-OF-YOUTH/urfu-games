@@ -50,5 +50,5 @@
   "devDependencies": {
     "dotenv": "^10.0.0"
   },
-  "proxy": "http://77.246.159.176:3000"
+  "proxy": "http://edgime.ru:3000"
 }
