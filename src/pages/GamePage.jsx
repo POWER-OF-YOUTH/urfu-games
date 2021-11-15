@@ -102,7 +102,9 @@ function GamePage({ history }) {
                                                 {game.participants.length > 0 ? 
                                                     <p>
                                                         <span className={styles.caption}>Участники: </span>
-                                                        <span>{game.participants.join(", ")}</span>
+                                                        <span>
+                                                            {game.participants.map(p => p.login).join(", ")}
+                                                        </span>
                                                     </p>
                                                     :
                                                     <></>
