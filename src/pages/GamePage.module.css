@@ -115,11 +115,11 @@ body {
 
 .name {
     position: relative;
-    top: -6px;
+    top: -3px;
     max-width: 340px;
     order: -1;
     line-height: 30px;
-    font-family: "Roboto" sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 30px;
     font-weight: bold;
     margin: 0;
@@ -128,11 +128,13 @@ body {
 
 @media (max-width: 1000px) {
     .content {
+    }
+    .contentWrapper {
         padding: 0;
-        padding-bottom: 200px;
+        padding-bottom: 100px;
     }
     .topBlock {
-        flex-direction: column;
+        grid-template-columns: none;
     }
     .cover {
         width: 100%;
@@ -142,11 +144,18 @@ body {
         margin-top: 20px;
         flex-basis: initial;
     }
+    .name {
+        line-height: initial;
+    }
     .ratingContainer { 
         flex-direction: row-reverse;
         position: absolute;
         right: 18px;
         margin: 0;
+    }
+    .ratingCaption {
+        margin-left: 0;
+        margin-right: 10px;
     }
     .gameButtonContainerPlay {
         display: none;

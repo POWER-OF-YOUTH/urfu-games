@@ -36,7 +36,7 @@ function GamePage({ history }) {
     );
     let [game, setGame] = useState(null);
 
-    const loadGame = async (gameId) => {
+    const fetchGame = async (gameId) => {
         const response = await gamesAPI.getGame(gameId);
 
         if (response.ok) {
@@ -46,15 +46,14 @@ function GamePage({ history }) {
         else
             return Promise.reject();
     };
-    const loadComments = (gameId) => commentsStore.loadComments();
-    const load = async (gameId) => {
+    const fetchComments = (gameId) => commentsStore.loadComments();
+    const fetchAll = async (gameId) => {
         await Promise.all([
-            loadGame(gameId),
-            loadComments(gameId)
+            fetchGame(gameId),
+            fetchComments(gameId)
         ]);
     };
 
-    // Вызвается при нажатии кнопки «Отправить» компонента CommentForm
     const handleCommentFormSubmit = (text) => commentsStore.addComment(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
 
@@ -75,7 +74,7 @@ function GamePage({ history }) {
     )); 
 
     React.useEffect(() => {
-        load(params.gameId).then(() => {}, () => history.push("/404")); // Если игра не найдена, переадресуем на страницу ошибки
+        fetchAll(params.gameId).then(() => {}, () => history.push("/404")); // Если игра не найдена, переадресуем на страницу ошибки
     }, []);
     return (
         <>
