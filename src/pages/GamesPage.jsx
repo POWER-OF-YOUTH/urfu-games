@@ -18,19 +18,14 @@ import {
     CssBaseline,
     Rating,
     Avatar,
+    DialogContent,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import styles from "./GamesPage.module.css";
-import test from "../components/GameImg.jpg";
 import Header from "../components/Header";
 import Competence from "../components/Competence";
+import GameCard from "../components/Card";
 import Popup from "../components/Dialog";
-// import image from '../components/GameImage.jpg';
-
-const Input = styled("input")({
-    display: "none",
-});
-const [openPopup, setOpenPopup] = useState(false);
 
 export default function GamesPage() {
     return (
@@ -38,51 +33,101 @@ export default function GamesPage() {
             <Header />
             <Box className={styles.mainmenu}>
                 <Box className={styles.tags}>
-                    <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-                        <Typography variant="h5" sx={{ mb: 1 }}>
-                            Компетенции
-                        </Typography>
-                    </Popup>
+                    <Typography variant="h5" sx={{ mb: 1 }}>
+                        Компетенции
+                    </Typography>
                     <Competence color="red" width="100px">
-                        <span> Тег #1 </span>
+                        <Popup title="Системная аналитика" tegs="тег#1">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции о системном анализе
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это научно-методологическая дисциплина, которая изучает принципы, методы и средства
+                                исследования сложных объектов посредством представления их в качестве систем и анализа
+                                этих систем.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#CC00FF" width="100px">
-                        <span> Тег #2 </span>
+                        <Popup title="Математический анализ" tegs="тег#2">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции о математическом анализ
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это совокупность разделов математики, соответствующих историческому разделу под
+                                наименованием «анализ бесконечно малых», объединяет дифференциальное и интегральное
+                                исчисления.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#00BBFF" width="100px">
-                        <span> Тег #3 </span>
+                        <Popup title="Программирование на языке C++" tegs="тег#3">
+                            <Typography guterBottom>Тег посвещённый развитию навыка Программирования на C++</Typography>
+                            <Typography gutterBottom>
+                                Это один из самых распространённых языков в мире который, компилируемый ,
+                                структурированный, объектно-ориентированный, невероятно упрощающий работу с большими
+                                программами и при этом имеющий огромный потенциал для развития.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#5500FF" width="100px">
-                        <span> Тег #4 </span>
+                        <Popup title="Теория вероятности" tegs="тег#4">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции про Теорию вероятности
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это раздел математики, изучающий случайные события, случайные величины, их свойства и
+                                операции над ними.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="green" width="220px">
-                        <span> Тег #5 </span>
+                        <Popup title="Системная аналитика" tegs="тег#5">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции о системном анализе
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это научно-методологическая дисциплина, которая изучает принципы, методы и средства
+                                исследования сложных объектов посредством представления их в качестве систем и анализа
+                                этих систем.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#FF8800" width="60px">
-                        <span> Тег #6 </span>
+                        <Popup title="Математический анализ" tegs="тег#6">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции о математическом анализ
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это совокупность разделов математики, соответствующих историческому разделу под
+                                наименованием «анализ бесконечно малых», объединяет дифференциальное и интегральное
+                                исчисления.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#00FFCC" width="60px">
-                        <span> Тег #7 </span>
+                        <Popup title="Программирование на языке C++" tegs="тег#7">
+                            <Typography guterBottom>Тег посвещённый развитию навыка Программирования на C++</Typography>
+                            <Typography gutterBottom>
+                                Это один из самых распространённых языков в мире который, компилируемый ,
+                                структурированный, объектно-ориентированный, невероятно упрощающий работу с большими
+                                программами и при этом имеющий огромный потенциал для развития.
+                            </Typography>
+                        </Popup>
                     </Competence>
                     <Competence color="#9900FF" width="60px">
-                        <span> Тег #8 </span>
+                        <Popup title="Математический анализ" tegs="тег#8">
+                            <Typography guterBottom>
+                                Тег посвещённый развитию компетенции о математическом анализ
+                            </Typography>
+                            <Typography gutterBottom>
+                                Это совокупность разделов математики, соответствующих историческому разделу под
+                                наименованием «анализ бесконечно малых», объединяет дифференциальное и интегральное
+                                исчисления.
+                            </Typography>
+                        </Popup>
                     </Competence>
                 </Box>
-                {/* <Card className={styles.Games}>
-            <CardActionArea>
-                <CardMedia 
-                className={styles.Container}
-                image="/components/GameImage.jpg" 
-                titile="games" />
-            <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-                Lizard
-            </Typography>
-
-            </CardContent>
-            </CardActionArea>
-        </Card>              */}
-
                 <Box className={styles.menu}>
                     <Box className={styles.menuButton}>
                         <Typography variant="h5" sx={{ ml: 3, mt: 2 }} className={styles.recommendButton}>
@@ -95,217 +140,25 @@ export default function GamesPage() {
                         </Link>
                     </Box>
                     <Box className={styles.recommend}>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent className={styles.darkbox}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
                         {/* ОСТОРОЖНО ТУТ ИДЁТ КАПИПАСТ CARD */}
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent className={styles.darkbox}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
                     </Box>
                     <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
                         Все игры
                     </Typography>
                     <Box className={styles.allgame}>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
                         {/* ОСТОРОЖНО ТУТ ИДЁТ КАПИПАСТ CARD */}
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-                            <Link to="/games/:gameId">
-                                <CardMedia component="img" height="180" image={test} alt="game 1" />
-                            </Link>
-                            <CardContent className={styles.darkbox}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Игра #1
-                                </Typography>
-                                <div className={styles.ratingContainer}>
-                                    <Typography component="legend"></Typography>
-                                    <Rating name="read-only" readOnly />
-                                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                                        0/5
-                                    </Typography>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
+                        <GameCard />
                     </Box>
                 </Box>
             </Box>

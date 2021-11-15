@@ -1,0 +1,10 @@
+.ratingContainer {
+    align-content: center;
+    text-align: center;
+    display: flex;
+}
+.rating {
+    align-content: center;
+    text-align: center;
+    display: flex;
+}
