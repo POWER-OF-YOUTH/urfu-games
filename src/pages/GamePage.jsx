@@ -99,7 +99,7 @@ function GamePage({ history }) {
                                                     <span className={styles.caption}>Автор: </span>
                                                     <span className={styles.login}>{game.author.login}</span>
                                                 </p>
-                                                {game.participants.length <= 0 ? 
+                                                {game.participants.length > 0 ? 
                                                     <p>
                                                         <span className={styles.caption}>Участники: </span>
                                                         <span>{game.participants.join(", ")}</span>
