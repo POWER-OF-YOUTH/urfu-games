@@ -1,46 +1,17 @@
 html,
-body {   
-    width: 100%;
+body {          
     background-color: rgb(240, 240, 240);
 }
+
 .allbar{
     display: flex;
     flex-direction: row;
     align-content: center;
     justify-content: space-between;
 }
-.logotip {
-    flex-grow: 1;
-    align-content: center;
-    text-align:start;    
-}
-.infbutton {
-    flex-grow: 10;    
-    align-content: center;
-    text-align: start;
-}
-.regbutton{    
-    flex-grow: 1;
-    text-align: end;    
-}
-.regbutton1{          
-    margin: 10px;   
-    font-size: 15px;
-    padding: 8px 32px;
-    font-weight: 600;
-    background-color: #18A0FB;
-    color: #ffffff;
-    border: 2px solid #18A0FB;
-}
-.regbutton2{        
-    font-size: 15px;
-    padding: 8px 32px;
-    font-weight: 600;
-    text-align: center;
-}
 .mainmenu {
-    min-width: 100%;
-    min-height: 100vh;
+    min-height: 95vh;
+    width: 100%;
     flex: 1 1 auto;
     margin: 0 2em auto auto;
     display: flex;
@@ -50,15 +21,14 @@ body {
     flex-grow: 1;
     min-width: 265px;
     max-width: 265px;
-    min-height: 100vh;
     margin: 1em 2em auto 24px;
 }
-
-
 .menu {
     flex-grow: 10;    
     background-color: rgb(255, 255, 255);    
     border: 2px solid rgb(207, 207, 207);
+    
+    
 }
 .menuButton{
     display: flex;
@@ -78,17 +48,6 @@ body {
     background-color: rgb(255, 255, 255);    
     margin-top: 20px;    
     display: flex;
-}
-.ratingContainer {
-    
-    align-content: center;
-    text-align: center;
-    display: flex;        
-    
-}
-.rating {    
-    align-content: center;
-    text-align: center;
-    display: flex;
-   
+    text-align:start;
+    flex-wrap: wrap;    
 }

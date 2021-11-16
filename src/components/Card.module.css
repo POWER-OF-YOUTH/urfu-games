@@ -1,10 +1,36 @@
-.ratingContainer {
-    align-content: center;
-    text-align: center;
+.allCard {
     display: flex;
+    margin-right: 0;
+    flex-grow: 1;
+
 }
+.text {    
+    
+    background-color: rgba(0, 0, 0, 0.616);
+    height: 58px;   
+    width: 180px;
+    color: white;
+    flex-grow: 10;
+    margin-left: 10px;
+    
+}
+
 .rating {
-    align-content: center;
-    text-align: center;
-    display: flex;
+       float: left;
+}
+.empty {
+    height: 160px;
+    width: 150px;
+}
+
+.allImage {
+    background-image: url(../components/images/GameImg.jpg);
+    width: 240px;
+    height: 240px;
+    background-repeat: no-repeat;
+    padding: 10px;    
+    
+}
+element.style {
+    width: 100px;
 }

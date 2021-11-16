@@ -1,4 +1,11 @@
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root 
+.competens
 {
-    all: initial;
+    font-size: 20px;
+    color: #0000a7;
+    text-decoration: none;
+}
+.title
+{
+    font-size: 30px;
+    font-weight: bold;
 }

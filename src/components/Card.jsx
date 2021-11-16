@@ -1,28 +1,31 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardMedia, CardActionArea, Container, CssBaseline, Rating, Typography } from "@material-ui/core";
+import { 
+    Rating,
+    Typography,
+    Box,
+} from "@material-ui/core";
 import styles from "./Card.module.css";
 import { Link } from "react-router-dom";
 import test from "../components/images/GameImg.jpg";
 
-function GameCard({ children }) {
+function GameCard({ img, title, rating }) {
     return (
-        <Card sx={{ maxWidth: 345, ml: 5, mt: 3 }}>
-            <Link to="/games/:gameId">
-                <CardMedia component="img" height="180" image={test} alt="game 1" />
-            </Link>
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Игра #1
-                </Typography>
-                <div className={styles.ratingContainer}>
-                    <Typography component="legend"></Typography>
-                    <Rating name="read-only" readOnly />
-                    <Typography sx={{ ml: 1.5 }} className={styles.rating}>
-                        0/5
+        <Box className={styles.allCard }>
+            <Box className={styles.allImage} sx={{ mt: 3 }}>            
+                <Link to="/games/:gameId">
+                    <Box className={styles.empty}> </Box>
+                </Link>
+                <Box className={styles.text}>
+                    <Typography gutterBottom variant="h6" component="div">
+                        { title }
+                        <div className={styles.ratingContainer}>
+                            <Rating className={styles.rating} name="read-only" readOnly />
+                            <Typography className={styles.rating}>{ rating }</Typography>
+                        </div>
                     </Typography>
-                </div>
-            </CardContent>
-        </Card>
+                </Box>
+            </Box>
+        </Box>
     );
 }
 

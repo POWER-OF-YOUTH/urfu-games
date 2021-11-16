@@ -8,8 +8,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import styles from "./Dialog.module.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -49,7 +49,7 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default function Popup({ children, title, tegs}) {
+export default function Popup({ children, title, competenceName}) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -61,14 +61,14 @@ export default function Popup({ children, title, tegs}) {
 
     return (
         <div>
-            <Button style={{ textDecoration: "none", color: "#ffffff" }} onClick={handleClickOpen}>
-                {tegs}
+            <Button style={{ textDecoration: "none", color: "#ffffff", padding: 0, margin: 0 }} onClick={handleClickOpen}>
+                {competenceName}
             </Button>
             <BootstrapDialog onClose={handleClose} open={open}>
-                <BootstrapDialogTitle onClose={handleClose}>{title}</BootstrapDialogTitle>
-                <DialogContent dividers>{children}</DialogContent>
-                <DialogActions>
-                    <Link to="/games/:gameId" style={{ textDecoration: "none", color: "#000000" }}>
+                <BootstrapDialogTitle className={styles.title} onClose={handleClose}>{title}</BootstrapDialogTitle>
+                <DialogContent dividers>{children}</DialogContent >
+                <DialogActions >
+                    <Link className={styles.competens} to="/games/:gameId">
                         Остальные компетенции
                     </Link>
                 </DialogActions>
