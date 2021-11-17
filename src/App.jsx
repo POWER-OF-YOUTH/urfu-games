@@ -7,6 +7,7 @@ import SignUpPage from "./pages/SignUpPage";
 import GamesPage from "./pages/GamesPage";
 import GamePage from "./pages/GamePage";
 import PlayPage from "./pages/PlayPage";
+import { NotFoundPage } from "./pages/error";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route exact path="/games" component={GamesPage} />
                 <Route exact path="/games/:gameId" component={GamePage} />
                 <Route exact path="/games/:gameId/play" component={PlayPage} />
+                <Route exact path="/404" component={NotFoundPage} />
             </Switch>
         </Router>
     );

@@ -1,36 +1,56 @@
-async function signUp(data) {
-    const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+import * as apiConfig from "../../helpers/apiConfig";
 
-    return response;
+async function signUp(data) {
+    const url = apiConfig.APIURL + "/auth/signup";
+
+    try {
+        const response = await fetch(url, {
+            ...apiConfig.getDefaultRequestInit(),
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+
+        return response;
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
 
 async function signIn(data) {
-    const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+    const url = apiConfig.APIURL + "/auth/signin";
 
-    return response;
+    try {
+        const response = await fetch(url, {
+            ...apiConfig.getDefaultRequestInit(),
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+
+        return response;
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
 
 async function check(token) {
-    const response = await fetch("/api/auth/check", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
+    const url = apiConfig.APIURL + "/auth/check";
 
-    return response;
+    try {
+        const response = await fetch(url, {
+            ...apiConfig.getDefaultRequestInit(),
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        return response;
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
 
 const authAPI = {

@@ -1,0 +1,18 @@
+.content {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffc8c8;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorCode, .errorMessage {
+    margin: 0;
+}
+
+.errorCode {
+    font-size: 200px;
+    font-weight: bold;
+}

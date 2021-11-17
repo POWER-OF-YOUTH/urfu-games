@@ -1,0 +1,5 @@
+.commentsContainer {
+    width: 100%;
+    display: grid;
+    grid-row-gap: 20px;
+}

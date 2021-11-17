@@ -6,6 +6,7 @@ import {
 } from "mobx-state-tree";
 
 import { DateTime } from "./custom";
+import { User } from "./user";
 import * as gamesAPI from "../utils/api/gamesAPI";
 
 const Game = types
@@ -16,19 +17,17 @@ const Game = types
         name: types.string,
         description: types.string,
         rating: types.number,
-        author: types.string,
-        participants: types.array(types.string),
+        author: User,
+        participants: types.array(User),
         url: types.string,
         uploaded: types.boolean,
         createdAt: DateTime
     })
-    .views(self => ({
-        get rating() {
-            return self.rating;
-        }
-    }))
     .actions(self => ({
-        rate(rate) { /* TODO: Rates */ },
+        rate(rate) { 
+            /* TODO: Rates */ 
+            self.rating = rate;
+        },
         update: flow(function* (data) {
             const oldData = getSnapshot(self);
             const newData = { ...oldData, ...data };
@@ -44,12 +43,9 @@ const Game = types
 
 const GamesStore = types
     .model({
-        games: types.optional(types.map(Game), {})
+        games: types.map(Game),
     })
     .actions(self => ({
-        afterCreate() {
-            self.loadGames();
-        },
         loadGames: flow(function* () {
             const response = yield gamesAPI.getGames(); 
 
@@ -64,13 +60,16 @@ const GamesStore = types
             }
         }),
         loadGame: flow(function* (gameId) { 
-            const response = yield gamesAPI.getGame(gameId);
+            if (!self.games.has(gameId))
+            {
+                const response = yield gamesAPI.getGame(gameId);
 
-            if (response.ok) {
-                const json = yield response.json();
+                if (response.ok) {
+                    const json = yield response.json();
 
-                self.games.put(json);
-            }
+                    self.games.put(json);
+                }
+            }    
         }),
         deleteGame: flow(function* (gameId) { 
             const game = self.games[gameId];

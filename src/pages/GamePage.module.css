@@ -1,67 +1,171 @@
-.barItem {
-    float: right;
-    margin: 10px;
-    color: rgb(0, 0, 0);
+:root {
+    --captions-font: "Roboto" sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    height: 100vh;
+}
+
+.wrapper {
+    display: flex;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.paper {
+    box-shadow: 0 0 10px -4px black;
+    background-color: white;
+    min-height: 100vh;
+    width: 1000px;
+}
+
+.contentWrapper {
+    padding: 60px;
+}
+
+.content {
+    display: grid;
+    row-gap: 20px;
+}
+
+.topBlock {
+    display: grid;
+    grid-template-columns: 520px minmax(0, 340px);
+    grid-column-gap: 20px;
+    height: fit-content;
+    overflow-wrap: break-word;
+}
+
+.caption {
+    color: grey;
+}
+
+.cover {
+}
+
+.cover img {
     display: block;
+    width: 100%;
+}
+
+.gameData {
+    display: grid;
+    height: 100%;
+    width: 100%;
+}
+
+.competencies *:nth-child(n) {
+    margin-right: 3px;
+}
+
+.ratingContainer {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+}
+
+.ratingCaption {
+    margin-left: 10px;
+}
+
+.gameButtonsContainer {
+    display: flex;
+    margin-top: auto;
+}
+
+.playButtonLink {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
+.playButton {
+    width: 100%;
+    background-color: green !important;
+}
+
+.settingsButtonLink {
+    display: block;
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+.settingsButton {
+    width: 100%;
+    background-color: blue !important;
+}
+
+.blockCaption {
+    font-family: var(--captions-font);
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.descriptionContainer {
+}
+
+.description {
+    color: #403E3F;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+.name {
     position: relative;
-    font-size: 15px;
-    padding: 8px 32px;
-    font-weight: 600;
-    text-align: center;
-}
-.bar {
-    margin-left: auto;
-}
-.menu{
-
-    text-align: center;
-    position: relative;
-	min-width: 300px;	
-    max-width: 1250px;
-    min-height: 700px;
-    max-height: 700px;
-    display: block;     
-    border: 2px solid rgb(224, 224, 224);
-    margin: 90px auto 0;    
-}
-.maininf{
-
-    text-align: center;
-    position: relative;
-	min-width: 1000px;	
-    max-width: 1250px;
-    min-height: 400px;
-    max-height: 400px;
-    display: inline-block;     
-    border: 2px solid rgb(224, 224, 224);
-    margin-top: 30px;   
-    margin-bottom: 30px; 
+    top: -3px;
+    max-width: 340px;
+    order: -1;
+    line-height: 30px;
+    font-family: "Roboto", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    overflow-wrap: break-word;
 }
 
-.text {
-    float: right;
-    border: 2px solid rgb(224, 224, 224);
-    min-width: 400px;	
-    max-width: 450px;
-    min-height: 400px;
-    max-height: 400px;
-    
-
+@media (max-width: 1000px) {
+    .content {
+    }
+    .contentWrapper {
+        padding: 0;
+        padding-bottom: 100px;
+    }
+    .topBlock {
+        grid-template-columns: none;
+    }
+    .cover {
+        width: 100%;
+    }
+    .gameData {
+        margin: 0;
+        margin-top: 20px;
+        flex-basis: initial;
+    }
+    .name {
+        line-height: initial;
+    }
+    .ratingContainer { 
+        flex-direction: row-reverse;
+        position: absolute;
+        right: 18px;
+        margin: 0;
+    }
+    .ratingCaption {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+    .gameButtonContainerPlay {
+        display: none;
+    }
+    .gameButtonsContainer {
+        display: none;
+        margin-top: 20px;
+    }
+    .middle {
+        padding: 20px;
+    }
 }
-.button {
-    width: 80%;
-    height: 50px;
-    float: inline-end;
-}
-.about {
-    border: 2px solid rgb(224, 224, 224);
-    min-width: 400px;	
-    max-width: 450px;
-    display: inline-block;  
-    min-width: 1000px;	
-    max-width: 1250px;    
-    text-align: center;
-    position: relative;
 
-
-}

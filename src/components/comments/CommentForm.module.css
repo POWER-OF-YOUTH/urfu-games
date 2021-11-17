@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-end;
+}
+
+.sendButton {
+    margin-left: 10px;
+}
+
+.buttonsContainer {
+    margin-top: 10px;
+}
