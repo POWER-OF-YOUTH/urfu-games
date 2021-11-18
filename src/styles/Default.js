@@ -37,4 +37,4 @@ import InputBase from '@material-ui/core/InputBase';
         width: '20ch',
       },
     },
-  }));
+}));

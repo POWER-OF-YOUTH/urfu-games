@@ -3,15 +3,14 @@ import { Link } from "react-router-dom";
 
 import styles from "./Competence.module.css";
 
-function Competence({ id = "", color = "orange", children }) {
+function Competence({ id = "", color = "orange", width = "80px", children }) {
     return (
-        <div className={styles.container} style={{ backgroundColor: color }}>
-            <Link to={`/competencies/${id}`} className={styles.competenceLink}>
+        <div className={styles.container} style={{ backgroundColor: color, width: width }}>
+            <div className={styles.competenceLink}>
                 {children}
-            </Link>
+            </div>
         </div>
     );
 }
 
 export default Competence;
-
