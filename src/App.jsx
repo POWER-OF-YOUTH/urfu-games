@@ -1,6 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { 
+    BrowserRouter as Router, 
+    Switch, 
+    Route 
+} from "react-router-dom";
 
+import MainPage from "./pages/MainPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import GamesPage from "./pages/GamesPage";
