@@ -15,13 +15,12 @@ import { formatRelative } from "date-fns";
 import { ru } from "date-fns/locale";
 import { observer } from "mobx-react-lite";
 
-import { RootStoreContext } from "../../models/root";
+import { useStore } from "../../hooks";
 
 import styles from "./CommentView.module.css";
 
-function CommentView({ store, comment }) {
-    const rootStore = useContext(RootStoreContext);
-    const authStore = rootStore.authStore;
+function CommentView({ comment }) {
+    const { auth } = useStore();
 
     const [menuAnchorElement, setMenuAnchorElement] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -46,7 +45,7 @@ function CommentView({ store, comment }) {
     const handleChangeButtonClick = () => enableEditing();
     const handleDeleteButtonClick = () => {
         clearMenuAnchor();
-        store.deleteComment(comment.id);
+        comment.delete();
     };
     const handleCancelButtonClick = () => disableEditing();
     const handleSaveButtonClick = () => {
@@ -92,11 +91,11 @@ function CommentView({ store, comment }) {
                 onClose={handleMenuClose} 
                 MenuListProps={{"aria-labelledby": "basic-button"}}
             >
-                { authStore.authenticated && authStore.user.id == comment.author.id 
+                { auth.authenticated && auth.user.id == comment.author.id 
                     ? <MenuItem onClick={handleChangeButtonClick}>Изменить</MenuItem>
                     : <></>
                 }
-                { authStore.authenticated && authStore.user.id == comment.author.id 
+                { auth.authenticated && auth.user.id == comment.author.id 
                     ? <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem> 
                     : <></>
                 }

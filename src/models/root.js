@@ -7,9 +7,10 @@ import { types } from "mobx-state-tree";
 
 const RootStore = types
     .model({
-        gamesStore: types.optional(GamesStore, {}),
-        authStore: types.optional(AuthStore, {})
+        games: types.optional(GamesStore, {}),
+        auth: types.optional(AuthStore, {})
     });
+
 
 const RootStoreContext = React.createContext(null);
 

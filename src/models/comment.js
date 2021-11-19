@@ -1,9 +1,8 @@
-import { types, flow, applySnapshot } from "mobx-state-tree";
+import { types, flow, getParent } from "mobx-state-tree";
 import { values } from "mobx";
 
 import { DateTime } from "./custom";
 import { User } from "./user";
-import * as usersAPI from "../utils/api/usersAPI";
 import * as commentsAPI from "../utils/api/commentsAPI";
 
 const Author = User;
@@ -27,7 +26,12 @@ const Comment = types
 
             if (!response.ok) 
                 self.text = previousText;
-        })
+        }),
+        delete() {
+            const parent = getParent(self, 2);
+
+            parent.delete(self.id);
+        }
     }));
 
 const CommentsStore = types
@@ -36,15 +40,15 @@ const CommentsStore = types
         comments: types.optional(types.map(Comment), {}),
     })
     .views(self => ({
-        get orderedByDateAscending() {
+        orderedByDateAscending() {
             return values(self.comments).sort((c) => c.createdAt);
         },
-        get orderedByDateDescending() {
+        orderedByDateDescending() {
             return values(self.comments).sort((c) => -c.createdAt);
         }
     }))
     .actions(self => ({
-        loadComments: flow(function* () {
+        load: flow(function* () {
             const response = yield commentsAPI.getComments(self.gameId);
             
             if (response.ok) {
@@ -58,7 +62,7 @@ const CommentsStore = types
                 self.comments = comments;
             }
         }),
-        addComment: flow(function* (text) {
+        add: flow(function* (text) {
             const token = localStorage.getItem("token");
 
             const response = yield commentsAPI.addComment(token, self.gameId, text);
@@ -67,7 +71,7 @@ const CommentsStore = types
             if (response.ok)
                 self.comments.put(json);
         }),
-        deleteComment: flow(function* (commentId) {
+        delete: flow(function* (commentId) {
             const comment = self.comments[commentId];
             self.comments.delete(commentId);
 
