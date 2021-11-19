@@ -1,7 +1,4 @@
-import React, { 
-    useState, 
-    useContext
-} from "react";
+import React, { useState } from "react";
 
 import { Redirect } from "react-router-dom";
 import { 
@@ -13,33 +10,32 @@ import {
 import { observer } from "mobx-react-lite";
 
 import Header from "../components/Header";
-import { RootStoreContext } from "../models/root";
+import { useStore } from "../hooks";
 
 import styles from "./SignUpPage.module.css";
 
 function SignUpPage(props) {
-    const rootStore = useContext(RootStoreContext);
-    const authStore = rootStore.authStore;
+    const { auth } = useStore();
 
     React.useEffect(() => {
-        authStore.clearErrors();
+        auth.clearErrors();
     }, []);
 
     const handleFormSubmit = async (values) => {
-        await authStore.signUp(values);
+        await auth.signUp(values);
 
         // Если в процессе регистрации ошибок не возникло
-        if (authStore.errors.length === 0)
+        if (auth.errors.length === 0)
             props.history.push("/signin");
     };
   
-    const alert = authStore.errors.length > 0 ? 
+    const alert = auth.errors.length > 0 ? 
         <Alert className={styles.alert} severity="error">
-            {authStore.errors[0].message}
+            {auth.errors[0].message}
         </Alert>
         : 
         <></>; 
-    return authStore.authenticated ? 
+    return auth.authenticated ? 
         (
             <Redirect to="/games" />
         ) : (

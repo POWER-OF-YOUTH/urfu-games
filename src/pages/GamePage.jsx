@@ -1,60 +1,32 @@
-import React, { 
-    useState,
-    useContext
-} from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
     Button,
     Rating
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { NavLink } from "react-router-dom";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { Helmet } from "react-helmet";
+import { observer } from "mobx-react-lite";
 
 import Header from "../components/Header";
+import Competence from "../components/Competence";
 import {
     CommentForm,
     CommentsListView
 } from "../components/comments";
-import Competence from "../components/Competence";
-import { Game } from "../models/game";
-import { CommentsStore } from "../models/comment";
-import { RootStoreContext } from "../models/root";
-import * as gamesAPI from "../utils/api/gamesAPI";
+import { fetchGame } from "../models/game";
+import { useStore } from "../hooks";
 
 import styles from "./GamePage.module.css";
 
-
 function GamePage({ history }) {
-    const params = useParams(); // { gameId: string }
+    const { gameId } = useParams();
 
-    const rootStore = useContext(RootStoreContext);
-    const authStore = rootStore.authStore;
-    const commentsStore = useLocalObservable(() => 
-        CommentsStore.create({ gameId: params.gameId })
-    );
-    let [game, setGame] = useState(null);
+    const { auth } = useStore();
 
-    const fetchGame = async (gameId) => {
-        const response = await gamesAPI.getGame(gameId);
+    const [game, setGame] = useState(null);
 
-        if (response.ok) {
-            const gameData = await response.json();
-            setGame(Game.create(gameData));
-        }
-        else
-            return Promise.reject();
-    };
-    const fetchComments = (gameId) => commentsStore.loadComments();
-    const fetchAll = async (gameId) => {
-        await Promise.all([
-            fetchGame(gameId),
-            fetchComments(gameId)
-        ]);
-    };
-
-    const handleCommentFormSubmit = (text) => commentsStore.addComment(text); 
+    const handleCommentFormSubmit = (text) => game.comment(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
 
     const competencies = [ 
@@ -73,8 +45,16 @@ function GamePage({ history }) {
         <Competence key={i} color={competence.color}>{competence.name}</Competence>
     )); 
 
+    const fetchAll = async () => {
+        const game = await fetchGame(gameId);
+
+        setGame(game);
+        
+        await game.comments.load();
+    };
+
     React.useEffect(() => {
-        fetchAll(params.gameId).then(() => {}, () => history.push("/404")); // Если игра не найдена, переадресуем на страницу ошибки
+        fetchAll(() => {}, () => history.push("/404"));
     }, []);
     return (
         <>
@@ -126,16 +106,16 @@ function GamePage({ history }) {
                                             <div className={styles.gameButtonsContainer}>
                                                 <NavLink 
                                                     className={styles.playButtonLink} 
-                                                    to={`/games/${params.gameId}/play`}
+                                                    to={`/games/${gameId}/play`}
                                                 >
                                                     <Button className={styles.playButton} variant="contained">
                                                         Играть
                                                     </Button>
                                                 </NavLink>
-                                                { authStore.authenticated && authStore.user.id === game.author.id ? 
+                                                { auth.authenticated && auth.user.id === game.author.id ? 
                                                     <NavLink 
                                                         className={styles.settingsButtonLink} 
-                                                        to={`/games/${params.gameId}/settings`}
+                                                        to={`/games/${gameId}/settings`}
                                                     >
                                                         <Button className={styles.settingsButton} variant="contained">
                                                             <SettingsIcon />
@@ -156,10 +136,10 @@ function GamePage({ history }) {
                                         </div>
                                     </div>
                                     <div className={styles.commentsBlock}>
-                                        <p className={styles.blockCaption}>{`Комментарии (${commentsStore.comments.size})`}</p>
+                                        <p className={styles.blockCaption}>{`Комментарии (${game.comments.comments.size})`}</p>
                                         <div>
-                                            {authStore.authenticated ? <CommentForm onSubmit={handleCommentFormSubmit} /> : <></>}
-                                            <CommentsListView store={commentsStore} />
+                                            {auth.authenticated ? <CommentForm onSubmit={handleCommentFormSubmit} /> : <></>}
+                                            <CommentsListView comments={game.comments} />
                                         </div>
                                     </div>
                                 </main>

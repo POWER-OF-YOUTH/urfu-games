@@ -7,6 +7,7 @@ import {
 
 import { DateTime } from "./custom";
 import { User } from "./user";
+import { CommentsStore } from "./comment";
 import * as gamesAPI from "../utils/api/gamesAPI";
 
 const Game = types
@@ -21,9 +22,13 @@ const Game = types
         participants: types.array(User),
         url: types.string,
         uploaded: types.boolean,
-        createdAt: DateTime
+        createdAt: DateTime,
+        comments: types.maybe(CommentsStore)
     })
     .actions(self => ({
+        afterCreate() {
+            self.comments = CommentsStore.create({ gameId: self.id });
+        },
         rate(rate) { 
             /* TODO: Rates */ 
             self.rating = rate;
@@ -38,7 +43,10 @@ const Game = types
 
             if (!response.ok)
                 applySnapshot(self, oldData);
-        }) 
+        }),
+        comment(text) {
+            self.comments.add(text);
+        }
     }));
 
 const GamesStore = types
@@ -83,4 +91,12 @@ const GamesStore = types
         })
     }));
 
-export { Game, GamesStore };
+async function fetchGame(gameId) {
+    const response = await gamesAPI.getGame(gameId);
+
+    if (response.ok)
+        return Game.create(await response.json());
+    return Promise.reject(response);
+}
+
+export { Game, GamesStore, fetchGame };

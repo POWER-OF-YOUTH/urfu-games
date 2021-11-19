@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 
-import { RootStoreContext } from "../models/root";
+import { useStore } from "../hooks";
 
 import styles from "./Header.module.css";
 
@@ -24,8 +24,7 @@ import styles from "./Header.module.css";
  * @param {{ variant: "standard" | "hidebuttons" | "hideall" }}
  */
 function Header({ variant = "standard" }) {
-    const rootStore = React.useContext(RootStoreContext);
-    const authStore = rootStore.authStore;
+    const { auth } = useStore();
 
     const [menuAnchorElement, setMenuAnchorElement] = React.useState(null);
     const [isMobile, setIsMobile] = React.useState(false);
@@ -61,7 +60,7 @@ function Header({ variant = "standard" }) {
         setIsMenuOpen(false);
     };
     const handleLogoutClick = () => {
-        authStore.logout();
+        auth.logout();
         setIsMenuOpen(false);
     };
 
@@ -74,9 +73,9 @@ function Header({ variant = "standard" }) {
                             { isMobile ? "UG" : "UrFU Games" }
                         </Link>
                     </div>
-                    {!authStore.isLoading ? 
-                        authStore.authenticated ?
-                            showUser ? <User user={authStore.user} onClick={handleUserClick} /> : <></> 
+                    {!auth.isLoading ? 
+                        auth.authenticated ?
+                            showUser ? <User user={auth.user} onClick={handleUserClick} /> : <></> 
                             : 
                             showAuthButtons ?
                                 <div className={styles.authButtonsContainer}>

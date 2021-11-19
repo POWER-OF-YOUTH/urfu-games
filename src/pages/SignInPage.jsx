@@ -13,33 +13,32 @@ import {
 import { observer } from "mobx-react-lite";
 
 import Header from "../components/Header";
-import { RootStoreContext } from "../models/root";
+import { useStore } from "../hooks";
 
 import styles from "./SignInPage.module.css";
 
 function SignInPage(props) {
-    const rootStore = useContext(RootStoreContext);
-    const authStore = rootStore.authStore;
+    const { auth } = useStore();
 
     React.useEffect(() => {
-        authStore.clearErrors();
+        auth.clearErrors();
     }, []);
 
     const handleFormSubmit = async (values) => {
-        await authStore.signIn(values);
+        await auth.signIn(values);
 
         // Если в процессе входа ошибок не возникло
-        if (authStore.errors.length === 0)
+        if (auth.errors.length === 0)
             props.history.push("/games");
     };
   
-    const alert = authStore.errors.length > 0 ? 
+    const alert = auth.errors.length > 0 ? 
         <Alert className={styles.alert} severity="error">
-            {authStore.errors[0].message}
+            {auth.errors[0].message}
         </Alert>
         : 
         <></>; 
-    return authStore.authenticated ? 
+    return auth.authenticated ? 
         (
             <Redirect to="/games" />
         ) : (
