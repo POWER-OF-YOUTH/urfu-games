@@ -1,28 +1,39 @@
+:root {
+    --avatar-size: 28px;
+    --avatar-border-radius: 50%;
+    --exit-text-color: #CA1701;
+    --signInButton-background-color: steelBlue !important;
+    --signUpButton-background-color: green !important;
+    --login-font-size: initial;
+}
+
+@import "../styles/variables.css";
+
 header {
     z-index: 99;
     position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
+    background-color: var(--header-color);
     width: 100%;
-    height: 45px;
-    box-shadow: 0 2px 2px 0px #bfbfbf;
+    height: var(--header-height);
+    box-shadow: var(--header-box-shadow);
 }
 
 .spacer {
     width: 100%;
-    height: 45px;
+    height: var(--header-height);
 }
 
 .logo {
     margin-left: 15px;
     margin-right: auto;
-    font-family: "Roboto", sans-serif;
-    font-size: 30px;
+    font-family: var(--logo-font-family);
+    font-size: var(--logo-font-size);
     font-weight: bold;
     text-decoration: none;
-    color: black;
+    color: var(--logo-color);
 }
 
 .userContainer {
@@ -40,15 +51,16 @@ header {
 }
 
 .login {
+    font-size: var(--login-font-size);
     font-weight: bold;
     margin-right: 10px;
 }
 
 .avatar {
     margin-right: 5px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: var(--avatar-border-radius);
     overflow: hidden;
 }
 
@@ -78,7 +90,7 @@ header {
 
 .exitText {
     font-weight: 500;
-    color: #CA1701;
+    color: var(--exit-text-color);
 }
 
 .menuListContainer {
@@ -99,9 +111,9 @@ header {
 }
 
 .signInButton button {
-    background-color: steelBlue !important;
+    background-color: var(--signInButton-background-color);
 }
 
 .signUpButton button {
-    background-color: green !important;
+    background-color: var(--signUpButton-background-color);
 }

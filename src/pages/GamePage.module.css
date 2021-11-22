@@ -1,23 +1,31 @@
 :root {
-    --captions-font: "Roboto" sans-serif;
+    --block-caption-color: black;
+    --caption-color: grey;
+    --caption-font-size: 30px;
+    --caption-font: "Roboto" sans-serif;
+    --description-color: #403E3F;
+    --name-font-family: "Roboto", sans-serif;
+    --paper-box-shadow: 0 0 10px -4px black;
+    --paper-width: 1000px;
+    --playButton-color: green;
+    --settingsButton-color: blue;
+    --wrapper-max-width: 1000px;
 }
 
-body {
-    background-color: #f4f4f4;
-    height: 100vh;
-}
+@import "../styles/variables.css";
 
 .wrapper {
     display: flex;
-    max-width: 1000px;
+    max-width: var(--wrapper-max-width);
+    height: fit-content;
     margin: 0 auto;
 }
 
 .paper {
-    box-shadow: 0 0 10px -4px black;
+    box-shadow: var(--paper-box-shadow);
     background-color: white;
-    min-height: 100vh;
-    width: 1000px;
+    min-height: calc(100vh - var(--header-height));
+    width: var(--paper-width);
 }
 
 .contentWrapper {
@@ -38,7 +46,7 @@ body {
 }
 
 .caption {
-    color: grey;
+    color: var(--caption-color);
 }
 
 .cover {
@@ -82,7 +90,7 @@ body {
 
 .playButton {
     width: 100%;
-    background-color: green !important;
+    background-color: var(--playButton-color) !important;
 }
 
 .settingsButtonLink {
@@ -93,12 +101,13 @@ body {
 
 .settingsButton {
     width: 100%;
-    background-color: blue !important;
+    background-color: var(--settingsButton-color) !important;
 }
 
 .blockCaption {
-    font-family: var(--captions-font);
-    font-size: 30px;
+    color: var(--block-caption-color);
+    font-family: var(--caption-font);
+    font-size: var(--caption-font-size);
     font-weight: bold;
     margin: 0;
     margin-bottom: 5px;
@@ -108,7 +117,7 @@ body {
 }
 
 .description {
-    color: #403E3F;
+    color: var(--description-color);
     overflow-wrap: break-word;
     text-overflow: ellipsis;
 }
@@ -119,7 +128,7 @@ body {
     max-width: 340px;
     order: -1;
     line-height: 30px;
-    font-family: "Roboto", sans-serif;
+    font-family: var(--name-font-family);
     font-size: 30px;
     font-weight: bold;
     margin: 0;
