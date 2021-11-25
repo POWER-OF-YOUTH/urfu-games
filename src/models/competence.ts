@@ -4,6 +4,7 @@ interface ICompetence {
     id: string;
     name: string;
     description: string;
+    createdAt: Date;
 }
 
 const competenceSchema = new Schema<ICompetence>(
@@ -18,12 +19,14 @@ const competenceSchema = new Schema<ICompetence>(
             type: String,
             unique: true,
             required: true,
-            index: true,
-            lowercase: true
+            index: true
         },
         description: {
             type: String,
             default: ""
+        },
+        createdAt: {
+            type: Date
         }
     },
     { versionKey: false }
