@@ -1,0 +1,6 @@
+.tags {
+    flex-grow: 1;
+    min-width: 265px;
+    max-width: 265px;
+    margin: 1em 2em auto 24px;
+}
