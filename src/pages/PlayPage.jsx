@@ -33,7 +33,7 @@ function PlayPage({ history }) {
                             <div className={styles.gameContainer}>
                                 <iframe 
                                     className={styles.gameFrame}
-                                    src={"http://edgime.ru:3000/public/games/896190e9-041e-44f9-91d1-db8bfcb47fba/index.html"} 
+                                    src={game.url} 
                                     frameBorder="no"
                                 >
                                     Браузер не поддерживает iframe
