@@ -10,8 +10,8 @@ import test from "../components/images/GameImg.jpg";
 
 function GameCard({ img, title, rating }) {
     return (
-        <Box className={styles.allCard }>
-            <Box className={styles.allImage} sx={{ mt: 3 }}>            
+        <Box className={styles.allCard}> 
+            <Box className={styles.allImage} sx={{ mt: 3, backgroundImage: img }}>            
                 <Link to="/games/:gameId">
                     <Box className={styles.empty}> </Box>
                 </Link>
