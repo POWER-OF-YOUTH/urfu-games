@@ -1,18 +1,16 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
+import { Button } from "@mui/material";
 
 import Header from "../components/Header";
 import { fetchGame } from "../models/game";
-import { useStore } from "../hooks";
 
 import styles from "./PlayPage.module.css";
 
-function PlayPage({ history }) {
+function PlayPage() {
     const { gameId } = useParams();
 
     const [game, setGame] = useState(null);
-
-    const { auth } = useStore();
 
     const fetchAll = async () => {
         const game = await fetchGame(gameId);
@@ -28,6 +26,11 @@ function PlayPage({ history }) {
             <Header />
             <div className={styles.wrapper}>
                 <main className={styles.content}>
+                    <NavLink className={styles.back} to={`/games/${gameId}`}>
+                        <Button size="large">
+                            Назад
+                        </Button>
+                    </NavLink>
                     { game ?  
                         <>
                             <div className={styles.gameContainer}>
