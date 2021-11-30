@@ -1,8 +1,15 @@
+:root {
+    --content-background-color: #ffc8c8;
+    --errorCode-font-size: 200px;
+}
+
+@import "../../styles/variables.css";
+
 .content {
     display: flex;
     width: 100vw;
-    height: 100vh;
-    background-color: #ffc8c8;
+    height: calc(100vh - var(--header-height));
+    background-color: var(--content-background-color);
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
@@ -13,6 +20,10 @@
 }
 
 .errorCode {
-    font-size: 200px;
+    font-size: var(--errorCode-font-size);
     font-weight: bold;
+}
+
+.goToMain {
+    text-decoration: none;
 }
