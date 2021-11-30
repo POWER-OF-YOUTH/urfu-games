@@ -16,11 +16,10 @@
 }
 
 .ratingIcon {
-       float: left;
+    float: left;
 }
 .rating {
-    float: left;
-    margin-bottom: 5px;
+    float: right;
 }
 .empty {
     height: 160px;

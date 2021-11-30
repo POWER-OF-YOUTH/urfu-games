@@ -1,6 +1,4 @@
 import React from "react";
-// import SearchIcon from "@material-ui/icons/Search";
-// import { Search, SearchIconWrapper, StyledInputBase } from "../styles/Default";
 import { Typography, Box } from "@material-ui/core";
 import styles from "./Tags.module.css";
 import Competence from "./Competence";

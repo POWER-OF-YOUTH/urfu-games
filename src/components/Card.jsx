@@ -21,46 +21,16 @@ function GameCard({ images, title, rating }) {
                 <img src={test} />
             </Link>
             <Box className={styles.content}>
-                <Typography gutterBottom variant="h6" component="div">
-                    {title}
+                <Typography gutterBottom variant="h6"  sx={{ ml: 1 }}>
+                    {title} 
                     <div className={styles.ratingContainer}>
                         <StyledRating className={styles.ratingIcon} name="read-only" readOnly />
-                        <Typography className={styles.rating} sx={{ ml: 2 }} >{rating}</Typography>
+                        <Typography className={styles.rating}  sx={{ mr: 1 }}>{rating}</Typography>
                     </div>
                 </Typography>
             </Box>
         </Box>
     );
 }
-
-{
-    /* <StyledRating
-className={styles.rating}
-name="customized-color"
-defaultValue={2}
-getLabelText={(value) => `${value} Heart${value !== 1 ? "s" : ""}`}
-precision={0.5}
-icon={<FavoriteIcon fontSize="inherit" />}
-emptyIcon={<StarIcon  fontSize="inherit" />}
-readOnly
-/> */
-}
-
-/* <Box className={styles.allCard}> 
-<Box className={styles.allImage} sx={{ mt: 3, backgroundImage: img }}>            
-    <Link to="/games/:gameId">
-        <Box className={styles.empty}> </Box>
-    </Link>
-    <Box className={styles.text}>
-        <Typography gutterBottom variant="h6" component="div">
-            { title }
-            <div className={styles.ratingContainer}>
-                <Rating className={styles.rating} name="read-only" readOnly />
-                <Typography className={styles.rating}>{ rating }</Typography>
-            </div>
-        </Typography>
-    </Box>
-</Box>
-</Box> */
 
 export default GameCard;
