@@ -22,15 +22,15 @@
 
 .recommend {       
     background-color: rgb(255, 255, 255);    
-    margin-top: 20px;    
-    box-sizing: border-box;
-    overflow: hidden;
+    margin-top: 20px;
+    display: flex;
 }
 .allgame {
-    flex-grow: 10;
+    flex-grow: 5;
     background-color: rgb(255, 255, 255);    
     margin-top: 20px;    
     display: flex;
     text-align:start;
     flex-wrap: wrap;    
+    margin-bottom: 20px;    
 }

@@ -28,9 +28,25 @@
     width: 240px;
     height: 240px;
     background-repeat: no-repeat;
-    padding: 10px;    
+    padding: 8px;    
     
 }
 element.style {
     width: 100px;
+}
+.image{
+    width: 200px;
+    height: 220px;
+    position: relative;
+    padding: 10px;
+    margin-right: 20px; 
+    align-content: center;    
+}
+.content{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.616);
+    color: white;
+    
 }

@@ -17,13 +17,14 @@ import "flickity/css/flickity.css";
 
 export default function GamesPage() {
     const flickityOptions = {
-        
         wrapAround: true,
         freeSroll: true,
         pageDots: false,
-        contain: true,
-        arrowShape: 'M 0,50 L 60,00 L 50,30 L 80,30 L 80,70 L 50,70 L 60,100 Z',
+        arrowShape: "M 0,50 L 60,00 L 50,30 L 80,30 L 80,70 L 50,70 L 60,100 Z",
         prevNextButtons: true,
+        cellAlign: "center",
+        pauseAutoPlayOnHover: false,
+        initialIndex: 2,
     };
     return (
         <MainLayout sidePageComponent={<Tags />}>
@@ -39,18 +40,23 @@ export default function GamesPage() {
                             </Typography>
                         </Link>
                     </Box>
-                    <Flickity options={flickityOptions} >
-                        <GameCard className={styles.slide1} title="Игра#1" rating="0/5" />
-                        <GameCard className={styles.slide2} title="Игра#2" rating="5/5" />
-                        <GameCard className={styles.slide3} title="Игра#3" rating="2/5" />
-                        <GameCard className={styles.slide4} title="Игра#4" rating="1/5" />
-                        <GameCard className={styles.slide5} title="Игра#5" rating="0/5" />
+                    {/* <Box className={styles.recommend} sx={{ ml: 6 }}> */}
+                    <Flickity options={flickityOptions} className={styles.slider}>
+                        <GameCard title="Игра#1" rating="0/5" />
+                        <GameCard title="Игра#2" rating="5/5" />
+                        <GameCard title="Игра#3" rating="2/5" />
+                        <GameCard title="Игра#4" rating="1/5" />
+                        <GameCard title="Игра#5" rating="0/5" />
+                        <GameCard title="Игра#6" rating="4/5" />
                     </Flickity>
-
+                    {/* </Box> */}
                     <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
                         Все игры
                     </Typography>
-                    <Box className={styles.allgame} sx={{ ml: 6 }}>
+                    <Box className={styles.allgame} sx={{ ml: 3 }}>
+                        {/* {this.props.games.map(game=>(
+                            <GameCard title={game.title} rating={game.rating} img={game.img}/>
+                        ))} */}
                         <GameCard title="Игра#1" rating="0/5" />
                         <GameCard title="Игра#2" rating="5/5" />
                         <GameCard title="Игра#3" rating="2/5" />
@@ -59,8 +65,6 @@ export default function GamesPage() {
                         <GameCard title="Игра#6" rating="4/5" />
                         <GameCard title="Игра#7" rating="3/5" />
                         <GameCard title="Игра#8" rating="2/5" />
-                        <GameCard title="Игра#9" rating="5/5" />
-                        <GameCard title="Игра#10" rating="0/5" />
                     </Box>
                 </Box>
             </PageLayout>
