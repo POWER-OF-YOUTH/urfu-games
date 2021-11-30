@@ -41,7 +41,7 @@ export default function GamesPage() {
                         </Link>
                     </Box>
                     {/* <Box className={styles.recommend} sx={{ ml: 6 }}> */}
-                    <Flickity options={flickityOptions} className={styles.slider}>
+                    <Flickity options={flickityOptions} className={styles.slider} >
                         <GameCard title="Игра#1" rating="0/5" />
                         <GameCard title="Игра#2" rating="5/5" />
                         <GameCard title="Игра#3" rating="2/5" />

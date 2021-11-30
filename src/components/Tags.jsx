@@ -14,7 +14,7 @@ class Tags extends React.Component {
                 <Typography variant="h5" sx={{ mb: 1 }}>
                     Компетенции
                 </Typography>
-                <Competence color="red" width="100px" competenceName="тег#1">
+                <Competence color="#DB5762" width="100px" competenceName="тег#1">
                     <Popup title="Системная аналитика" competenceName="тег#1">
                         <Typography guterBottom>Тег посвещённый развитию компетенции о системном анализе</Typography>
                         <Typography gutterBottom>
@@ -24,7 +24,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#CC00FF" width="100px">
+                <Competence color="#DB44E8" width="100px">
                     <Popup title="Математический анализ" competenceName="тег#2">
                         <Typography guterBottom>
                             Тег посвещённый развитию компетенции о математическом анализ
@@ -36,7 +36,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#00BBFF" width="100px">
+                <Competence color="#60C6E8" width="100px">
                     <Popup title="Программирование на языке C++" competenceName="тег#3">
                         <Typography guterBottom>Тег посвещённый развитию навыка Программирования на C++</Typography>
                         <Typography gutterBottom>
@@ -46,7 +46,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#5500FF" width="100px">
+                <Competence color="#4352E8" width="100px">
                     <Popup title="Теория вероятности" competenceName="тег#4">
                         <Typography guterBottom>Тег посвещённый развитию компетенции про Теорию вероятности</Typography>
                         <Typography gutterBottom>
@@ -55,7 +55,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="green" width="220px">
+                <Competence color="#89FF50" width="220px">
                     <Popup title="Системная аналитика" competenceName="тег#5">
                         <Typography guterBottom>Тег посвещённый развитию компетенции о системном анализе</Typography>
                         <Typography gutterBottom>
@@ -65,7 +65,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#FF8800" width="60px">
+                <Competence color="#FFB347" width="60px">
                     <Popup title="Математический анализ" competenceName="тег#6">
                         <Typography guterBottom>
                             Тег посвещённый развитию компетенции о математическом анализ
@@ -77,7 +77,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#00FFCC" width="60px">
+                <Competence color="#89FFDC" width="60px">
                     <Popup title="Программирование на языке C++" competenceName="тег#7">
                         <Typography guterBottom>Тег посвещённый развитию навыка Программирования на C++</Typography>
                         <Typography gutterBottom>
@@ -87,7 +87,7 @@ class Tags extends React.Component {
                         </Typography>
                     </Popup>
                 </Competence>
-                <Competence color="#9900FF" width="60px">
+                <Competence color="#8252E8" width="60px">
                     <Popup title="Математический анализ" competenceName="тег#8">
                         <Typography guterBottom>
                             Тег посвещённый развитию компетенции о математическом анализ
