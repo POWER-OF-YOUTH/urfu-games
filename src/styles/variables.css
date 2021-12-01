@@ -1,8 +1,8 @@
 :root {
     --header-height: 45px;
-    --header-color: white;
+    --header-color: #4B4E6D;
     --header-box-shadow: 0 2px 2px 0px #bfbfbf;
-    --logo-color: black;
+    --logo-color: white;
     --logo-font-family: "Roboto", sans-serif;
     --logo-font-size: 30px;
 }
