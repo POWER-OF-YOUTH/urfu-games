@@ -50,6 +50,7 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
                 id,
                 author: author._id,
                 participants: participants.map(p => p._id),
+                competencies: competencies.map(c => c.id),
                 url: path.join("/public", process.env.PUBLIC_GAMES_SUBDIR, id),
                 createdAt: Date.now()
             });
@@ -119,12 +120,20 @@ export async function updateGame(req: Request, res: Response, next: NextFunction
         const user: any = req.user;
         const game: GameDocument = await Game.findOne({ id: data.gameId });
 
+        const competencies: Array<CompetenceDocument> = await Competence.find({ 
+            id: { $in: data.competencies }
+        });
         if (!game) {
             res.status(404).json({ errors: [ 
                 new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
             ]});
         }
-        if (game.author !== user.id && user.role !== Role.Admin) 
+        else if (competencies.length !== data.competencies.length) {
+            res.status(422).json({ errors: [
+                new LogicError(req.originalUrl, "Одна или несколько компетенций не найдены.")
+            ]});
+        }
+        else if (game.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
             if (data.participants) { // convert participants ids to _id
