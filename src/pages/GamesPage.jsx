@@ -35,15 +35,17 @@ export default function GamesPage() {
     
     // const [games, setGames] = React.useState(false);
 
-    // const fetchAll= async()=> {
-    //     const games=games.loadGames();
-    //     setGames(games);
-    // };
+    const fetchAll= async()=> {
+        await games.loadGames();
+        console.log([...games.games]);
+    };
 
     React.useEffect(() => {
         window.addEventListener("resize", () => setIsMobile(window.innerWidth < 1000));
 
-        games.loadGames();
+       
+        fetchAll(() => {}, () => {});
+        
         // setLoading(false);
         // fetchAll(
         //     () => {},
@@ -52,7 +54,7 @@ export default function GamesPage() {
     }, []);
     // if (loading) return <div>Fetching data...</div>
 
-    console.log([...games.games]);
+    
     
 
     return (        
@@ -73,7 +75,7 @@ export default function GamesPage() {
                             </Box>
                             {/* <Box className={styles.recommend} sx={{ ml: 6 }}> */}
                             <Flickity options={flickityOptions} className={styles.slider}>
-                                <GameCard title="Игра#1" rating="0/5" />
+                                <GameCard title="Игра1" rating="0/5" />
                                 <GameCard title="Игра#2" rating="5/5" />
                                 <GameCard title="Игра#3" rating="2/5" />
                                 <GameCard title="Игра#4" rating="1/5" />
@@ -85,18 +87,10 @@ export default function GamesPage() {
                                 Все игры
                             </Typography>
                             <Box className={styles.allgame} sx={{ ml: 3 }}>
-                                {/* { games.games && [...games.games].map((key,games) => (
+                                { games.all().map((key,games) => (
                                     <GameCard key={key} title={games.name} rating={games.rating} img={games.image} />
                                 ))}
-                                {} */}
-                                <GameCard title="Игра#1" rating="0/5" />
-                                <GameCard title="Игра#2" rating="5/5" />
-                                <GameCard title="Игра#3" rating="2/5" />
-                                <GameCard title="Игра#4" rating="1/5" />
-                                <GameCard title="Игра#5" rating="0/5" />
-                                <GameCard title="Игра#6" rating="4/5" />
-                                <GameCard title="Игра#7" rating="3/5" />
-                                <GameCard title="Игра#8" rating="2/5" />
+                                {}                                
                             </Box>
                         </Box>
                     </PageLayout>

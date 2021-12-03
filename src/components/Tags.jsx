@@ -11,7 +11,7 @@ class Tags extends React.Component {
             <Box className={styles.tags}>
                 <Typography variant="h5" sx={{ mb: 1 }}>
                     Компетенции
-                </Typography>
+                </Typography>                
                 <Competence color="#DB5762" width="100px" competenceName="тег#1">
                     <Popup title="Системная аналитика" competenceName="тег#1">
                         <Typography guterBottom>Тег посвещённый развитию компетенции о системном анализе</Typography>
