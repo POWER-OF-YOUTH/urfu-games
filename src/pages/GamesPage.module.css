@@ -10,6 +10,19 @@
     height: calc(100vh - var(--header-height))
 }
 
+.gamesWrapper {
+    padding: 20px;
+}
+
+.showAll {
+    color: black;
+}
+
+.captionWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
 .allbar{
     display: flex;
     flex-direction: row;
@@ -39,16 +52,13 @@
 
 .recommend {       
     background-color: rgb(255, 255, 255);    
-    margin-top: 20px;
     display: flex;
 }
 
-.allgame {
+.gamesGrid {
     flex-grow: 5;
     background-color: rgb(255, 255, 255);    
-    margin-top: 20px;    
     display: flex;
     text-align:start;
     flex-wrap: wrap;    
-    margin-bottom: 20px;    
 }
