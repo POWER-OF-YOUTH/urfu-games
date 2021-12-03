@@ -42,24 +42,18 @@ function GamesPage() {
 
     React.useEffect(() => {
         window.addEventListener("resize", () => setIsMobile(window.innerWidth < 1000));
-
        
         fetchAll(() => {}, () => {});
-        
-        // setLoading(false);
-        // fetchAll(
-        //     () => {},
-        //     () => history.push("/404")
-        // );
     }, []);
-    // if (loading) return <div>Fetching data...</div>
 
     return (        
         <>
             {games.games ? (
-                <MainLayout sidePageComponent={<Tags />}>
-                    <PageLayout>
-                        <Box className={styles.menu}>
+                <div>
+                    <Header />
+                    <main className={styles.content}>
+                        <Tags />
+                        <div className={styles.games}>
                             <Box className={styles.menuButton}>
                                 <Typography variant="h6" sx={{ ml: 3, mt: 2 }} className={styles.recommendButton}>
                                     Рекомендуемые
@@ -70,10 +64,8 @@ function GamesPage() {
                                     </Typography>
                                 </Link>
                             </Box>
-                            {/* <Box className={styles.recommend} sx={{ ml: 6 }}> */}
                             <Flickity options={flickityOptions} className={styles.slider}>
                             </Flickity>
-                            {/* </Box> */}
                             <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
                                 Все игры
                             </Typography>
@@ -82,9 +74,9 @@ function GamesPage() {
                                     <GameCard key={i} game={game} />
                                 ))} 
                             </Box>
-                        </Box>
-                    </PageLayout>
-                </MainLayout>
+                        </div>
+                    </main>
+                </div>
             ) : (
                 <></>
             )}
