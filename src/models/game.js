@@ -10,6 +10,7 @@ import { User } from "./user";
 import { CommentsStore } from "./comment";
 import * as gamesAPI from "../utils/api/gamesAPI";
 import { values } from "mobx";
+
 const Game = types
     .model({
         id: types.identifier,
@@ -54,7 +55,7 @@ const GamesStore = types
         games: types.map(Game),
     })
     .views(self => ({
-        all(){
+        all() {
             return values(self.games);
         }
     }))

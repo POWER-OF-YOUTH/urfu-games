@@ -3,6 +3,7 @@ import React from "react";
 // import { Search, SearchIconWrapper, StyledInputBase } from "../styles/Default";
 import { Button, Typography, Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 import styles from "./GamesPage.module.css";
 import Header from "../components/Header";
 import Competence from "../components/Competence";
@@ -16,7 +17,7 @@ import Flickity from "react-flickity-component";
 import "flickity/css/flickity.css";
 import { useStore } from "../hooks";
 
-export default function GamesPage() {
+function GamesPage() {
     const { games } = useStore();
 
     const flickityOptions = {
@@ -37,7 +38,6 @@ export default function GamesPage() {
 
     const fetchAll= async()=> {
         await games.loadGames();
-        console.log([...games.games]);
     };
 
     React.useEffect(() => {
@@ -53,9 +53,6 @@ export default function GamesPage() {
         // );
     }, []);
     // if (loading) return <div>Fetching data...</div>
-
-    
-    
 
     return (        
         <>
@@ -75,22 +72,15 @@ export default function GamesPage() {
                             </Box>
                             {/* <Box className={styles.recommend} sx={{ ml: 6 }}> */}
                             <Flickity options={flickityOptions} className={styles.slider}>
-                                <GameCard title="Игра1" rating="0/5" />
-                                <GameCard title="Игра#2" rating="5/5" />
-                                <GameCard title="Игра#3" rating="2/5" />
-                                <GameCard title="Игра#4" rating="1/5" />
-                                <GameCard title="Игра#5" rating="0/5" />
-                                <GameCard title="Игра#6" rating="4/5" />
                             </Flickity>
                             {/* </Box> */}
                             <Typography variant="h5" sx={{ ml: 3, mt: 2 }}>
                                 Все игры
                             </Typography>
                             <Box className={styles.allgame} sx={{ ml: 3 }}>
-                                { games.all().map((key,games) => (
-                                    <GameCard key={key} title={games.name} rating={games.rating} img={games.image} />
-                                ))}
-                                {}                                
+                                { games.all().map((game, i) => (
+                                    <GameCard key={i} game={game} />
+                                ))} 
                             </Box>
                         </Box>
                     </PageLayout>
@@ -101,3 +91,5 @@ export default function GamesPage() {
         </>
     );
 }
+
+export default observer(GamesPage);

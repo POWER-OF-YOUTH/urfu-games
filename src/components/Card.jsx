@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Rating, Typography, Box } from "@material-ui/core";
 import styles from "./Card.module.css";
 import { Link } from "react-router-dom";
@@ -14,7 +14,9 @@ const StyledRating = styled(Rating)({
     },
 });
 
-function GameCard({ images, title, rating }) {
+function GameCard({ game }) {
+    console.log(game.toJSON());
+
     return (
         <Box className={styles.image}>
             <Link to="/games/:gameId">
@@ -22,10 +24,10 @@ function GameCard({ images, title, rating }) {
             </Link>
             <Box className={styles.content}>
                 <Typography gutterBottom variant="h6"  sx={{ ml: 1 }}>
-                    {title} 
+                    {game.name} 
                     <div className={styles.ratingContainer}>
                         <StyledRating className={styles.ratingIcon} name="read-only" readOnly />
-                        <Typography className={styles.rating}  sx={{ mr: 1 }}>{rating}</Typography>
+                        <Typography className={styles.rating}  sx={{ mr: 1 }}>{game.rating}</Typography>
                     </div>
                 </Typography>
             </Box>
