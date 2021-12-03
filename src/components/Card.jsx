@@ -19,8 +19,8 @@ function GameCard({ game }) {
 
     return (
         <Box className={styles.image}>
-            <Link to="/games/:gameId">
-                <img src={test} />
+            <Link to={`/games/${game.id}`}>
+                <img src={game.image}  className={styles.avatar}/>
             </Link>
             <Box className={styles.content}>
                 <Typography gutterBottom variant="h6"  sx={{ ml: 1 }}>
