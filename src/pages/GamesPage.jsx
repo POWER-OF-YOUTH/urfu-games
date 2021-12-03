@@ -35,11 +35,11 @@ function GamesPage() {
                     <div className={styles.gamesWrapper}>
                         <div className={styles.gamesBlock}>
                             <div className={styles.captionWrapper}>
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Рекомендуемые
                                 </Typography>
                                 <NavLink to="/games/:gameId" className={styles.showAll}>
-                                    <Typography variant="h5">
+                                    <Typography variant="h6">
                                         {isMobile ? "Все" : "Показать все"}
                                     </Typography>
                                 </NavLink>
@@ -52,7 +52,7 @@ function GamesPage() {
                         </div>
                         <div className={styles.gamesBlock}>
                             <div className={styles.captionWrapper}>
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Все игры
                                 </Typography>
                             </div>

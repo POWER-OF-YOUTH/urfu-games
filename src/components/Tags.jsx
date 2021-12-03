@@ -9,7 +9,7 @@ class Tags extends React.Component {
     render() {
         return (
             <Box className={styles.tags}>
-                <Typography variant="h5" sx={{ mb: 1 }}>
+                <Typography variant="h6" sx={{ mb: 1 }}>
                     Компетенции
                 </Typography>                
                 <Competence color="#DB5762" width="100px" competenceName="тег#1">
