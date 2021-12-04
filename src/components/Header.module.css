@@ -106,28 +106,19 @@ header {
     margin-right: 15px;
 }
 
-.signInButton, .signUpButton {
+.signInLink, .signUpLink {
     text-decoration: none;
     font-weight: bold;
 }
 
-.signInButton {
-    margin-right: 5px;
+.signInLink {
+    margin-right: 15px;
 }
 
-.signInButton button {
-    background-color: var(--signInButton-background-color);
-    color: black;
-    font-weight: bold;
+.signUpLink {
+    color: white;
 }
 
-.signInButton button:hover {
-    background-color: white;
-}
-
-.signUpButton button {
-    background-color: var(--signUpButton-background-color);
-}
-
-.signInButton button:hover {
+.signUpLink:hover {
+    text-decoration: underline;
 }

@@ -1,6 +1,15 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener } from "@mui/material";
+import {
+    Slide,
+    Popper,
+    Button,
+    MenuList,
+    MenuItem,
+    ListItemIcon,
+    ClickAwayListener
+} from "@mui/material";
+import { styled } from "@mui/material";
 import {
     Logout as LogoutIcon,
     ArrowDropDown as ArrowDropDownIcon,
@@ -60,26 +69,20 @@ function Header({ variant = "standard" }) {
         <>
             <div className={styles.spacer}>
                 <header>
-                    <div className={styles.logoContainer}>
-                        <Link to="/" className={styles.logo}>
-                            { isMobile ? "UG" : "UrFU Games" }
-                        </Link>
-                    </div>
+                    <Logo mobile={isMobile} />
                     {!auth.isLoading ? 
                         auth.authenticated ?
                             showUser ? <User user={auth.user} onClick={handleUserClick} /> : <></> 
                             : 
                             showAuthButtons ?
                                 <div className={styles.authButtonsContainer}>
-                                    <NavLink className={styles.signInButton} to="/signin">
-                                        <Button variant="contained" size="small">
+                                    <NavLink className={styles.signInLink} to="/signin">
+                                        <SignInButton variant="contained" size="small">
                                             Войти
-                                        </Button>
+                                        </SignInButton>
                                     </NavLink>
-                                    <NavLink className={styles.signUpButton} to="/signup">
-                                        <Button variant="contained" size="small">
-                                            Зарегистрироваться
-                                        </Button>
+                                    <NavLink className={styles.signUpLink} to="/signup">
+                                        Зарегистрироваться
                                     </NavLink>
                                 </div>
                                 :
@@ -88,7 +91,6 @@ function Header({ variant = "standard" }) {
                         <></>
                     }
                     <Popper 
-                        className={styles.menuPopper}
                         open={isMenuOpen}
                         anchorEl={menuAnchorElement}
                         onClose={handleMenuClose} 
@@ -124,6 +126,25 @@ function Header({ variant = "standard" }) {
         </>
     );
 }
+
+function Logo({ mobile = false }) {
+    return (
+        <div className={styles.logoContainer}>
+            <Link to="/" className={styles.logo}>
+                { mobile ? "UG" : "UrFU Games" }
+            </Link>
+        </div>
+    );
+}
+
+const SignInButton = styled(Button)({
+    backgroundColor: "#84DCC6",
+    color: "black",
+    fontWeight: "bold",
+    "&:hover": {
+        backgroundColor: "white"
+    }
+});
 
 function User({ user, onClick }) {
     const handleClick = (evt) => onClick(evt);
