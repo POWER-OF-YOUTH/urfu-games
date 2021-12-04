@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Typography } from "@material-ui/core";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -8,12 +7,11 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-import styles from "./Competence.module.css";
-
-function Competence({ competence }) {
+function Competence({ competence, enablePopup = false, size = "medium", color = "gray" }) {
     const [popupOpen, setPopupOpen] = React.useState(false);
     const handleClick = () => {
-        setPopupOpen(true);
+        if (enablePopup)
+            setPopupOpen(true);
     };
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -22,29 +20,54 @@ function Competence({ competence }) {
 
     return (
         <>
-            <div 
-                className={styles.container} 
-                style={{ backgroundColor: competence.color }}
-                onClick={handleClick}
-            >
-                <div className={styles.competence}>
+            <CompetenceContainer size={size} color={color}>
+                <CompetenceName>
                     {competence.name}
-                </div>
-            </div>
+                </CompetenceName>
+            </CompetenceContainer>
 
-            <CompetenceDialog onClose={handlePopupClose} open={popupOpen}>
-                <CompetenceDialogTitle onClose={handlePopupClose}>
-                    {competence.name}
-                </CompetenceDialogTitle>
-                <DialogContent dividers>
-                    <Typography gutterBottom>
-                        {competence.description}
-                    </Typography>
-                </DialogContent >
-            </CompetenceDialog>
+            { enablePopup ? (
+                <CompetenceDialog onClose={handlePopupClose} open={popupOpen}>
+                    <CompetenceDialogTitle onClose={handlePopupClose}>
+                        {competence.name}
+                    </CompetenceDialogTitle>
+                    <DialogContent dividers>
+                        <Typography gutterBottom>
+                            {competence.description}
+                        </Typography>
+                    </DialogContent >
+                </CompetenceDialog>
+            ) : (
+                <></>
+            )}
         </>
     );
 }
+
+const CompetenceContainer = styled("div")(({ color, size }) => ({
+    cursor: "pointer",
+    height: "23px",
+    display: "inline-block",
+    padding: "2px 10px",
+    borderRadius: "40px",
+    alignContent: "center",
+    textAlign: "center",
+    backgroundColor: color,
+    ...(size === "small" && {
+        padding: "1px 5px"
+    }),
+    ...(size === "medium" && {
+        padding: "2px 10px"
+    }),
+    ...(size === "large" && {
+        padding: "5px 15px"
+    })
+}));
+
+const CompetenceName = styled("span")({
+    color: "white",
+    fontWeight: "bold"
+});
 
 const CompetenceDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {

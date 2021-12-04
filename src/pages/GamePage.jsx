@@ -34,7 +34,7 @@ function GamePage({ history }) {
 
         setGame(game);
 
-        /// Подгружаем компетенции привязанные к данной игре
+        // Подгружаем компетенции привязанные к данной игре
         await Promise.all(game.competencies.map(c => competencies.loadOne(c)));
         
         await game.comments.load();
@@ -79,7 +79,7 @@ function GamePage({ history }) {
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
                                                     {competencies.all().map((c, i) => (
-                                                        <Competence key={i} competence={c} />
+                                                        <Competence key={i} competence={c} color={c.color} enablePopup />
                                                     ))}
                                                 </span> 
                                             </div> 
