@@ -63,8 +63,10 @@
     width: 100%;
 }
 
-.competencies *:nth-child(n) {
-    margin-right: 3px;
+.competencies {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
 }
 
 .ratingContainer {

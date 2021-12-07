@@ -1,32 +1,33 @@
 import React from "react";
-import { Rating, Typography, Box } from "@material-ui/core";
-import styles from "./GameCard.module.css";
+import { Rating as MUIRating } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import test from "../components/images/GameImg.jpg";
 import { styled } from "@mui/material/styles";
 
-function GameCard({ game }) {
-    console.log(game.toJSON());
+import styles from "./GameCard.module.css";
 
+function GameCard({ className = "", game }) {
     return (
-        <Box className={styles.image}>
-            <Link to={`/games/${game.id}`}>
-                <img src={game.image}  className={styles.avatar}/>
-            </Link>
-            <Box className={styles.content}>
-                <Typography gutterBottom variant="h6"  sx={{ ml: 1 }}>
-                    {game.name} 
-                    <div className={styles.ratingContainer}>
-                        <StyledRating className={styles.ratingIcon} name="read-only" readOnly />
-                        <Typography className={styles.rating}  sx={{ mr: 1 }}>{game.rating}</Typography>
+        <div className={`${styles.card} ${className}`}>
+            <Link className={styles.coverLink} to={`/games/${game.id}`}>
+                <img src={game.image} className={styles.cover}/>
+                <div className={styles.contentWrapper}>
+                    <div className={styles.content}>
+                        <div className={styles.nameContainer}>
+                            <h3 className={styles.name}>
+                                {game.name}
+                            </h3>
+                        </div>
+                        <div className={styles.ratingContainer}>
+                            <Rating readOnly size="small" />
+                        </div>
                     </div>
-                </Typography>
-            </Box>
-        </Box>
+                </div>
+            </Link>
+        </div>
     );
 }
 
-const StyledRating = styled(Rating)({
+const Rating = styled(MUIRating)({
     "& .MuiRating-iconFilled": {
         color: "#F2F2F2",
     },

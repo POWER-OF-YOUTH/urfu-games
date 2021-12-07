@@ -6,7 +6,7 @@ import {
     Rating
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 
 import Header from "../components/Header";
 import Competence from "../components/Competence";
@@ -15,6 +15,7 @@ import {
     CommentsListView
 } from "../components/comments";
 import { fetchGame } from "../models/game";
+import { CompetenciesStore } from "../models/competence";
 import { useStore } from "../hooks";
 
 import styles from "./GamePage.module.css";
@@ -22,7 +23,8 @@ import styles from "./GamePage.module.css";
 function GamePage({ history }) {
     const { gameId } = useParams();
 
-    const { auth, competencies } = useStore();
+    const { auth } = useStore();
+    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     const [game, setGame] = useState(null);
 
@@ -79,7 +81,7 @@ function GamePage({ history }) {
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
                                                     {competencies.all().map((c, i) => (
-                                                        <Competence key={i} competence={c} color={c.color} enablePopup />
+                                                        <Competence key={i} competence={c} enablePopup />
                                                     ))}
                                                 </span> 
                                             </div> 

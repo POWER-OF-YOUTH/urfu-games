@@ -6,19 +6,22 @@ import { observer } from "mobx-react-lite";
 
 import Header from "../components/Header";
 import GameCard from "../components/GameCard";
-import Tags from "../components/CompetenciesList";
+import Competence from "../components/Competence";
+import CompetenciesList from "../components/CompetenciesList";
 import { useStore } from "../hooks";
 
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 
 function GamesPage() {
-    const { games } = useStore();
+    const { games, competencies } = useStore();
 
     const [isMobile, setIsMobile] = React.useState(false);
 
     const fetchAll = async ()=> {
         await games.loadGames();
+
+        await competencies.load();
     };
 
     React.useEffect(() => {
@@ -29,42 +32,54 @@ function GamesPage() {
     return (        
         <>
             <Header />
-            <main className={styles.content}>
-                <Tags/>
-                <div className={styles.games}>
-                    <div className={styles.gamesWrapper}>
-                        <div className={styles.gamesBlock}>
-                            <div className={styles.captionWrapper}>
-                                <Typography variant="h6">
-                                    Рекомендуемые
-                                </Typography>
-                                <NavLink to="/games/:gameId" className={styles.showAll}>
-                                    <Typography variant="h6">
-                                        {isMobile ? "Все" : "Показать все"}
-                                    </Typography>
-                                </NavLink>
+            <div className={styles.wrapper}>
+                <div className={styles.pageGrid}>
+                    <CompetenciesList className={styles.competenciesList}>
+                        {competencies.all().map((c, i) => (
+                            <Competence key={i} competence={c} enablePopup />
+                        ))}
+                    </CompetenciesList>
+                    <main className={styles.content}>
+                        <div className={styles.games}>
+                            <div className={styles.gamesWrapper}>
+                                <div className={styles.gamesBlock}>
+                                    <div className={styles.gamesBlockCaptionWrapper}>
+                                        <h2 className={styles.gamesBlockCaption}>Рекомендуемые</h2>
+                                        { /* 
+                                        <NavLink to="/games/:gameId" className={styles.showAll}>
+                                            <Typography variant="h6">
+                                                {isMobile ? "Все" : "Показать все"}
+                                            </Typography>
+                                        </NavLink>
+                                        */ }
+                                    </div>
+                                    <GamesCardsCarousel>
+                                        { games.all().map((game, i, arr) => (
+                                            <>
+                                                <GameCard key={i} className={styles.carouselCard} game={game} />
+                                                <GameCard key={i + arr.length} className={styles.carouselCard} game={game} />
+                                            </>
+                                        ))} 
+                                    </GamesCardsCarousel>
+                                </div>
+                                <div className={styles.gamesBlock}>
+                                    <div className={styles.gamesBlockCaptionWrapper}>
+                                        <h2 className={styles.gamesBlockCaption}>Все игры</h2>
+                                    </div>
+                                    <Box className={styles.gamesGrid}>
+                                        { games.all().map((game, i, arr) => (
+                                            <>
+                                                <GameCard key={i} game={game} />
+                                                <GameCard key={i + arr.length} game={game} />
+                                            </>
+                                        ))} 
+                                    </Box>
+                                </div>
                             </div>
-                            <GamesCardsCarousel>
-                                { games.all().map((game, i) => (
-                                    <GameCard key={i} game={game} />
-                                ))} 
-                            </GamesCardsCarousel>
                         </div>
-                        <div className={styles.gamesBlock}>
-                            <div className={styles.captionWrapper}>
-                                <Typography variant="h6">
-                                    Все игры
-                                </Typography>
-                            </div>
-                            <Box className={styles.gamesGrid}>
-                                { games.all().map((game, i) => (
-                                    <GameCard key={i} game={game} />
-                                ))} 
-                            </Box>
-                        </div>
-                    </div>
+                    </main>
                 </div>
-            </main>
+            </div>
         </>
     );
 }
