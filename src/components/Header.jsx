@@ -1,18 +1,10 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import {
-    Slide,
-    Popper,
-    Button,
-    MenuList,
-    MenuItem,
-    ListItemIcon,
-    ClickAwayListener
-} from "@mui/material";
+import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener } from "@mui/material";
 import {
     Logout as LogoutIcon,
     ArrowDropDown as ArrowDropDownIcon,
-    Settings as SettingsIcon
+    Settings as SettingsIcon,
 } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 
@@ -138,9 +130,7 @@ function User({ user, onClick }) {
 
     return (
         <div className={styles.userContainer} onClick={handleClick}>
-            <span className={styles.login}>
-                {user.login}
-            </span>
+            <span className={styles.login}>{user.login}</span>
             <div className={styles.avatar}>
                 <img alt="avatar" src={user.avatar} />
             </div>
@@ -152,4 +142,3 @@ function User({ user, onClick }) {
 }
 
 export default observer(Header);
-

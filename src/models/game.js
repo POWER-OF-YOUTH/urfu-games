@@ -9,6 +9,7 @@ import { DateTime } from "./custom";
 import { User } from "./user";
 import { CommentsStore } from "./comment";
 import * as gamesAPI from "../utils/api/gamesAPI";
+import { values } from "mobx";
 
 const Game = types
     .model({
@@ -53,6 +54,11 @@ const GamesStore = types
     .model({
         games: types.map(Game),
     })
+    .views(self => ({
+        all() {
+            return values(self.games);
+        }
+    }))
     .actions(self => ({
         loadGames: flow(function* () {
             const response = yield gamesAPI.getGames(); 
