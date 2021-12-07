@@ -5,8 +5,8 @@ import { Link, NavLink } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 import Header from "../components/Header";
-import GameCard from "../components/Card";
-import Tags from "../components/Tags";
+import GameCard from "../components/GameCard";
+import Tags from "../components/CompetenciesList";
 import { useStore } from "../hooks";
 
 import "flickity/css/flickity.css";
@@ -30,7 +30,7 @@ function GamesPage() {
         <>
             <Header />
             <main className={styles.content}>
-                <Tags />
+                <Tags/>
                 <div className={styles.games}>
                     <div className={styles.gamesWrapper}>
                         <div className={styles.gamesBlock}>

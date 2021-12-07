@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Box } from "@material-ui/core";
-import styles from "./Tags.module.css";
+import styles from "./CompetenciesList.module.css";
 import Competence from "./Competence";
 import Popup from "./Dialog";
 
