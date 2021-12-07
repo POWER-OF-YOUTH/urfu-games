@@ -22,33 +22,20 @@ import styles from "./GamePage.module.css";
 function GamePage({ history }) {
     const { gameId } = useParams();
 
-    const { auth } = useStore();
+    const { auth, competencies } = useStore();
 
     const [game, setGame] = useState(null);
 
     const handleCommentFormSubmit = (text) => game.comment(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
 
-    const competencies = [ 
-        {
-            name: "Математика"
-        },
-        {
-            name: "Физика",
-            color: "purple"
-        },
-        {
-            name: "Химия",
-            color: "darkred"
-        }
-    ].map((competence, i) => (
-        <Competence key={i} color={competence.color}>{competence.name}</Competence>
-    )); 
-
     const fetchAll = async () => {
         const game = await fetchGame(gameId);
 
         setGame(game);
+
+        // Подгружаем компетенции привязанные к данной игре
+        await Promise.all(game.competencies.map(c => competencies.loadOne(c)));
         
         await game.comments.load();
     };
@@ -91,7 +78,9 @@ function GamePage({ history }) {
                                                 }
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
-                                                    {competencies}
+                                                    {competencies.all().map((c, i) => (
+                                                        <Competence key={i} competence={c} color={c.color} enablePopup />
+                                                    ))}
                                                 </span> 
                                             </div> 
                                             <div className={styles.ratingContainer}>
