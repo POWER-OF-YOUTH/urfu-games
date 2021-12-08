@@ -6,4 +6,8 @@
     --logo-font-family: "Roboto", sans-serif;
     --logo-font-size: 30px;
     --block-box-shadow: 0 0 10px -5px black;
+    --block-color: white;
+    --block-padding: 10px;
+    --block-spacing: 10px;
+    --block-border-radius: 5px;
 }

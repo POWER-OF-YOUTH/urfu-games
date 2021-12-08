@@ -1,4 +1,4 @@
-import { types, flow } from "mobx-state-tree";
+import { types, flow, applySnapshot } from "mobx-state-tree";
 import { values } from "mobx";
 
 import { DateTime } from "./custom";
@@ -44,11 +44,10 @@ const CompetenciesStore = types
             if (response.ok) {
                 const json = yield response.json();
 
-                const competencies = {};
-
-                json.forEach(c => competencies[c.id] = c);
-
-                self.competencies = competencies;
+                // Добавляем в хранилище только новые компетенции
+                json
+                    .filter(c => !self.competencies.has(c.id))
+                    .forEach(c => self.competencies.put(c));
             }
         }),
         loadOne: flow(function* (competenceId) {

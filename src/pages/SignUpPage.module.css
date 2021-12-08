@@ -9,6 +9,7 @@
 .signUpForm {
     background-color: white;
     width: 400px;
+    max-width: 100%;
     align-content: center;
     text-align: center;
     border: 2px solid rgb(224, 224, 224);

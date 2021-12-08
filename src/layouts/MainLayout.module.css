@@ -1,24 +1,7 @@
-.root {
-    display :flex;
-    width: 100vw;
-    height: 100vh;
+@import "../styles/variables.css";
 
-}
-
-.content {   
-    margin-top: 45px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.sidePage
-{
-    width: 25%;
-
-}
-.gamesGrid 
-{
-    width: 75%;
-
+.wrapper {
+    box-sizing: border-box;
+    padding: var(--block-spacing);
+    height: calc(100% - var(--header-height));
 }

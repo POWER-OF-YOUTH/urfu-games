@@ -10,8 +10,8 @@ function GameCard({ className = "", game }) {
         <div className={`${styles.card} ${className}`}>
             <Link className={styles.coverLink} to={`/games/${game.id}`}>
                 <img src={game.image} className={styles.cover}/>
-                <div className={styles.contentWrapper}>
-                    <div className={styles.content}>
+                <div className={styles.infoWrapper}>
+                    <div className={styles.info}>
                         <div className={styles.nameContainer}>
                             <h3 className={styles.name}>
                                 {game.name}

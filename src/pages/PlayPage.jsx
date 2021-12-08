@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
 
-import Header from "../components/Header";
 import { fetchGame } from "../models/game";
 
 import styles from "./PlayPage.module.css";
@@ -23,7 +22,6 @@ function PlayPage() {
     }, []);
     return (
         <>
-            <Header />
             <div className={styles.wrapper}>
                 <main className={styles.content}>
                     <NavLink className={styles.back} to={`/games/${gameId}`}>

@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { observer } from "mobx-react-lite";
 
 function Competence({ competence, enablePopup = false, size = "medium" }) {
     const [popupOpen, setPopupOpen] = React.useState(false);
@@ -59,7 +60,10 @@ const CompetenceContainer = styled("div")(({ color, size }) => ({
     }),
     ...(size === "large" && {
         padding: "5px 15px"
-    })
+    }),
+    "&:hover": {
+        filter: "brightness(1.05)"
+    }
 }));
 
 const CompetenceName = styled("span")({
@@ -100,4 +104,4 @@ const CompetenceDialogTitle = (props) => {
     );
 };
 
-export default Competence;
+export default observer(Competence);

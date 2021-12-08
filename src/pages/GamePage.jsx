@@ -9,6 +9,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { observer, useLocalObservable } from "mobx-react-lite";
 
 import Header from "../components/Header";
+import Block from "../components/Block";
 import Competence from "../components/Competence";
 import {
     CommentForm,
@@ -47,16 +48,15 @@ function GamePage({ history }) {
     }, []);
     return (
         <>
-            <Header />
             { game ? 
                 <>
                     <Helmet>
                         <title>{game.name}</title>
                     </Helmet>
                     <div className={styles.wrapper}>
-                        <div className={styles.paper}>
+                        <Block className={styles.paper}>
                             <div className={styles.contentWrapper}>
-                                <main className={styles.content}>
+                                <div className={styles.content}>
                                     <div className={styles.topBlock}>
                                         <div className={styles.cover}>
                                             <img src={game.image} alt="cover" />
@@ -133,9 +133,9 @@ function GamePage({ history }) {
                                             <CommentsListView comments={game.comments} />
                                         </div>
                                     </div>
-                                </main>
+                                </div>
                             </div>
-                        </div>
+                        </Block>
                     </div>
                 </>
                 : 

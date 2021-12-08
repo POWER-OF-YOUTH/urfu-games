@@ -17,15 +17,8 @@
 .wrapper {
     display: flex;
     max-width: var(--wrapper-max-width);
-    height: fit-content;
+    min-height: 100%;
     margin: 0 auto;
-}
-
-.paper {
-    box-shadow: var(--paper-box-shadow);
-    background-color: white;
-    min-height: calc(100vh - var(--header-height));
-    width: var(--paper-width);
 }
 
 .contentWrapper {

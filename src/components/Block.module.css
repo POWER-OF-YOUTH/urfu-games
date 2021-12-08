@@ -1,0 +1,10 @@
+@import "../styles/variables.css";
+
+.block {
+    box-sizing: border-box;
+    padding: var(--block-padding);
+    background-color: var(--block-color);
+    overflow: hidden;
+    border-radius: var(--block-border-radius);
+    box-shadow: var(--block-box-shadow);
+}

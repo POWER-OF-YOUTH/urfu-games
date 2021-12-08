@@ -12,9 +12,14 @@
 .cover {
     display: block;
     width: 100%;
+    transition: transform 500ms;
 }
 
-.contentWrapper {
+.card:hover .cover {
+    transform: scale(1.06, 1.06);
+}
+
+.infoWrapper {
     position: absolute;
     display: flex;
     flex-flow: column-reverse;
@@ -25,13 +30,18 @@
     padding: 5px;
 }
 
-.content {
+.info {
     box-sizing: border-box;
     width: 100%;
     height: fit-content;
     padding: 5px;
-    background-color: rgba(0, 0, 0, 0.616);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
+    transition: background 500ms;
+}
+
+.card:hover .info {
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .name { 
@@ -39,7 +49,3 @@
     color: white;
 }
 
-.avatar{
-    width: 100%;
-    height: 100%;
-}
