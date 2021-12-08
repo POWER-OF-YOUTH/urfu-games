@@ -1,6 +1,6 @@
 # Настройки
 
-**Адрес**: /users/{:userId}/settings
+**Адрес**: /users/{userId}/settings
 
 ## Описание
 
