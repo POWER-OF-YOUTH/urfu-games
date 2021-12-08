@@ -5,7 +5,6 @@ import {
     Route 
 } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import ReactGA from "react-ga";
 
 import MainPage from "./pages/MainPage";
 import SignInPage from "./pages/SignInPage";
