@@ -149,9 +149,13 @@ const SignInButton = styled(Button)({
 function User({ user, onClick }) {
     const handleClick = (evt) => onClick(evt);
 
+    const Login = styled("span")({
+        color: user.isAdmin() ? "red" : "white"
+    });
+
     return (
         <div className={styles.userContainer} onClick={handleClick}>
-            <span className={styles.login}>{user.login}</span>
+            <Login className={`${styles.login}`}>{user.login}</Login>
             <div className={styles.avatar}>
                 <img alt="avatar" src={user.avatar} />
             </div>

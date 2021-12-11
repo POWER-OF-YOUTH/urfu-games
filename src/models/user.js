@@ -15,6 +15,11 @@ const User = types
         avatar: "",
         createdAt: DateTime,
     })
+    .views(self => ({
+        isAdmin() {
+            return self.role === 1;
+        }
+    }))
     .actions(self => ({
         update: flow(function* (id, data = {}) {
             const response = yield usersAPI.updateUser(id, data);
