@@ -5,9 +5,8 @@
     --signInButton-background-color: #84DCC6 !important;
     --signInButton-color: black;
     --signUpButton-background-color: var(--header-color) !important;
-    --login-font-size: initial;
-    --login-color: white;
     --menuIcon-color: white;
+    --login-font-size: initial;
 }
 
 @import "../styles/variables.css";
@@ -54,7 +53,6 @@ header {
 }
 
 .login {
-    color: var(--login-color);
     font-size: var(--login-font-size);
     font-weight: bold;
     margin-right: 10px;

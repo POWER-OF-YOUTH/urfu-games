@@ -95,7 +95,7 @@ function CommentView({ comment }) {
                     ? <MenuItem onClick={handleChangeButtonClick}>Изменить</MenuItem>
                     : <></>
                 }
-                { auth.authenticated && auth.user.id == comment.author.id 
+                { auth.authenticated && (auth.user.id == comment.author.id || auth.user.isAdmin()) 
                     ? <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem> 
                     : <></>
                 }
