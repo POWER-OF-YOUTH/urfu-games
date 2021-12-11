@@ -1,9 +1,10 @@
 import React from "react";
 import { 
-    BrowserRouter as Router, 
+    Router, 
     Switch, 
     Route 
 } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 import MainPage from "./pages/MainPage";
 import SignInPage from "./pages/SignInPage";
@@ -14,9 +15,14 @@ import PlayPage from "./pages/PlayPage";
 import LoadPage from "./pages/LoadPage";
 import { NotFoundPage } from "./pages/error";
 
+const history = createBrowserHistory();
+history.listen((location) => {
+    window.ym(86784357, "hit", location.pathname);
+});
+
 function App() {
     return (
-        <Router>
+        <Router history={history}>
             <Switch>
                 <Route exact path="/" component={MainPage} />
                 <Route exact path="/signin" component={SignInPage} />
