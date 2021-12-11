@@ -1,5 +1,5 @@
 import { types, flow, applySnapshot } from "mobx-state-tree";
-import { values } from "mobx";
+import { values, observable } from "mobx";
 
 import { DateTime } from "./custom";
 import * as competenciesAPI from "../utils/api/competenciesAPI";
@@ -19,22 +19,27 @@ const Competence = types
         id: types.identifier,
         name: types.string,
         description: types.string,
-        color: "gray",
         createdAt: DateTime
     })
-    .actions(self => ({ 
-        afterCreate() {
-            self.color = colors[Math.floor(Math.random() * colors.length)];
-        }
-    }));
+    .extend(self => {
+        const _color = observable.box(colors[Math.floor(Math.random() * colors.length)]);
+
+        return {
+            views: {
+                get color() {
+                    return _color.get();
+                }
+            }
+        };
+    });
 
 const CompetenciesStore = types
     .model({
-        competencies: types.map(Competence)
+        competencies: types.array(Competence)
     })
     .views(self => ({
         all() {
-            return values(self.competencies);
+            return self.competencies;
         }
     }))
     .actions(self => ({
@@ -44,19 +49,14 @@ const CompetenciesStore = types
             if (response.ok) {
                 const json = yield response.json();
 
-                // Добавляем в хранилище только новые компетенции
-                json
-                    .filter(c => !self.competencies.has(c.id))
-                    .forEach(c => self.competencies.put(c));
+                applySnapshot(self.competencies, json);
             }
         }),
         loadOne: flow(function* (competenceId) {
-            if (!self.competencies.has(competenceId)) {
-                const response = yield competenciesAPI.getCompetence(competenceId);
+            const response = yield competenciesAPI.getCompetence(competenceId);
 
-                if (response.ok) 
-                    self.competencies.put(yield response.json());
-            }
+            if (response.ok) 
+                self.competencies.push(yield response.json());
         })
     }));
 
