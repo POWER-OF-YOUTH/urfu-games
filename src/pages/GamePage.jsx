@@ -31,13 +31,13 @@ function GamePage({ history }) {
 
     const fetchAll = async () => {
         const game = await fetchGame(gameId);
-
         setGame(game);
 
         // Подгружаем компетенции привязанные к данной игре
-        await Promise.all(game.competencies.map(c => competencies.loadOne(c)));
-        
-        await game.comments.load();
+        await Promise.all([
+            game.comments.load(),
+            ...game.competencies.map(c => competencies.loadOne(c))
+        ]);
     };
 
     React.useEffect(() => {
