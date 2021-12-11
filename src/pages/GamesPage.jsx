@@ -1,23 +1,26 @@
 import React from "react";
 import Flickity from "react-flickity-component";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 
 import Block from "../components/Block";
 import GameCard from "../components/GameCard";
 import Competence from "../components/Competence";
 import CompetenciesList from "../components/CompetenciesList";
-import { useStore, useIsMobile } from "../hooks";
+import { useStore } from "../hooks";
+import { CompetenciesStore } from "../models/competence";
 
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 
 function GamesPage() {
-    const { games, competencies } = useStore();
+    const { games } = useStore();
+    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
-    const fetchAll = async ()=> {
-        await games.loadGames();
-
-        await competencies.load();
+    const fetchAll = async () => {
+        await Promise.all([
+            games.loadGames(),
+            competencies.load()
+        ]);
     };
 
     React.useEffect(() => {
