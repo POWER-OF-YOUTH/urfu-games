@@ -43,7 +43,6 @@ function SignInPage(props) {
             <Redirect to="/games" />
         ) : (
             <>
-                <Header variant="hideall" />
                 <div className={styles.wrapper}>
                     <SignInForm onSubmit={handleFormSubmit} />
                     {alert}

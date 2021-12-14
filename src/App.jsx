@@ -14,6 +14,7 @@ import GamePage from "./pages/GamePage";
 import PlayPage from "./pages/PlayPage";
 import LoadPage from "./pages/LoadPage";
 import { NotFoundPage } from "./pages/error";
+import { MainLayout } from "./layouts";
 
 const history = createBrowserHistory();
 history.listen((location) => {
@@ -23,16 +24,18 @@ history.listen((location) => {
 function App() {
     return (
         <Router history={history}>
-            <Switch>
-                <Route exact path="/" component={MainPage} />
-                <Route exact path="/signin" component={SignInPage} />
-                <Route exact path="/signup" component={SignUpPage} />
-                <Route exact path="/games" component={GamesPage} />
-                <Route exact path="/games/load" component={LoadPage} />
-                <Route exact path="/games/:gameId" component={GamePage} />
-                <Route exact path="/games/:gameId/play" component={PlayPage} />
-                <Route exact path="/404" component={NotFoundPage} />
-            </Switch>
+            <MainLayout>
+                <Switch>
+                    <Route exact path="/" component={MainPage} />
+                    <Route exact path="/signin" component={SignInPage} />
+                    <Route exact path="/signup" component={SignUpPage} />
+                    <Route exact path="/games" component={GamesPage} />
+                    <Route exact path="/games/load" component={LoadPage} />
+                    <Route exact path="/games/:gameId" component={GamePage} />
+                    <Route exact path="/games/:gameId/play" component={PlayPage} />
+                    <Route exact path="/404" component={NotFoundPage} />
+                </Switch>
+            </MainLayout>
         </Router>
     );
 }

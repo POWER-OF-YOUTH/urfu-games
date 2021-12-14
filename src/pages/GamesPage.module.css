@@ -1,32 +1,70 @@
+:root {
+    --gamesSection-spacing: 10px;
+    --gamesSectionCaption-spacing: 10px;
+    --gamesGrid-minCardSize: 300px;
+    --carouselCard-width: 500px;
+}
+
 @import "../styles/variables.css";
 
-.content {
+.pageGrid {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-gap: var(--block-spacing);
+    min-height: 100%;
 }
 
-.games {
-    background-color: white;
-    height: calc(100vh - var(--header-height))
+@media (min-width: 1000px) {
+    .pageGrid {
+        grid-template-columns: 230px 1fr;
+    }
 }
 
-.gamesWrapper {
-    padding: 20px;
+.sideBar {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+@media (max-width: 1000px) {
+    .sideBar {
+        order: 99;
+    }
+}
+
+.competenciesList {
+    position: sticky;
+    top: 0;
+}
+
+.content {
+    height: 100%;
+}
+
+.gamesSection {
+    margin-bottom: var(--gamesSection-spacing);
 }
 
 .showAll {
     color: black;
 }
 
-.captionWrapper {
+.gamesSectionCaptionWrapper {
     display: flex;
     justify-content: space-between;
+    margin-bottom: var(--gamesSectionCaption-spacing);
+}
+
+.gamesSectionCaption {
+    margin: 0;
 }
 
 .gamesGrid {
-    flex-grow: 5;
-    background-color: rgb(255, 255, 255);    
-    display: flex;
-    text-align:start;
-    flex-wrap: wrap;    
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--gamesGrid-minCardSize), 1fr));
+}
+
+.carouselCard {
+    max-width: 100%;
+    width: var(--carouselCard-width);
+    margin-right: 10px;
 }

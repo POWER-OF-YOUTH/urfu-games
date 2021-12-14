@@ -1,4 +1,25 @@
-.tags {
-    flex-grow: 1;
-    margin: 1em 2em auto 24px;
+@import "../styles/variables.css";
+
+.competencies {
+    width: 100%;
+    height: fit-content;
 }
+
+.titleContainer {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.title {
+    margin: 0;
+    text-align: center;
+}
+
+.competenciesContainer {
+    margin-top: 5px;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
+    width: 100%;
+}
+

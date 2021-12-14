@@ -6,15 +6,17 @@ import {
     Rating
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 
 import Header from "../components/Header";
+import Block from "../components/Block";
 import Competence from "../components/Competence";
 import {
     CommentForm,
     CommentsListView
 } from "../components/comments";
 import { fetchGame } from "../models/game";
+import { CompetenciesStore } from "../models/competence";
 import { useStore } from "../hooks";
 
 import styles from "./GamePage.module.css";
@@ -22,7 +24,8 @@ import styles from "./GamePage.module.css";
 function GamePage({ history }) {
     const { gameId } = useParams();
 
-    const { auth, competencies } = useStore();
+    const { auth } = useStore();
+    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     const [game, setGame] = useState(null);
 
@@ -45,16 +48,15 @@ function GamePage({ history }) {
     }, []);
     return (
         <>
-            <Header />
             { game ? 
                 <>
                     <Helmet>
                         <title>{game.name}</title>
                     </Helmet>
                     <div className={styles.wrapper}>
-                        <div className={styles.paper}>
+                        <Block className={styles.paper}>
                             <div className={styles.contentWrapper}>
-                                <main className={styles.content}>
+                                <div className={styles.content}>
                                     <div className={styles.topBlock}>
                                         <div className={styles.cover}>
                                             <img src={game.image} alt="cover" />
@@ -79,7 +81,7 @@ function GamePage({ history }) {
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
                                                     {competencies.all().map((c, i) => (
-                                                        <Competence key={i} competence={c} color={c.color} enablePopup />
+                                                        <Competence key={i} competence={c} enablePopup />
                                                     ))}
                                                 </span> 
                                             </div> 
@@ -131,9 +133,9 @@ function GamePage({ history }) {
                                             <CommentsListView comments={game.comments} />
                                         </div>
                                     </div>
-                                </main>
+                                </div>
                             </div>
-                        </div>
+                        </Block>
                     </div>
                 </>
                 : 

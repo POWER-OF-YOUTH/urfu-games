@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 
-import { useStore } from "../hooks";
+import { useStore, useIsMobile } from "../hooks";
 
 import styles from "./Header.module.css";
 
@@ -27,8 +27,9 @@ import styles from "./Header.module.css";
 function Header({ variant = "standard" }) {
     const { auth } = useStore();
 
+    const isMobile = useIsMobile();
+
     const [menuAnchorElement, setMenuAnchorElement] = React.useState(null);
-    const [isMobile, setIsMobile] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     let showAuthButtons, showUser;
@@ -48,10 +49,6 @@ function Header({ variant = "standard" }) {
         showAuthButtons = true;
         showUser = true;
     }
-
-    React.useEffect(() => {
-        window.addEventListener("resize", () => setIsMobile(window.innerWidth < 1000));
-    }, []);
 
     const handleUserClick = (evt) => {
         setMenuAnchorElement(evt.currentTarget);
