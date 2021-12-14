@@ -53,10 +53,13 @@ const CompetenciesStore = types
             }
         }),
         loadOne: flow(function* (competenceId) {
-            const response = yield competenciesAPI.getCompetence(competenceId);
+            if (self.competencies.find(c => c.id === competenceId) === undefined)
+            {
+                const response = yield competenciesAPI.getCompetence(competenceId);
 
-            if (response.ok) 
-                self.competencies.push(yield response.json());
+                if (response.ok) 
+                    self.competencies.push(yield response.json());
+            }
         })
     }));
 
