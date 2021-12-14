@@ -6,7 +6,7 @@
     "scripts": {
         "prestart": "npm run build",
         "start": "node ./dist/index.js",
-        "mon": "nodemon --ext ts,js,json,env ./src/index.ts",
+        "dev": "nodemon --ext ts,js,json,env ./src/index.ts",
         "build": "tsc"
     },
     "keywords": [],
@@ -20,6 +20,7 @@
         "express-validator": "^6.1.1",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6",
+        "mongoose-autopopulate": "^0.16.0",
         "morgan": "^1.9.1",
         "multer": "^1.4.3",
         "uuid": "^8.3.2"
@@ -30,6 +31,7 @@
         "@types/express": "^4.17.13",
         "@types/express-jwt": "^6.0.2",
         "@types/jsonwebtoken": "^8.5.5",
+        "@types/mongoose-autopopulate": "^0.10.2",
         "@types/morgan": "^1.9.3",
         "@types/multer": "^1.4.7",
         "@types/node": "^16.11.7",

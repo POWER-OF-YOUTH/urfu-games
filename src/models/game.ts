@@ -62,14 +62,16 @@ const gameSchema = new Schema<IGame>(
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
-            index: true
+            index: true,
+            autopopulate: true
         },       
         participants: {
             type: [{
                 type: Schema.Types.ObjectId,
                 ref: "User",
             }],
-            default: []
+            default: [],
+            autopopulate: true
         },
         url: {
             type: String,
@@ -86,14 +88,14 @@ const gameSchema = new Schema<IGame>(
     { versionKey: false }
 );
 
-const Game = mongoose.model<IGame>("Game", gameSchema);
+gameSchema.plugin(require("mongoose-autopopulate"));
 
-type GameDocument = IGame & Document<any, any, IGame>;
+// @ts-ignore
+const Game = mongoose.model<IGamePopulated>("Game", gameSchema);
 
 export default Game;
 export {
     IGame,
     IGamePopulated,
-    Game,
-    GameDocument
+    Game
 };

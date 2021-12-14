@@ -3,15 +3,15 @@ import { Request, Response, NextFunction } from "express";
 import multer, { diskStorage } from "multer";
 import path from "path";
 import fs from "fs";
+import { HydratedDocument } from "mongoose";
 import { matchedData } from "express-validator";
 
 import { LogicError, AccessError } from "../../../utils/errors";
 import { Competence, CompetenceDocument } from "../../../models/competence";
 import { User, UserDocument, Role } from "../../../models/user";
-import { Game, GameDocument, IGamePopulated } from "../../../models/game";
+import { Game, IGamePopulated } from "../../../models/game";
 import Comment from "../../../models/comment";
 import GameDTO from "../../../utils/dto/game";
-
 
 type AddGameData = {
     competencies: Array<string>,
@@ -20,24 +20,25 @@ type AddGameData = {
     participants: Array<string>
 }
 
-export async function addGame(req: Request, res: Response, next: NextFunction) {
+export async function addGame
+    (req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = <AddGameData> matchedData(req, { locations: [ "body" ] });
+        const requestData = <AddGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;
 
         const author = await User.findOne({ id: user.id });
         const participants: Array<UserDocument> = await User.find({ 
-            id: { $in: data.participants }
+            id: { $in: requestData.participants }
         });
         const competencies: Array<CompetenceDocument> = await Competence.find({ 
-            id: { $in: data.competencies }
+            id: { $in: requestData.competencies }
         });
-        if (participants.length !== data.participants.length) {
+        if (participants.length !== requestData.participants.length) {
             res.status(422).json({ errors: [
                 new LogicError(req.originalUrl, "Один или несколько участников не найдены.")
             ]});
         }
-        else if (competencies.length !== data.competencies.length) {
+        else if (competencies.length !== requestData.competencies.length) {
             res.status(422).json({ errors: [
                 new LogicError(req.originalUrl, "Одна или несколько компетенций не найдены.")
             ]});
@@ -45,8 +46,8 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
         else {
             // Create game entity
             const id: string = uuid();
-            const game: GameDocument = await Game.create({ 
-                ...data,
+            const gameDocument: HydratedDocument<IGamePopulated> = await Game.create({ 
+                ...requestData,
                 id,
                 author: author._id,
                 participants: participants.map(p => p._id),
@@ -55,11 +56,7 @@ export async function addGame(req: Request, res: Response, next: NextFunction) {
                 createdAt: Date.now()
             });
 
-            await game.populate("author");
-            await game.populate("participants");
-
-            // @ts-ignore
-            res.json(new GameDTO(game));
+            res.json(new GameDTO(gameDocument));
         }
     }
     catch (err) {
@@ -71,35 +68,42 @@ type GetGameData = {
     gameId: string
 };
 
-export async function getGame(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getGame(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> {
     try {
-        const data = <GetGameData> matchedData(req, { locations: [ "params" ] });
-        const game: IGamePopulated = await Game
-            .findOne({ id: data.gameId })
-            .populate("author")
-            .populate("participants");
+        const requestData = <GetGameData> matchedData(req, { locations: [ "params" ] });
+        const gameDocument: HydratedDocument<IGamePopulated> = await Game.findOne({ id: requestData.gameId });
 
-        if (!game) {
+        if (gameDocument === null) {
             res.status(404).json({ errors: [ 
                 new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
             ]});
         }
         else
-            res.json(new GameDTO(<IGamePopulated> game));
+            res.json(new GameDTO(gameDocument));
     }
     catch (err) {
         next(err);
     }
 }
 
-export async function getGames(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const games: Array<IGamePopulated> = await Game
-            .find()
-            .populate("author")
-            .populate("participants");
+type GetGamesData = {
+    start: number,
+    count: number
+};
 
-        res.json(games.map(g => new GameDTO(g)));
+export async function getGames(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> {
+    try {
+        const gamesDocuments: Array<HydratedDocument<IGamePopulated>> = await Game.find();
+
+        res.json(gamesDocuments.map(g => new GameDTO(g)));
     }
     catch (err) {
         next(err);
@@ -114,42 +118,42 @@ type UpdateGameData = {
     participants: Array<string> | undefined
 }
 
-export async function updateGame(req: Request, res: Response, next: NextFunction) {
+export async function updateGame(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> {
     try {
-        const data = <UpdateGameData> matchedData(req, { locations: [ "body", "params" ] });
         const user: any = req.user;
-        const game: GameDocument = await Game.findOne({ id: data.gameId });
+        const requestData = <UpdateGameData> matchedData(req, { locations: [ "body", "params" ] });
+        const gameDocument: HydratedDocument<IGamePopulated> = await Game.findOne({ id: requestData.gameId });
 
         const competencies: Array<CompetenceDocument> = await Competence.find({ 
-            id: { $in: data.competencies }
+            id: { $in: requestData.competencies }
         });
-        if (!game) {
+        if (gameDocument === null) {
             res.status(404).json({ errors: [ 
                 new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
             ]});
         }
-        else if (competencies.length !== data.competencies.length) {
+        else if (competencies.length !== requestData.competencies.length) {
             res.status(422).json({ errors: [
                 new LogicError(req.originalUrl, "Одна или несколько компетенций не найдены.")
             ]});
         }
-        else if (game.author !== user.id && user.role !== Role.Admin) 
+        else if (gameDocument.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
-            if (data.participants) { // convert participants ids to _id
-                const participants = await User.find({ id: { $in: data.participants }});
-                data.participants = participants.map(p => p._id);
+            if (requestData.participants) { // convert participants ids to _id
+                const participants = await User.find({ id: { $in: requestData.participants }});
+                requestData.participants = participants.map(p => p._id);
             }
 
-            game.set(data);
+            gameDocument.set(requestData);
 
-            await game.save();
+            await gameDocument.save();
 
-            await game.populate("author");
-            await game.populate("participants");
-
-            // @ts-ignore
-            res.json(new GameDTO(game));
+            res.json(new GameDTO(gameDocument));
         }
     }
     catch(err) {
@@ -193,15 +197,15 @@ export const uploadGame = [
                 ]});
             }
             else {
-                const game: GameDocument = await Game.findOne({ id: req.params.id });
+                const gameDocument: HydratedDocument<IGamePopulated> = await Game.findOne({ id: req.params.id });
     
                 const filesLoaded: Array<string> = [];
                 for (const file of <Array<Express.Multer.File>> req.files)
                     filesLoaded.push(file.originalname);
     
-                game.uploaded = true; 
+                gameDocument.uploaded = true; 
     
-                await game.save();
+                await gameDocument.save();
     
                 res.json({ filesLoaded });
             }
@@ -216,36 +220,36 @@ type DeleteGameData = {
     gameId: string
 }
 
-export async function deleteGame(req: Request, res: Response, next: NextFunction) {
+export async function deleteGame(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> {
     try {
-        const data = <DeleteGameData> matchedData(req, { locations: [ "params" ] });
-        const game: GameDocument = await Game.findOne({ id: data.gameId });
+        const requestData = <DeleteGameData> matchedData(req, { locations: [ "params" ] });
+        const gameDocument: HydratedDocument<IGamePopulated> = await Game.findOne({ id: requestData.gameId });
         const user: any = req.user;
 
-        if (!game) {
+        if (gameDocument === null) {
             res.status(422).json({ errors: [ 
                 new LogicError(req.originalUrl, "Игры с указанным id не существует.") 
             ]});
         }
-        else if (game.author !== user.id && user.role !== Role.Admin) 
+        else if (gameDocument.author !== user.id && user.role !== Role.Admin) 
             res.status(403).json({ errors: [ new AccessError(req.originalUrl) ] });
         else {
-            const directory: string = path.join("/public" + process.env.PUBLIC_GAMES_SUBDIR, data.gameId);
+            const directory: string = path.join("/public" + process.env.PUBLIC_GAMES_SUBDIR, requestData.gameId);
 
-            await game.delete();
+            await gameDocument.delete();
 
             // Удаляем директорию, содержащую файлы игры, если она существует
             if (fs.existsSync(directory))
                 fs.rmSync(directory, { recursive: true });
 
             // Удаляем комментарии, относящиеся к игре
-            await Comment.deleteMany({ gameId: game.id }); 
+            await Comment.deleteMany({ gameId: gameDocument.id }); 
 
-            await game.populate("author");
-            await game.populate("participants");
-
-            // @ts-ignore
-            res.json(new GameDTO(game));
+            res.json(new GameDTO(gameDocument));
         }
     }
     catch (err) {
