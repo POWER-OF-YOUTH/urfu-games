@@ -44,10 +44,7 @@ function GamesPage() {
                             </div>
                             <GamesCardsCarousel>
                                 { games.all().map((game, i, arr) => (
-                                    <>
-                                        <GameCard key={i} className={styles.carouselCard} game={game} />
-                                        <GameCard key={i + arr.length} className={styles.carouselCard} game={game} />
-                                    </>
+                                    <GameCard key={i} className={styles.carouselCard} game={game} />
                                 ))} 
                             </GamesCardsCarousel>
                         </div>
@@ -57,10 +54,7 @@ function GamesPage() {
                             </div>
                             <div className={styles.gamesGrid}>
                                 { games.all().map((game, i, arr) => (
-                                    <>
-                                        <GameCard key={i} game={game} />
-                                        <GameCard key={i + arr.length} game={game} />
-                                    </>
+                                    <GameCard key={i} game={game} />
                                 ))} 
                             </div>
                         </div>
