@@ -1,9 +1,19 @@
 import mongoose, { Schema } from "mongoose";
 
+import { IUser } from "./user";
+
 interface IRating {
     id: string;
     gameId: string;
-    author: string;
+    author: Schema.Types.ObjectId;
+    value: number;
+    createdAt: Date;
+}
+
+interface IRatingPopulated {
+    id: string;
+    gameId: string;
+    author: IUser;
     value: number;
     createdAt: Date;
 }
@@ -22,9 +32,11 @@ const ratingSchema = new Schema<IRating>(
             index: true
         },
         author: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "User",
             required: true,
-            index: true
+            index: true,
+            autopopulate: true
         },
         value: {
             type: Number,
@@ -37,10 +49,14 @@ const ratingSchema = new Schema<IRating>(
     { versionKey: false }
 );
 
-const Rating = mongoose.model<IRating>("Rating", ratingSchema);
+ratingSchema.plugin(require("mongoose-autopopulate"));
+
+// @ts-ignore
+const Rating = mongoose.model<IRatingPopulated>("Rating", ratingSchema);
 
 export default Rating;
 export {
     IRating,
+    IRatingPopulated,
     Rating
 };

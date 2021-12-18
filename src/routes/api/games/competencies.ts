@@ -66,6 +66,7 @@ gameCompetenciesRouter.get("/",
 
 gameCompetenciesRouter.put("/", 
     body("id").isUUID(),
+    requestValidator,
     asyncMiddleware(async (
         req: Request, 
         res: Response, 

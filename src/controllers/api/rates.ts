@@ -1,3 +1,4 @@
+/*
 import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 
@@ -127,3 +128,4 @@ async function updateGameRating(gameId: string) {
         console.error(`Error during update rating for game ${gameId}: ${error}`);
     }
 }
+*/

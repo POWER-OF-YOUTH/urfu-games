@@ -11,6 +11,7 @@ import * as gamesValidator from "../../../validators/api/games";
 import validateToken from "../../../validators/validateToken";
 import * as gamesController from "../../../controllers/api/games";
 import gameCompetenciesRouter from "./competencies";
+import ratingsRouter from "./ratings";
 import commentsRouter from "./comments";
 import { Game, IGamePopulated } from "../../../models/game";
 import { LogicError, ValidationError } from "../../../utils/errors";
@@ -67,5 +68,7 @@ gamesRouter.use("/:gameId/competencies",
     gamesValidator.getGame,
     gameCompetenciesRouter
 );
+
+gamesRouter.use("/:gameId/ratings", ratingsRouter);
 
 export default gamesRouter;
