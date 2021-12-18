@@ -15,7 +15,7 @@ function requestValidator(req: Request, res: Response, next: NextFunction): void
     const errors = createCustomValidationResult(req).array();
 
     if(errors.length > 0)
-        res.status(422).json({ errors });
+        next(errors[0]);
     else
         next();
 }

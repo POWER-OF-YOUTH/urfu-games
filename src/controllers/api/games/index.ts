@@ -20,8 +20,11 @@ type AddGameData = {
     participants: Array<string>
 }
 
-export async function addGame
-    (req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function addGame(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> {
     try {
         const requestData = <AddGameData> matchedData(req, { locations: [ "body" ] });
         const user: any = req.user;

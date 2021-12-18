@@ -5,7 +5,13 @@ import mongoose from "mongoose";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
 
-import { DatabaseError, UnexpectedError } from "./utils/errors";
+import { 
+    DatabaseError, 
+    LogicError, 
+    UnexpectedError, 
+    ValidationError,
+    AccessError
+} from "./utils/errors";
 import apiRouter from "./routes/api";
 
 const app = express();
@@ -32,8 +38,28 @@ app.use((req: Request, res: Response, next: NextFunction) => {
         next();
 });
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.log(err);
-    res.status(500).json({ errors: [ new UnexpectedError(req.originalUrl)]});
+    // @ts-ignore
+    const sendErrors = (status: number, ...errors) => {
+        res.status(status).json({ errors });
+    }
+
+    let status = 500;
+
+    if (err instanceof ValidationError)
+        status = 422;
+    else if (err instanceof LogicError)
+        status = 404;
+    else if (err instanceof AccessError)
+        status = 403;
+    else {
+        console.log(err);
+
+        sendErrors(500, new UnexpectedError(req.originalUrl));
+
+        return;
+    }
+
+    sendErrors(status, err);
 });
 
 export default app;
