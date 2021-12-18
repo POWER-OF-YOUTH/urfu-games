@@ -93,6 +93,7 @@ function GamePage({ history }) {
                                                     size="large" 
                                                     defaultValue={game.rating} 
                                                     onChange={handleRatingChange} 
+                                                    readOnly={!auth.authenticated || game.rated}
                                                 />
                                                 <span className={styles.ratingCaption}>{game.rating}</span>
                                             </div>

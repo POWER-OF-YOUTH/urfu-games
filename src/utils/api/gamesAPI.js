@@ -88,3 +88,24 @@ export async function deleteGame(gameId) {
         console.log(err);
     }
 }
+
+/*
+ * @param {string} gameId
+ * @param {number} value
+ */
+export async function rateGame(gameId, value) {
+    const url = new URL(apiConfig.APIURL + `/games/${gameId}/ratings`);
+
+    try {
+        const response = await fetch(url, {
+            ...apiConfig.getDefaultRequestInit(),
+            method: "PUT",
+            body: JSON.stringify({ value })
+        });
+
+        return response;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}

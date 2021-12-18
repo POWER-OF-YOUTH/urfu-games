@@ -24,16 +24,29 @@ const Game = types
         url: types.string,
         uploaded: types.boolean,
         createdAt: DateTime,
-        comments: types.maybe(CommentsStore)
+        comments: types.maybe(CommentsStore),
+        rated: false
     })
     .actions(self => ({
         afterCreate() {
             self.comments = CommentsStore.create({ gameId: self.id });
         },
-        rate(rate) { 
-            /* TODO: Rates */ 
-            self.rating = rate;
-        },
+        rate: flow(function* (value) {
+            if (!self.rated) {
+                yield gamesAPI.rateGame(self.id, value);
+                const gameResponse = yield gamesAPI.getGame(self.id);
+
+                if (gameResponse.ok) {
+                    const gameJSON = yield gameResponse.json();
+
+                    self.rating = gameJSON.rating; 
+                }
+
+                self.rated = true;
+
+                window.ym(86784357, 'reachGoal', 'rate_game'); 
+            }
+        }),
         update: flow(function* (data) {
             const oldData = getSnapshot(self);
             const newData = { ...oldData, ...data };
