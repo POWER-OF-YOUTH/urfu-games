@@ -28,8 +28,11 @@ function SignInPage(props) {
         await auth.signIn(values);
 
         // Если в процессе входа ошибок не возникло
-        if (auth.errors.length === 0)
+        if (auth.errors.length === 0) {
+            window.ym(86784357, 'reachGoal', 'signin');
+
             props.history.push("/games");
+        }
     };
   
     const alert = auth.errors.length > 0 ? 

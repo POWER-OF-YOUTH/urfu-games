@@ -25,8 +25,11 @@ function SignUpPage(props) {
         await auth.signUp(values);
 
         // Если в процессе регистрации ошибок не возникло
-        if (auth.errors.length === 0)
+        if (auth.errors.length === 0) {
+            window.ym(86784357, 'reachGoal', 'signup');
+
             props.history.push("/signin");
+        }
     };
   
     const alert = auth.errors.length > 0 ? 

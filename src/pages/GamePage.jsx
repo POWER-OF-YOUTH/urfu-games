@@ -31,7 +31,9 @@ function GamePage({ history }) {
 
     const handleCommentFormSubmit = (text) => game.comment(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
-
+    const handlePlayButtonClick = () => {
+        window.ym(86784357, 'reachGoal', 'play_button_click');
+    };
     const fetchAll = async () => {
         const game = await fetchGame(gameId);
         setGame(game);
@@ -99,7 +101,7 @@ function GamePage({ history }) {
                                                     className={styles.playButtonLink} 
                                                     to={`/games/${gameId}/play`}
                                                 >
-                                                    <Button className={styles.playButton} variant="contained">
+                                                    <Button className={styles.playButton} variant="contained" onClick={handlePlayButtonClick}>
                                                         Играть
                                                     </Button>
                                                 </NavLink>
