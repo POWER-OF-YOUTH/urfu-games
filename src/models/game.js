@@ -32,7 +32,7 @@ const Game = types
             self.comments = CommentsStore.create({ gameId: self.id });
         },
         rate: flow(function* (value) {
-            if (!self.rated) {
+            if (!self.rated && value !== null && value !== undefined) {
                 yield gamesAPI.rateGame(self.id, value);
                 const gameResponse = yield gamesAPI.getGame(self.id);
 
