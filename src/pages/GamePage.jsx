@@ -95,7 +95,7 @@ function GamePage({ history }) {
                                                     onChange={handleRatingChange} 
                                                     readOnly={!auth.authenticated || game.rated}
                                                 />
-                                                <span className={styles.ratingCaption}>{game.rating}</span>
+                                                <span className={styles.ratingCaption}>{Math.round(game.rating)}</span>
                                             </div>
                                             <div className={styles.gameButtonsContainer}>
                                                 <NavLink 
