@@ -24,8 +24,7 @@ const Game = types
         url: types.string,
         uploaded: types.boolean,
         createdAt: DateTime,
-        comments: types.maybe(CommentsStore),
-        rated: false
+        comments: types.maybe(CommentsStore)
     })
     .actions(self => ({
         afterCreate() {
@@ -41,8 +40,6 @@ const Game = types
 
                     self.rating = gameJSON.rating; 
                 }
-
-                self.rated = true;
 
                 window.ym(86784357, 'reachGoal', 'rate_game'); 
             }

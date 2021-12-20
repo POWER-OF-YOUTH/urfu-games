@@ -89,11 +89,16 @@ function GamePage({ history }) {
                                             </div> 
                                             <div className={styles.ratingContainer}>
                                                 <Rating 
-                                                    name="simple-controller" 
+                                                    className={styles.rating}
                                                     size="large" 
-                                                    defaultValue={game.rating} 
+                                                    value={game.rating} 
+                                                    readOnly={true}
+                                                />
+                                                <Rating 
+                                                    className={styles.rating}
+                                                    size="large" 
                                                     onChange={handleRatingChange} 
-                                                    readOnly={!auth.authenticated || game.rated}
+                                                    readOnly={!auth.authenticated}
                                                 />
                                                 <span className={styles.ratingCaption}>{Math.round(game.rating)}</span>
                                             </div>

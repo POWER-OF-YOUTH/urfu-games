@@ -68,6 +68,10 @@
     margin-top: auto;
 }
 
+.ratingContainer .rating:nth-child(1) {
+    position: absolute;
+}
+
 .ratingCaption {
     margin-left: 10px;
 }
