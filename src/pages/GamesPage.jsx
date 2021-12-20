@@ -43,7 +43,7 @@ function GamesPage() {
                                 <h2 className={styles.gamesSectionCaption}>Рекомендуемые</h2>
                             </div>
                             <GamesCardsCarousel>
-                                { games.all().map((game, i, arr) => (
+                                { games.all().sort(g => -g.createdAt).map((game, i) => (
                                     <GameCard key={i} className={styles.carouselCard} game={game} />
                                 ))} 
                             </GamesCardsCarousel>
@@ -53,7 +53,7 @@ function GamesPage() {
                                 <h2 className={styles.gamesSectionCaption}>Все игры</h2>
                             </div>
                             <div className={styles.gamesGrid}>
-                                { games.all().map((game, i, arr) => (
+                                { games.all().sort(g => -g.createdAt).map((game, i) => (
                                     <GameCard key={i} game={game} />
                                 ))} 
                             </div>
