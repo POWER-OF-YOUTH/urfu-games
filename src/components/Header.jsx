@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import {
     Slide,
     Popper,
@@ -25,6 +25,7 @@ import styles from "./Header.module.css";
  * @param {{ variant: "standard" | "hidebuttons" | "hideall" }}
  */
 function Header({ variant = "standard" }) {
+    const location = useLocation();
     const { auth } = useStore();
 
     const isMobile = useIsMobile();
@@ -73,12 +74,24 @@ function Header({ variant = "standard" }) {
                             : 
                             showAuthButtons ?
                                 <div className={styles.authButtonsContainer}>
-                                    <NavLink className={styles.signInLink} to="/signin">
+                                    <NavLink 
+                                        className={styles.signInLink} 
+                                        to={{
+                                            pathname: "/signin", 
+                                            state: { redirectTo: location.pathname }
+                                        }}
+                                    >
                                         <SignInButton variant="contained" size="small">
                                             Войти
                                         </SignInButton>
                                     </NavLink>
-                                    <NavLink className={styles.signUpLink} to="/signup">
+                                    <NavLink 
+                                        className={styles.signUpLink} 
+                                        to={{
+                                            pathname: "/signup", 
+                                            state: { redirectTo: location.pathname }
+                                        }}
+                                    >
                                         Зарегистрироваться
                                     </NavLink>
                                 </div>

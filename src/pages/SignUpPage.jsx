@@ -9,17 +9,12 @@ import {
 } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 
-import Header from "../components/Header";
 import { useStore } from "../hooks";
 
 import styles from "./SignUpPage.module.css";
 
-function SignUpPage(props) {
+function SignUpPage({ history, ...props }) {
     const { auth } = useStore();
-
-    React.useEffect(() => {
-        auth.clearErrors();
-    }, []);
 
     const handleFormSubmit = async (values) => {
         await auth.signUp(values);
@@ -28,7 +23,7 @@ function SignUpPage(props) {
         if (auth.errors.length === 0) {
             window.ym(86784357, 'reachGoal', 'signup');
 
-            props.history.push("/signin");
+            history.push("/signin", history.location.state);
         }
     };
   
@@ -38,17 +33,28 @@ function SignUpPage(props) {
         </Alert>
         : 
         <></>; 
-    return auth.authenticated ? 
-        (
-            <Redirect to="/games" />
-        ) : (
-            <>
-                <div className={styles.wrapper}>
-                    <SignUpForm onSubmit={handleFormSubmit} />
-                    {alert}
-                </div>
-            </>
-        );
+
+    React.useEffect(() => {
+        auth.clearErrors();
+    }, []);
+    React.useEffect(() => {
+        if (auth.authenticated)
+        {
+            if (history.location.state !== undefined 
+             && history.location.state.redirectTo !== undefined)
+                history.push(history.location.state.redirectTo);
+            else
+                history.push("/games");
+        }
+    }, [auth.authenticated]);
+    return (
+        <>
+            <div className={styles.wrapper}>
+                <SignUpForm onSubmit={handleFormSubmit} />
+                {alert}
+            </div>
+        </>
+    );
 }
 
 function SignUpForm({ onSubmit }) {
