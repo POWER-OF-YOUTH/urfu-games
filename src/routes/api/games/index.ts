@@ -14,18 +14,15 @@ import gameCompetenciesRouter from "./competencies";
 import ratingsRouter from "./ratings";
 import commentsRouter from "./comments";
 import { Game, IGamePopulated } from "../../../models/game";
-import { LogicError, ValidationError } from "../../../utils/errors";
+import { LogicError } from "../../../utils/errors";
 import requestValidator from "../../../validators/request_validator";
 
 const gamesRouter = express.Router();
 
-gamesRouter.use("/:gameId",
+const commonGameIdMiddlewares = [
     param("gameId")
         .isUUID(),
-    requestValidator
-);
-
-gamesRouter.use("/:gameId", 
+    requestValidator,
     asyncMiddleware(async (
         req: Request,
         res: Response,
@@ -40,35 +37,55 @@ gamesRouter.use("/:gameId",
             res.locals.gameDocument = gameDocument;
             next();
         }
-    }
-));
+    })
+];
 
 gamesRouter.post("/", validateToken, gamesValidator.addGame, gamesController.addGame);
 
-gamesRouter.get("/:gameId", gamesValidator.getGame, gamesController.getGame);
+gamesRouter.get("/:gameId", 
+    commonGameIdMiddlewares,
+    gamesValidator.getGame, 
+    gamesController.getGame
+);
 
 gamesRouter.get("/", gamesController.getGames);
 
-gamesRouter.put("/:gameId", validateToken, gamesValidator.updateGame, gamesController.updateGame);
+gamesRouter.put("/:gameId", 
+    validateToken, 
+    commonGameIdMiddlewares, 
+    gamesValidator.updateGame, 
+    gamesController.updateGame
+);
 
-gamesRouter.post("/:gameId/upload", validateToken, gamesValidator.uploadGame, gamesController.uploadGame);
+gamesRouter.post("/:gameId/upload", 
+    validateToken, 
+    commonGameIdMiddlewares, 
+    gamesValidator.uploadGame, 
+    gamesController.uploadGame
+);
 
 gamesRouter.delete("/:gameId",
     validateToken, 
+    commonGameIdMiddlewares,
     gamesValidator.deleteGame, 
     gamesController.deleteGame
 );
 
 gamesRouter.use("/:gameId/comments", 
+    commonGameIdMiddlewares,
     gamesValidator.getGame,
     commentsRouter
 );
 
 gamesRouter.use("/:gameId/competencies",
+    commonGameIdMiddlewares,
     gamesValidator.getGame,
     gameCompetenciesRouter
 );
 
-gamesRouter.use("/:gameId/ratings", ratingsRouter);
+gamesRouter.use("/:gameId/ratings", 
+    commonGameIdMiddlewares,
+    ratingsRouter
+);
 
 export default gamesRouter;
