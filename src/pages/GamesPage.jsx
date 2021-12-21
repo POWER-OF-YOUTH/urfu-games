@@ -1,6 +1,7 @@
 import React from "react";
 import Flickity from "react-flickity-component";
 import { observer, useLocalObservable } from "mobx-react-lite";
+import { Helmet } from "react-helmet";
 
 import Block from "../components/Block";
 import GameCard from "../components/GameCard";
@@ -28,6 +29,9 @@ function GamesPage() {
     }, []);
     return (        
         <>
+            <Helmet>
+                <title>Игры</title>
+            </Helmet>
             <div className={styles.pageGrid}>
                 <div className={styles.sideBar}>
                     <CompetenciesList className={styles.competenciesList}>

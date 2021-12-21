@@ -2,6 +2,7 @@ import React, {
     useState, 
     useContext
 } from "react";
+import { Helmet } from "react-helmet";
 
 import { Redirect } from "react-router-dom";
 import { 
@@ -47,6 +48,9 @@ function SignInPage({ history, ...props }) {
     }, [auth.authenticated]);
     return (
         <>
+            <Helmet>
+                <title>Вход</title>
+            </Helmet>
             <div className={styles.wrapper}>
                 <SignInForm onSubmit={handleFormSubmit} />
                 {alert}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 
-import { Redirect } from "react-router-dom";
 import { 
     Button, 
     Typography, 
@@ -49,6 +49,9 @@ function SignUpPage({ history, ...props }) {
     }, [auth.authenticated]);
     return (
         <>
+            <Helmet>
+                <title>Регистрация</title>
+            </Helmet>
             <div className={styles.wrapper}>
                 <SignUpForm onSubmit={handleFormSubmit} />
                 {alert}
