@@ -6,7 +6,7 @@
     "scripts": {
         "prestart": "npm run build",
         "start": "node ./dist/index.js",
-        "dev": "nodemon --ext ts,js,json,env ./src/index.ts",
+        "dev": "nodemon ./src/index.ts",
         "build": "tsc"
     },
     "keywords": [],

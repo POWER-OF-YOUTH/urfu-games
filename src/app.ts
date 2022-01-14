@@ -21,14 +21,17 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+// ---
 
 // static files
 app.use("/public", express.static(
     path.join(process.cwd(), "/public"))
 );
+// ---
 
 // routes
 app.use("/api", apiRouter);
+// ---
 
 // errors handling
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -37,6 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     else
         next();
 });
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     // @ts-ignore
     const sendErrors = (status: number, ...errors) => {
@@ -61,5 +65,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
     sendErrors(status, err);
 });
+// ---
 
 export default app;

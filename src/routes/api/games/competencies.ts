@@ -13,18 +13,7 @@ import requestValidator from "../../../validators/request_validator";
 
 const gameCompetenciesRouter = express.Router();
 
-/// Requests handling
-/*
-    1. access handler
-    ↓
-    2. validation errors handler
-    ↓
-    3. logic errors handler
-    ↓
-    *4. data handling
-    ↓
-    5. business logic and response
-*/
+// Следует помнить, что документ игры уже сохранён в res.locals.gameDocument
 
 gameCompetenciesRouter.use("/:competenceId", 
     param("competenceId")
@@ -47,6 +36,9 @@ gameCompetenciesRouter.use("/:competenceId",
         else if (!gameDocument.competencies.includes(competenceDocument.id))
             next(new LogicError(req.originalUrl, "Компетенция с указанным id не относится к игре."));
         else {
+            // Сохраняем документ компетенции в res.locals.competenceDocument. 
+            // Все пути, которые включают в себя "/:competenceId", будут иметь доступ
+            // к этому полю.
             res.locals.competenceDocument = competenceDocument;
             next();
         }
@@ -59,6 +51,7 @@ gameCompetenciesRouter.get("/",
         res: Response, 
         next: NextFunction
     ): Promise<void> => {
+        // Получаем все компетенции, id которых сохранён в поле competencies документа игры
         const competenciesDocuments: Array<HydratedDocument<ICompetence>> 
             = await Competence.find({ id: { $in: res.locals.gameDocument.competencies }});
 
@@ -68,6 +61,22 @@ gameCompetenciesRouter.get("/",
 
 gameCompetenciesRouter.put("/", 
     validateToken, 
+    asyncMiddleware(async (
+        req: Request, 
+        res: Response, 
+        next: NextFunction
+    ): Promise<void> => {
+        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
+
+        const user: any = req.user;
+
+        // Продолжаем обработку запроса только в том случае, если пользователь
+        // является администратором или автором игры.
+        if (gameDocument.author.id !== user.id && user.role !== Role.Admin)
+            next(new AccessError(req.originalUrl));
+        else
+            next();
+    }),
     body("id").isUUID(),
     requestValidator,
     asyncMiddleware(async (
@@ -88,20 +97,6 @@ gameCompetenciesRouter.put("/",
 
             next();
         }
-    }),
-    asyncMiddleware(async (
-        req: Request, 
-        res: Response, 
-        next: NextFunction
-    ): Promise<void> => {
-        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
-
-        const user: any = req.user;
-
-        if (gameDocument.author.id !== user.id && user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
-        else
-            next();
     }),
     asyncMiddleware(async (
         req: Request, 
@@ -130,6 +125,8 @@ gameCompetenciesRouter.delete("/:competenceId",
 
         const user: any = req.user;
 
+        // Продолжаем обработку запроса только в том случае, если пользователь
+        // является администратором или автором игры.
         if (gameDocument.author.id !== user.id && user.role !== Role.Admin)
             next(new AccessError(req.originalUrl));
         else
