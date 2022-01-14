@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import expressJWT from "express-jwt";
+import expressJWT, { UnauthorizedError } from "express-jwt";
 
 import { AccessError } from "../utils/errors";
 
@@ -9,9 +9,7 @@ const validateToken = [
         algorithms: ["HS256"] 
     }),
     (err: any, req: Request, res: Response, next: NextFunction) => {
-        if (!err)
-            next();
-        else {
+        if (err instanceof UnauthorizedError) {
             res.status(401).json({ errors: [
                 new AccessError(
                     req.originalUrl,
@@ -19,6 +17,8 @@ const validateToken = [
                 )
             ]});
         }
+        else
+            next(err);
     }
 ];
 

@@ -15,13 +15,15 @@ const gameCompetenciesRouter = express.Router();
 
 /// Requests handling
 /*
-    1. validation errors handler
+    1. access handler
     ↓
-    2. logic errors handler
+    2. validation errors handler
     ↓
-    3. access handler
+    3. logic errors handler
     ↓
-    4. business logic and response
+    *4. data handling
+    ↓
+    5. business logic and response
 */
 
 gameCompetenciesRouter.use("/:competenceId", 
@@ -65,7 +67,9 @@ gameCompetenciesRouter.get("/",
 ));
 
 gameCompetenciesRouter.put("/", 
+    validateToken, 
     body("id").isUUID(),
+    requestValidator,
     asyncMiddleware(async (
         req: Request, 
         res: Response, 
@@ -85,7 +89,6 @@ gameCompetenciesRouter.put("/",
             next();
         }
     }),
-    validateToken, 
     asyncMiddleware(async (
         req: Request, 
         res: Response, 
