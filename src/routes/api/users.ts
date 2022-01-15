@@ -8,7 +8,9 @@ import validateToken from "../../validators/validateToken";
 const usersRouter = express.Router();
 
 usersRouter.get("/", usersValidator.getUsers, usersController.getUsers);
+
 usersRouter.get("/:id", usersValidator.getUser, usersController.getUser);
+
 usersRouter.put("/:id", 
     validateToken, 
     usersValidator.updateUser, 

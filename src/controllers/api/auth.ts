@@ -9,18 +9,6 @@ import { LogicError, DatabaseError, AccessError } from "../../utils/errors";
 
 import UserDTO from "../../utils/dto/user";
 
-
-type SignUpData = {
-    login: string,
-    email: string,
-    password: string
-};
-
-type SignInData = {
-    login: string,
-    password: string
-};
-
 function encryptPassword(password: string, salt: string): string {
     return crypto.createHmac("sha1", salt).update(password).digest("hex");
 }
@@ -33,6 +21,12 @@ function generateToken(data: string | object | Buffer): string {
         { expiresIn: "1d" }
     );
 }
+
+type SignUpData = {
+    login: string,
+    email: string,
+    password: string
+};
 
 export async function signUp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -48,6 +42,11 @@ export async function signUp(req: Request, res: Response, next: NextFunction): P
         next(err);
     }
 }
+
+type SignInData = {
+    login: string,
+    password: string
+};
 
 export async function signIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

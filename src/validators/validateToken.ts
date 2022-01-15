@@ -10,12 +10,10 @@ const validateToken = [
     }),
     (err: any, req: Request, res: Response, next: NextFunction) => {
         if (err instanceof UnauthorizedError) {
-            res.status(401).json({ errors: [
-                new AccessError(
-                    req.originalUrl,
-                    "Чтобы получить доступ к указанному ресурсу вам необходимо аутентифицироваться."
-                )
-            ]});
+            next(new AccessError(
+                req.originalUrl, 
+                "Чтобы получить доступ к указанному ресурсу вам необходимо аутентифицироваться."
+            ));
         }
         else
             next(err);
