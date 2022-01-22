@@ -34,36 +34,22 @@ app.use("/api", apiRouter);
 // ---
 
 // errors handling
-app.use((req: Request, res: Response, next: NextFunction) => {
-    if (mongoose.connection.readyState !== 1) // 1 = connected
-        res.status(500).json({ errors: [ new DatabaseError(req.originalUrl)]});
-    else
-        next();
-});
-
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    // @ts-ignore
-    const sendErrors = (status: number, ...errors) => {
-        res.status(status).json({ errors });
-    }
-
-    let status = 500;
+app.use(<TError>(err: TError, req: Request, res: Response, next: NextFunction) => {
+    const sendError = <T>(status: number, error: T) => {
+        res.status(status).json({ errors: [ error ] });
+    };
 
     if (err instanceof ValidationError)
-        status = 422;
+        sendError(422, err);
     else if (err instanceof LogicError)
-        status = 404;
+        sendError(404, err);
     else if (err instanceof AccessError)
-        status = 403;
-    else {
-        console.log(err);
+        sendError(403, err);
+    else { // Internal error
+        console.error(err);
 
-        sendErrors(500, new UnexpectedError(req.originalUrl));
-
-        return;
+        sendError(500, new UnexpectedError(req.originalUrl));
     }
-
-    sendErrors(status, err);
 });
 // ---
 
