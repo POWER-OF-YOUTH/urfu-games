@@ -1,7 +1,6 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import mongoose from "mongoose";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
 
@@ -12,6 +11,7 @@ import {
     ValidationError,
     AccessError
 } from "./utils/errors";
+import sendResponse from "./utils/send-response";
 import apiRouter from "./routes/api";
 
 const app = express();
@@ -36,7 +36,7 @@ app.use("/api", apiRouter);
 // errors handling
 app.use(<TError>(err: TError, req: Request, res: Response, next: NextFunction) => {
     const sendError = <T>(status: number, error: T) => {
-        res.status(status).json({ errors: [ error ] });
+        sendResponse(res, { errors: [ error ] }, status);
     };
 
     if (err instanceof ValidationError)
