@@ -1,4 +1,8 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { 
+    Schema, 
+    HydratedDocument, 
+    Model
+} from "mongoose";
 
 interface ICompetence {
     id: string;
@@ -7,7 +11,11 @@ interface ICompetence {
     createdAt: Date;
 }
 
-const competenceSchema = new Schema<ICompetence>(
+interface ICompetenceInstanceMethods { }
+
+interface ICompetenceModel extends Model<ICompetence, any, ICompetenceInstanceMethods> { }
+
+const competenceSchema = new Schema<ICompetence, ICompetenceModel>(
     {
         id: {
             type: String,
@@ -32,9 +40,9 @@ const competenceSchema = new Schema<ICompetence>(
     { versionKey: false }
 );
 
-const Competence = mongoose.model<ICompetence>("Competence", competenceSchema);
+const Competence = mongoose.model<ICompetence, ICompetenceModel>("Competence", competenceSchema);
 
-type CompetenceDocument = ICompetence & Document<any, any, ICompetence>;
+type CompetenceDocument = HydratedDocument<ICompetence & ICompetenceInstanceMethods>;
 
 export default Competence;
 export {
