@@ -9,7 +9,7 @@ import { Game, GameDocument } from "./game";
 
 interface IRating {
     id: string;
-    gameId: string;
+    game: string;
     author: string;
     value: number;
     createdAt: Date;
@@ -31,7 +31,7 @@ const ratingSchema = new Schema<IRating, IRatingModel>(
             required: true,
             index: true
         },
-        gameId: {
+        game: {
             type: String,
             required: true,
             index: true

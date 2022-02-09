@@ -1,17 +1,21 @@
 import strings from "../../../config/api/strings.json";
 
-import express, { Request, Response, NextFunction } from "express";
-import { body, param, query } from "express-validator";
+import express, { 
+    Request, 
+    Response, 
+    NextFunction 
+} from "express";
 import { asyncMiddleware } from "middleware-async";
+import { body, param, query } from "express-validator";
 import { v4 as uuid } from "uuid";
 
+import CompetenceDTO from "../../domain/dto/competence-dto";
+import sendResponse from "../../utils/send-response";
 import validateRequest from "../../validators/validate-request";
 import verifyToken from "../../validators/verify-token";
-import sendResponse from "../../utils/send-response";
-import { Role } from "../../domain/models/user";
-import { Competence, CompetenceDocument } from "../../domain/models/competence";
-import CompetenceDTO from "../../domain/dto/competence-dto";
 import { AccessError, LogicError } from "../../utils/errors";
+import { Competence, CompetenceDocument } from "../../domain/models/competence";
+import { Role } from "../../domain/models/user";
 
 const competenciesRouter = express.Router();
 
@@ -49,7 +53,10 @@ competenciesRouter.post("/",
             createdAt: Date.now()
         });
 
-        sendResponse(res, new CompetenceDTO(competence));
+        sendResponse(
+            res, 
+            await CompetenceDTO.create(competence)
+        );
     })
 );
 
@@ -72,7 +79,10 @@ competenciesRouter.get("/:competenceId",
             ));
         }
 
-        sendResponse(res, new CompetenceDTO(competence));
+        sendResponse(
+            res, 
+            await CompetenceDTO.create(competence)
+        );
     })
 );
 
@@ -84,7 +94,7 @@ competenciesRouter.get("/",
             .toInt(),
         query("count")
             .default(10)
-            .isInt({ gt: 0 })
+            .isInt({ gt: 0, lt: 100 })
             .toInt()
     ),
     asyncMiddleware(async (
@@ -97,7 +107,12 @@ competenciesRouter.get("/",
             .skip(req.data.start)
             .limit(req.data.count);
 
-        sendResponse(res, competencies.map(c => new CompetenceDTO(c)));
+        sendResponse(
+            res, 
+            await Promise.all(
+                competencies.map(c => CompetenceDTO.create(c))
+            )   
+        );
     })
 );
 
@@ -141,7 +156,10 @@ competenciesRouter.put("/:competenceId",
 
         await competence.save();
 
-        sendResponse(res, new CompetenceDTO(competence));
+        sendResponse(
+            res, 
+            await CompetenceDTO.create(competence)
+        );
     })
 );
 
@@ -156,7 +174,9 @@ competenciesRouter.delete("/:competenceId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const competence: CompetenceDocument = await Competence.findOne({ id: req.data.competenceId });
+        const competence: CompetenceDocument = await Competence.findOne({ 
+            id: req.data.competenceId 
+        });
 
         if (req.user.role !== Role.Admin)
             next(new AccessError(req.originalUrl));
@@ -170,7 +190,10 @@ competenciesRouter.delete("/:competenceId",
 
         await competence.delete();
 
-        sendResponse(res, new CompetenceDTO(competence));
+        sendResponse(
+            res, 
+            await CompetenceDTO.create(competence)
+        );
     })
 );
 

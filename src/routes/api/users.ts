@@ -7,14 +7,13 @@ import express, {
 } from "express";
 import { body, param, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
-import { v4 as uuid } from "uuid";
 
+import UserDTO from "../../domain/dto/user-dto";
+import sendResponse from "../../utils/send-response";
 import validateRequest from "../../validators/validate-request";
 import verifyToken from "../../validators/verify-token";
-import sendResponse from "../../utils/send-response";
-import { User, UserDocument } from "../../domain/models/user";
-import UserDTO from "../../domain/dto/user-dto";
 import { AccessError, LogicError } from "../../utils/errors";
+import { User, UserDocument } from "../../domain/models/user";
 
 const usersRouter = express.Router();
 
@@ -22,13 +21,17 @@ usersRouter.get("/",
     validateRequest(
         query("id")
             .optional()
-            .customSanitizer(id => {
-                if (!Array.isArray(id))
-                    return [ id ];
-                return id;
-            }),
-        query("id.*")
-            .isUUID()
+            .isArray(),
+        query("id.*") // TODO: length constraint?
+            .isUUID(),
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt()
     ),
     asyncMiddleware(async (
         req: Request,
@@ -39,12 +42,18 @@ usersRouter.get("/",
 
         if (req.data.id !== undefined)
             users = await User.find({id: {$in: req.data.id}});
-        else
-            users = await User.find();
+        else {
+            users = await User.find()
+                .sort("createdAt")
+                .skip(req.data.start)
+                .limit(req.data.count)
+        }
 
         sendResponse(
             res,
-            users.map(u => UserDTO.create(u))
+            await Promise.all(
+                users.map(u => UserDTO.create(u))
+            )
         );
     })
 );
@@ -70,7 +79,7 @@ usersRouter.get("/:userId",
 
         sendResponse(
             res,
-            UserDTO.create(user)
+            await UserDTO.create(user)
         );
     })
 );
@@ -110,18 +119,20 @@ usersRouter.put("/:userId",
         if (user.id !== req.user.id)
             next(new AccessError(req.originalUrl));
 
-        user.set({
-            name: req.data.name,
-            surname: req.data.surname,
-            patronymic: req.data.patronymic,
-            email: req.data.email
-        });
+        if (req.data.name !== undefined)
+            user.set({ name: req.data.name });
+
+        if (req.data.surname !== undefined)
+            user.set({ surname: req.data.name });
+
+        if (req.data.patronymic !== undefined)
+            user.set({ patronymic: req.data.patronymic });
 
         await user.save();
 
         sendResponse(
             res,
-            UserDTO.create(user)
+            await UserDTO.create(user)
         );
     })
 );

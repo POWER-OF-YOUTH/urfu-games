@@ -3,126 +3,116 @@ import express, {
     Response, 
     NextFunction 
 } from "express";
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
-import { HydratedDocument } from "mongoose";
-import { v4 as uuid } from "uuid";
 
-import { User, IUser } from "../../../models/user";
-import { IGamePopulated } from "../../../models/game";
-import { Rating, IRatingPopulated } from "../../../models/rating";
-import { RatingDTO } from "../../../utils/dto";
-import requestValidator from "../../../validators/request_validator";
-import validateToken from "../../../validators/validateToken";
+import sendResponse from "../../../utils/send-response";
+import { Game, GameDocument } from "../../../domain/models/game";
+import { User, UserDocument } from "../../../domain/models/user";
+import { Rating, RatingDocument } from "../../../domain/models/rating";
+import RatingDetailDTO from "../../../domain/dto/rating-detail-dto";
+import validateRequest from "../../../validators/validate-request";
+import verifyToken from "../../../validators/verify-token";
 import { LogicError } from "../../../utils/errors";
 
 const ratingsRouter = express.Router();
 
-ratingsRouter.get("/", 
+ratingsRouter.put("/",
+    verifyToken,
+    validateRequest(
+        body("value")
+            .isNumeric() // TODO: Range check
+    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
+        const author: UserDocument = await User.findOne({ 
+            id: req.user.id 
+        });
 
-        const ratingsDocuments: Array<HydratedDocument<IRatingPopulated>> = 
-            await Rating.find({ gameId: gameDocument.id });
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
+        });
 
-        res.json(ratingsDocuments.map(rd => new RatingDTO(rd)));
+        const rating: RatingDocument = await game.rate(req.data.value, author);
+
+        await game.save();
+
+        sendResponse(
+            res,
+            await RatingDetailDTO.create(rating)
+        );
     })
 );
 
-ratingsRouter.put("/",
-    validateToken,
-    body("value").isNumeric(), // TODO: Range check
-    requestValidator,
+ratingsRouter.get("/", 
+    validateRequest(
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt()
+    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const user: any = req.user;
-        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
-        const userDocument: HydratedDocument<IUser> = await User.findOne({ id: user.id });
-        let ratingDocument: HydratedDocument<IRatingPopulated> = 
-            await Rating.findOne({ gameId: gameDocument.id, author: userDocument._id });
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
+        });
 
-        if (ratingDocument !== null) {
-            ratingDocument.value = req.body.value; // TODO 
+        const ratings: Array<RatingDocument> = await game.getRatings(
+            req.data.start, 
+            req.data.count
+        );
 
-            await ratingDocument.save();
-        }
-        else {
-            ratingDocument = await Rating.create({  
-                id: uuid(),
-                gameId: gameDocument.id,
-                author: userDocument._id,
-                value: req.body.value, // TODO
-                createdAt: Date.now()
-            });
-
-            await ratingDocument.populate("author");
-        }
-
-        res.json(new RatingDTO(ratingDocument));
-
-        const ratingsDocuments: Array<HydratedDocument<IRatingPopulated>> = 
-            await Rating.find({ gameId: gameDocument.id });
-
-        let averageGameRating = 0;
-        for (const rd of ratingsDocuments) 
-            averageGameRating += rd.value / ratingsDocuments.length;
-
-        gameDocument.rating = averageGameRating;
-
-        await gameDocument.save();
+        sendResponse(
+            res,
+            await Promise.all(
+                ratings.map(r => RatingDetailDTO.create(r))
+            )
+        );
     })
 );
 
 ratingsRouter.delete("/",
-    validateToken,
+    verifyToken,
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const user: any = req.user;
-        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
-        const userDocument: HydratedDocument<IUser> = await User.findOne({ id: user.id });
-        const ratingDocument: HydratedDocument<IRatingPopulated> = 
-            await Rating.findOne({ gameId: gameDocument.id, author: userDocument._id });
+        const author: UserDocument = await User.findOne({ 
+            id: req.user.id 
+        });
 
-        if (ratingDocument === null)
-            next(new LogicError(req.originalUrl, "Вы не выставляли оценок данной игре."));
-        else {
-            res.locals.ratingDocument = ratingDocument;
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
+        });
 
-            next();
+        const rating: RatingDocument = await game.getRating(author);
+
+        if (rating === null) {
+            next(new LogicError(
+                req.originalUrl,
+                "Пользователь не оценивал игру."
+            ));
         }
-    }),
-    asyncMiddleware(async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        const gameDocument: HydratedDocument<IGamePopulated> = res.locals.gameDocument;
-        const ratingDocument: HydratedDocument<IRatingPopulated> = res.locals.ratingDocument;
 
-        res.json(new RatingDTO(ratingDocument));
+        await game.deleteRate(author);
 
-        await ratingDocument.delete();
+        await game.save();
 
-        const ratingsDocuments: Array<HydratedDocument<IRatingPopulated>> = 
-            await Rating.find({ gameId: gameDocument.id });
-
-        let averageGameRating = 0;
-        for (const rd of ratingsDocuments) 
-            averageGameRating += rd.value / ratingsDocuments.length;
-
-        gameDocument.rating = averageGameRating;
-
-        await gameDocument.save();
+        sendResponse(
+            res,
+            await RatingDetailDTO.create(rating)
+        );
     })
 );
 

@@ -6,7 +6,7 @@ import express, {
 import fs from "fs";
 import path from "path";
 import { asyncMiddleware } from "middleware-async";
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import { v4 as uuid } from "uuid";
 
 import GameDetailDTO from "../../../domain/dto/game-detail-dto";
@@ -22,6 +22,26 @@ import { LogicError, AccessError } from "../../../utils/errors";
 import { User, Role, UserDocument } from "../../../domain/models/user";
 
 const gamesRouter = express.Router();
+
+gamesRouter.use("/:gameId",
+    validateRequest(
+        param("gameId")
+            .isUUID()
+    ),
+    asyncMiddleware(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        if (!await Game.exists({ id: req.data.gameId })) {
+            next(new LogicError(
+                req.originalUrl, 
+                "Игры с указанным id не существует."
+            ));
+        }
+        next();
+    })
+);
 
 gamesRouter.use("/:gameId/comments", commentsRouter);
 
@@ -42,6 +62,9 @@ gamesRouter.post("/",
             .optional()
             .isString()
             .isLength({ min: 0, max: 500 }),
+        body("image")
+            .optional()
+            .isURL(),
         body("participants")
             .default([])
             .isArray(),
@@ -63,13 +86,6 @@ gamesRouter.post("/",
     ): Promise<void> => {
         const author: UserDocument = await User.findOne({ id: req.user.id });
 
-        if (author === null) {
-            next(new LogicError(
-                req.originalUrl, 
-                "Пользователь не существует."
-            ));
-        }
-
         const participants: Array<UserDocument> = await User.find({ 
             id: { $in: req.data.participants }
         });
@@ -86,13 +102,21 @@ gamesRouter.post("/",
             id,
             name: req.data.name,
             description: req.data.description,
+            image: req.data.image,
             author: author.id,
             participants: participants.map(p => p.id),
             url: path.join("/public", process.env.PUBLIC_GAMES_SUBDIR, id),
             createdAt: Date.now()
         });
 
-        sendResponse(res, GameDetailDTO.create(game, author, participants));
+        sendResponse(
+            res, 
+            await GameDetailDTO.create(
+                game, 
+                author, 
+                participants
+            )
+        );
     })
 );
 
@@ -108,32 +132,38 @@ gamesRouter.get("/:gameId",
     ): Promise<void> => {
         const game: GameDocument = await Game.findOne({ id: req.data.gameId });
 
-        if (game === null) {
-            next(new LogicError(
-                req.originalUrl, 
-                "Игры с указанным id не существует."
-            ));
-        }
-
         sendResponse(
             res, 
-            GameDetailDTO.create(game)
+            await GameDetailDTO.create(game)
         );
     })
 );
 
 gamesRouter.get("/", 
+    validateRequest(
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt()
+    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const games: Array<GameDocument> = await Game.find();
+        const games: Array<GameDocument> = await Game.find()
+            .sort("createdAt")
+            .skip(req.data.start)
+            .limit(req.data.count);
 
         sendResponse(
             res,
             await Promise.all(
-                games.map(async (g) => GameDetailDTO.create(g))
+                games.map(g => GameDetailDTO.create(g))
             )
         );
     })
@@ -179,13 +209,6 @@ gamesRouter.put("/:gameId",
     ): Promise<void> => {
         const game: GameDocument = await Game.findOne({ id: req.data.gameId });
 
-        if (game === null) {
-            next(new LogicError(
-                req.originalUrl, 
-                "Игры с указанным id не существует."
-            )); 
-        }
-
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
             next(new AccessError(req.originalUrl));
 
@@ -207,11 +230,13 @@ gamesRouter.put("/:gameId",
 
         await game.save();
 
+        const author: UserDocument = await game.getAuthor();
+
         sendResponse(
             res,
-            GameDetailDTO.create(
+            await GameDetailDTO.create(
                 game,
-                await game.getAuthor(),
+                author,
                 participants
             )
         );
@@ -231,13 +256,6 @@ gamesRouter.delete("/:gameId",
     ): Promise<void> => {
         const game: GameDocument = await Game.findOne({ id: req.data.gameId });
 
-        if (game === null) {
-            next(new LogicError(
-                req.originalUrl, 
-                "Игры с указанным id не существует."
-            )); 
-        }
-
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
             next(new AccessError(req.originalUrl));
 
@@ -246,13 +264,13 @@ gamesRouter.delete("/:gameId",
             fs.rmSync(game.url, { recursive: true });
 
         // Удаляем комментарии, относящиеся к игре
-        await Comment.deleteMany({ gameId: game.id }); 
+        await Comment.deleteMany({ game: game.id }); 
 
         await game.delete();
 
         sendResponse(
             res, 
-            GameDetailDTO.create(game)
+            await GameDetailDTO.create(game)
         );
     })
 );

@@ -5,15 +5,16 @@ import express, {
     Response,
     NextFunction
 } from "express";
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
-import { v4 as uuid } from "uuid";
 
+import CommentDetailDTO from "../../../domain/dto/comment-detail-dto";
+import sendResponse from "../../../utils/send-response";
 import validateRequest from "../../../validators/validate-request";
 import verifyToken from "../../../validators/verify-token";
 import { AccessError, LogicError } from "../../../utils/errors";
 import { Comment, CommentDocument } from "../../../domain/models/comment";
-import CommentDetailDTO from "../../../domain/dto/comment-detail-dto";
+import { Game, GameDocument } from "../../../domain/models/game";
 import { User, UserDocument, Role } from "../../../domain/models/user";
 
 const commentsRouter = express.Router();
@@ -32,24 +33,23 @@ commentsRouter.post("/",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const author = await User.findOne({ id: req.user.id });
+        const author: UserDocument = await User.findOne({ id: req.user.id });
 
-        if (author === null) {
-            next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithIdNotExists
-            ));
-        }
-        
-        const comment: CommentDocument = await Comment.create({
-            id: uuid(),
-            text: req.data.text,
-            game: req.data.gameId,
-            author: author.id,
-            createdAt: Date.now()
-        })
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
+        });
 
-        res.json(CommentDetailDTO.create(comment, author));
+        const comment: CommentDocument = await game.comment(
+            req.data.text, 
+            author
+        );
+
+        await game.save();
+
+        sendResponse(
+            res,
+            await CommentDetailDTO.create(comment)
+        );
     })
 );
 
@@ -63,29 +63,57 @@ commentsRouter.get("/:commentId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const comment: CommentDocument = await Comment.findOne({ 
-            id: req.data.commentId,
-            game: req.data.gameId
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
         });
 
-        if (comment === null)
-            next(new LogicError(req.originalUrl, "Комментарий с указанным id не найден."));
+        const comment: CommentDocument = await game.getComment(req.data.commentId);
 
-        res.json(CommentDetailDTO.create(comment));
+        if (comment === null) {
+            next(new LogicError(
+                req.originalUrl,
+                "Комментарий с указанным id не существует."
+            ));
+        }
+
+        sendResponse(
+            res,
+            await CommentDetailDTO.create(comment)
+        );
     })
 );
 
 commentsRouter.get("/", 
+    validateRequest(
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt()
+    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const comments: Array<CommentDocument> = await Comment.find({ 
-            game: req.data.gameId 
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
         });
 
-        res.json(comments.map(c => CommentDetailDTO.create(c)));
+        const comments: Array<CommentDocument> = await game.getComments(
+            req.data.start,
+            req.data.count
+        );
+
+        sendResponse(
+            res,
+            await Promise.all(
+                comments.map(c => CommentDetailDTO.create(c))
+            )
+        );
     })
 );
 
@@ -105,10 +133,13 @@ commentsRouter.put("/:commentId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const comment: CommentDocument = await Comment.findOne({ 
-            id: req.data.commentId,
-            game: req.data.gameId
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
         });
+
+        const comment: CommentDocument = await game.getComment(
+            req.data.commentId
+        );
 
         if (comment.author !== req.user.id)
             next(new AccessError(req.originalUrl));
@@ -117,7 +148,10 @@ commentsRouter.put("/:commentId",
 
         await comment.save();
 
-        res.json(CommentDetailDTO.create(comment));
+        sendResponse(
+            res,
+            await CommentDetailDTO.create(comment)
+        );
     })
 );
 
@@ -132,17 +166,24 @@ commentsRouter.delete("/:commentId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const comment: CommentDocument = await Comment.findOne({ 
-            id: req.data.commentId,
-            game: req.data.gameId
+        const game: GameDocument = await Game.findOne({ 
+            id: req.data.gameId 
         });
+
+        const comment: CommentDocument = await game.getComment(req.data.commentId);
 
         if (comment.author !== req.user.id && req.user.role !== Role.Admin)
             next(new AccessError(req.originalUrl));
 
-        await comment.delete();
+        await game.deleteComment(req.data.commentId);
 
-        res.json(CommentDetailDTO.create(comment));
+        await game.save();
+
+        sendResponse(
+            res,
+            await CommentDetailDTO.create(comment)
+        );
+
     })
 );
 

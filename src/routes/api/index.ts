@@ -1,9 +1,9 @@
 import express from "express";
 
 import authRouter from "./auth";
+import competenciesRouter from "./competencies";
 import gamesRouter from "./games";
 import usersRouter from "./users";
-import competenciesRouter from "./competencies";
 
 const apiRouter = express.Router();
 

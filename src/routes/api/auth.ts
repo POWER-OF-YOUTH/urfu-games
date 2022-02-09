@@ -1,16 +1,19 @@
 import strings from "../../../config/api/strings.json";
 
-import express, { Request, Response, NextFunction } from "express";
+import express, { 
+    Request, 
+    Response, 
+    NextFunction 
+} from "express";
 import { asyncMiddleware } from "middleware-async";
 import { body } from "express-validator";
 import { v4 as uuid } from "uuid";
 
-import { AccessError, LogicError } from "../../utils/errors";
 import sendResponse from "../../utils/send-response";
-import verifyToken from "../../validators/verify-token";
 import validateRequest from "../../validators/validate-request";
+import verifyToken from "../../validators/verify-token";
+import { AccessError, LogicError } from "../../utils/errors";
 import { User, UserDocument } from "../../domain/models/user";
-import UserDTO from "../../domain/dto/user-dto";
 
 const authRouter = express.Router();
 
@@ -60,16 +63,14 @@ authRouter.post("/signup",
             <string> process.env.USER_PWD_SALT
         );
 
-        const user: UserDocument = await User.create({ 
+        await User.create({ 
             id: uuid(),
             login: req.data.login,
             email: req.data.email,
             password: req.data.password
         });
 
-        sendResponse(res, { 
-            user: UserDTO.create(user) 
-        });
+        sendResponse(res, {});
     })
 );
 
@@ -96,11 +97,6 @@ authRouter.post("/signin",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        req.data.password = User.encryptPassword(
-            req.data.password, 
-            <string> process.env.USER_PWD_SALT
-        );
-
         const user: UserDocument = await User.findByLogin(req.data.login);
 
         if (user === null) {
@@ -110,6 +106,11 @@ authRouter.post("/signin",
             ));
         }
 
+        req.data.password = User.encryptPassword(
+            req.data.password, 
+            <string> process.env.USER_PWD_SALT
+        );
+
         if (req.data.password !== user.password) {
             next(new AccessError(
                 req.originalUrl, 
@@ -118,8 +119,7 @@ authRouter.post("/signin",
         }
 
         sendResponse(res, { 
-            user: UserDTO.create(user), 
-            token: user.generateJWT() 
+            access_token: user.generateJWT() 
         });
     })
 );
@@ -140,9 +140,7 @@ authRouter.post("/check",
             ));
         }
 
-        sendResponse(res, { 
-            user: UserDTO.create(user) 
-        });
+        sendResponse(res, {});
     })
 );
 
