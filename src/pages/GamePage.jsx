@@ -89,12 +89,18 @@ function GamePage({ history }) {
                                             </div> 
                                             <div className={styles.ratingContainer}>
                                                 <Rating 
-                                                    name="simple-controller" 
+                                                    className={styles.rating}
                                                     size="large" 
-                                                    defaultValue={game.rating} 
-                                                    onChange={handleRatingChange} 
+                                                    value={game.rating} 
+                                                    readOnly={true}
                                                 />
-                                                <span className={styles.ratingCaption}>{game.rating}</span>
+                                                <Rating 
+                                                    className={styles.rating}
+                                                    size="large" 
+                                                    onChange={handleRatingChange} 
+                                                    readOnly={!auth.authenticated}
+                                                />
+                                                <span className={styles.ratingCaption}>{Math.round(game.rating)}</span>
                                             </div>
                                             <div className={styles.gameButtonsContainer}>
                                                 <NavLink 

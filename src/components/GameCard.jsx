@@ -18,7 +18,7 @@ function GameCard({ className = "", game }) {
                             </h3>
                         </div>
                         <div className={styles.ratingContainer}>
-                            <Rating readOnly size="small" />
+                            <Rating readOnly defaultValue={game.rating} size="small" />
                         </div>
                     </div>
                 </div>
