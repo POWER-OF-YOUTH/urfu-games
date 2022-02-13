@@ -1,4 +1,4 @@
-import strings from "../../config/api/strings.json";
+import strings from "../config/api/strings.json";
 
 import { Request, Response, NextFunction } from "express";
 import expressJWT, { UnauthorizedError } from "express-jwt";

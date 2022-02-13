@@ -1,4 +1,4 @@
-import strings from "../../../../config/api/strings.json";
+import strings from "../../../config/api/strings.json";
 
 import express, {
     Request,
