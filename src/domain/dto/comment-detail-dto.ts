@@ -4,12 +4,14 @@ import UserDTO from "./user-dto";
 
 class CommentDetailDTO {
     public readonly id: string;
+    public readonly game: string;
     public readonly author: UserDTO;
     public readonly text: string;
     public readonly createdAt: Date;
 
     constructor(comment: Readonly<CommentDocument>, author: Readonly<UserDocument>) {
         this.id = comment.id;
+        this.game = comment.game;
         this.author = new UserDTO(author);
         this.text = comment.text;
         this.createdAt = comment.createdAt;

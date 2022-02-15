@@ -1,9 +1,12 @@
 import { GameDocument } from "../models/game";
+import { CompetenceDocument } from "../models/competence";
 import { UserDocument } from "../models/user";
+import CompetenceDTO from "./competence-dto";
 import UserDTO from "./user-dto";
 
 class GameDetailDTO {
     public readonly id: string;
+    public readonly competencies: Array<Readonly<CompetenceDTO>>;
     public readonly image: string;
     public readonly name: string;
     public readonly description: string;
@@ -17,9 +20,11 @@ class GameDetailDTO {
     constructor(
         game: Readonly<GameDocument>, 
         author: Readonly<UserDocument>, 
-        participants: Readonly<Array<Readonly<UserDocument>>>
+        participants: Readonly<Array<Readonly<UserDocument>>>,
+        competencies: Readonly<Array<Readonly<CompetenceDocument>>>
     ) {
         this.id = game.id;
+        this.competencies = competencies.map(c => new CompetenceDTO(c));
         this.image = game.image;
         this.name = game.name;
         this.description = game.description;
@@ -34,7 +39,8 @@ class GameDetailDTO {
     static async create(
         game: Readonly<GameDocument>, 
         author?: Readonly<UserDocument>, 
-        participants?: Readonly<Array<Readonly<UserDocument>>>
+        participants?: Readonly<Array<Readonly<UserDocument>>>,
+        competencies?: Readonly<Array<Readonly<CompetenceDocument>>>,
     ): Promise<GameDetailDTO> {
         if (author === undefined)
             author = await game.getAuthor();
@@ -42,10 +48,14 @@ class GameDetailDTO {
         if (participants === undefined)
             participants = await game.getParticipants();
 
+        if (competencies === undefined)
+            competencies = await game.getCompetencies();
+
         return new GameDetailDTO(
             game, 
             author, 
-            participants
+            participants,
+            competencies
         );
     }
 }

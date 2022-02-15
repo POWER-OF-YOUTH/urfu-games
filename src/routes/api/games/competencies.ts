@@ -80,7 +80,7 @@ gameCompetenciesRouter.put("/",
             id: { $in: req.data.id }
         });
 
-        if (competencies.length !== req.data.id) {
+        if (competencies.length !== req.data.id.length) {
             next(new LogicError(
                 req.originalUrl,
                 "Одна или несколько компетенций не найдены."
