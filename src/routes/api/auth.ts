@@ -14,6 +14,7 @@ import validateRequest from "../../validators/validate-request";
 import verifyToken from "../../validators/verify-token";
 import { AccessError, LogicError } from "../../utils/errors";
 import { User, UserDocument } from "../../domain/models/user";
+import UserDTO from "../../domain/dto/user-dto";
 
 const authRouter = express.Router();
 
@@ -140,7 +141,10 @@ authRouter.post("/check",
             ));
         }
 
-        sendResponse(res, {});
+        sendResponse(
+            res, 
+            await UserDTO.create(user)
+        );
     })
 );
 
