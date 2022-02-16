@@ -70,7 +70,7 @@ commentsRouter.get("/:commentId",
         const comment: CommentDocument = await game.getComment(req.data.commentId);
 
         if (comment === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl,
                 "Комментарий с указанным id не существует."
             ));
@@ -142,7 +142,7 @@ commentsRouter.put("/:commentId",
         );
 
         if (comment.author !== req.user.id)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         comment.set({ text: req.data.text });
 
@@ -173,7 +173,7 @@ commentsRouter.delete("/:commentId",
         const comment: CommentDocument = await game.getComment(req.data.commentId);
 
         if (comment.author !== req.user.id && req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         await game.deleteComment(req.data.commentId);
 

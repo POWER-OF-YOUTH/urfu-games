@@ -71,7 +71,7 @@ usersRouter.get("/:userId",
         const user: UserDocument = await User.findOne({ id: req.data.userId });
 
         if (user === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithIdNotExists
             ));
@@ -110,14 +110,14 @@ usersRouter.put("/:userId",
         const user: UserDocument = await User.findOne({ id: req.data.userId });
 
         if (user === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithIdNotExists
             ));
         }
 
         if (user.id !== req.user.id)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         if (req.data.name !== undefined)
             user.set({ name: req.data.name });

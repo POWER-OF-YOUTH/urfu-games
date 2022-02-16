@@ -32,7 +32,7 @@ function validateRequest(...validators: Array<any>) {
             })(req);
 
             if (!validationErrors.isEmpty())
-                next(validationErrors.array()[0]);
+                return next(validationErrors.array()[0]);
 
             req.data = { ...req.data, ...matchedData(req) };
 

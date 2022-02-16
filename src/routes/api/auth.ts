@@ -46,14 +46,14 @@ authRouter.post("/signup",
         next: NextFunction
     ): Promise<void> => {
         if (await User.exists({ login: req.data.login })) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithLoginAlreadyExists
             ));
         }
 
         if (await User.exists({ email: req.data.email })) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithEmailAlreadyExists
             ));
@@ -101,7 +101,7 @@ authRouter.post("/signin",
         const user: UserDocument = await User.findByLogin(req.data.login);
 
         if (user === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl,
                 strings.errors.logic.userWithLoginNotExists
             ));
@@ -113,7 +113,7 @@ authRouter.post("/signin",
         );
 
         if (req.data.password !== user.password) {
-            next(new AccessError(
+            return next(new AccessError(
                 req.originalUrl, 
                 strings.errors.access.passwordIncorrect
             ));
@@ -135,7 +135,7 @@ authRouter.post("/check",
         const user: UserDocument = await User.findOne({ id: req.user.id });
 
         if (user === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithIdNotExists
             ));

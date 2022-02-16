@@ -99,7 +99,7 @@ ratingsRouter.delete("/",
         const rating: RatingDocument = await game.getRating(author);
 
         if (rating === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl,
                 "Пользователь не оценивал игру."
             ));

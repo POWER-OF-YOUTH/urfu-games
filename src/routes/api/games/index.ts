@@ -34,7 +34,7 @@ gamesRouter.use("/:gameId",
         next: NextFunction
     ): Promise<void> => {
         if (!await Game.exists({ id: req.data.gameId })) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 "Игры с указанным id не существует."
             ));
@@ -91,7 +91,7 @@ gamesRouter.post("/",
         });
 
         if (participants.length !== req.data.participants.length) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 "Один или несколько участников не найдены."
             ));
@@ -210,12 +210,12 @@ gamesRouter.put("/:gameId",
         const game: GameDocument = await Game.findOne({ id: req.data.gameId });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         const participants: Array<UserDocument> = await User.find({ id: { $in: req.data.participants }});
 
         if (participants.length !== req.data.participants.length) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 "Один или несколько участников не найдены."
             ));
@@ -257,7 +257,7 @@ gamesRouter.delete("/:gameId",
         const game: GameDocument = await Game.findOne({ id: req.data.gameId });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         // Удаляем директорию, содержащую файлы игры, если она существует
         if (fs.existsSync(game.url))

@@ -37,10 +37,10 @@ competenciesRouter.post("/",
         next: NextFunction
     ): Promise<void> => {
         if (req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         if (await Competence.exists({ name: req.data.name })) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.competenceWithNameAlreadyExists
             ));
@@ -73,7 +73,7 @@ competenciesRouter.get("/:competenceId",
         const competence: CompetenceDocument = await Competence.findOne({ id: req.data.competenceId });
 
         if (competence === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.competenceWithIdNotExist
             ));
@@ -140,10 +140,10 @@ competenciesRouter.put("/:competenceId",
         const competence: CompetenceDocument = await Competence.findOne({ id: req.data.competenceId });
 
         if (req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         if (competence === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.competenceWithIdNotExist
             ));
@@ -179,10 +179,10 @@ competenciesRouter.delete("/:competenceId",
         });
 
         if (req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         if (competence === null) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.competenceWithIdNotExist
             ));

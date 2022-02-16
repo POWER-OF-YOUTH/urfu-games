@@ -33,7 +33,8 @@ gameCompetenciesRouter.use("/:competenceId",
                 "Компетенции с указанным id не существует."
             ));
         }
-        next();
+        else
+            next();
     })
 );
 
@@ -74,14 +75,14 @@ gameCompetenciesRouter.put("/",
         });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         const competencies: Array<CompetenceDocument> = await Competence.find({ 
             id: { $in: req.data.id }
         });
 
         if (competencies.length !== req.data.id.length) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl,
                 "Одна или несколько компетенций не найдены."
             ));
@@ -118,14 +119,14 @@ gameCompetenciesRouter.delete("/",
         });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin)
-            next(new AccessError(req.originalUrl));
+            return next(new AccessError(req.originalUrl));
 
         const competencies: Array<CompetenceDocument> = await Competence.find({ 
             id: { $in: req.data.id }
         });
 
         if (competencies.length !== req.data.id) {
-            next(new LogicError(
+            return next(new LogicError(
                 req.originalUrl,
                 "Одна или несколько компетенций не найдены."
             ));

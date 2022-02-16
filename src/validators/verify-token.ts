@@ -20,13 +20,13 @@ const verifyToken = [
         if (err instanceof UnauthorizedError) {
             res.set("WWW-Authenticate", "Bearer");
 
-            next(new AccessError(
+            return next(new AccessError(
                 req.originalUrl, 
                 strings.errors.access.notAuthorized
             ));
         }
-        else
-            next(err);
+
+        next(err);
     },
     asyncMiddleware(async (
         req: Request,
@@ -34,7 +34,7 @@ const verifyToken = [
         next: NextFunction
     ): Promise<void> => {
         if (!await User.exists({ id: req.user.id })) {
-            next(new AccessError(
+            return next(new AccessError(
                 req.originalUrl, 
                 strings.errors.access.notAuthorized
             ));
