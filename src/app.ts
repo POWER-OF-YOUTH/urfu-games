@@ -30,7 +30,7 @@ app.use("/public", express.static(
 // ---
 
 // routes
-app.use("/api", apiRouter);
+app.use("/", apiRouter);
 // ---
 
 // errors handling
