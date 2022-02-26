@@ -28,8 +28,6 @@ function Header({ variant = "standard" }) {
     const location = useLocation();
     const { auth } = useStore();
 
-    const isMobile = useIsMobile();
-
     const [menuAnchorElement, setMenuAnchorElement] = React.useState(null);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
@@ -67,7 +65,7 @@ function Header({ variant = "standard" }) {
         <>
             <div className={styles.spacer}>
                 <header>
-                    <Logo mobile={isMobile} />
+                    <Logo />
                     {!auth.isLoading ? 
                         auth.authenticated ?
                             showUser ? <User user={auth.user} onClick={handleUserClick} /> : <></> 
@@ -137,11 +135,13 @@ function Header({ variant = "standard" }) {
     );
 }
 
-function Logo({ mobile = false }) {
+function Logo() {
+    const isMobile = useIsMobile();
+
     return (
         <div className={styles.logoContainer}>
             <Link to="/" className={styles.logo}>
-                { mobile ? "UG" : "UrFU Games" }
+                { isMobile ? "UG" : "UrFU Games" }
             </Link>
         </div>
     );

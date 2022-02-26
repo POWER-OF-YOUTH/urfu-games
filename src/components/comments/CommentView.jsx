@@ -1,7 +1,6 @@
 import React, {
     useState,
-    useRef,
-    useContext
+    useRef
 } from "react";
 import {
     IconButton,
@@ -19,7 +18,7 @@ import { useStore } from "../../hooks";
 
 import styles from "./CommentView.module.css";
 
-function CommentView({ comment }) {
+function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
     const { auth } = useStore();
 
     const [menuAnchorElement, setMenuAnchorElement] = useState(null);
@@ -43,14 +42,18 @@ function CommentView({ comment }) {
     const handleMenuButtonClick = (evt) => setMenuAnchorElement(evt.currentTarget);
     const handleMenuClose = () => clearMenuAnchor();
     const handleChangeButtonClick = () => enableEditing();
-    const handleDeleteButtonClick = () => {
+    const handleDeleteButtonClick = async () => {
         clearMenuAnchor();
-        comment.delete();
+
+        onDelete(comment);
+        await comment.delete();
     };
     const handleCancelButtonClick = () => disableEditing();
-    const handleSaveButtonClick = () => {
+    const handleSaveButtonClick = async () => {
         disableEditing();
-        comment.update(inputRef.current.value);
+
+        onUpdate(comment);
+        await comment.update(inputRef.current.value);
     };
 
     // render blocks

@@ -34,16 +34,13 @@ async function signIn(data) {
     }
 }
 
-async function check(token) {
+async function check() {
     const url = apiConfig.APIURL + "/auth/check";
 
     try {
         const response = await fetch(url, {
             ...apiConfig.getDefaultRequestInit(),
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+            method: "POST"
         });
 
         return response;

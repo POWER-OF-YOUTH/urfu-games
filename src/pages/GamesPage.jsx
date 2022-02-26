@@ -7,26 +7,27 @@ import Block from "../components/Block";
 import GameCard from "../components/GameCard";
 import Competence from "../components/Competence";
 import CompetenciesList from "../components/CompetenciesList";
-import { useStore } from "../hooks";
+import { GamesStore } from "../models/game";
 import { CompetenciesStore } from "../models/competence";
 
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 
 function GamesPage() {
-    const { games } = useStore();
+    const games = useLocalObservable(() => GamesStore.create());
     const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     const fetchAll = async () => {
         await Promise.all([
-            games.loadGames(),
+            games.load(),
             competencies.load()
         ]);
     };
 
     React.useEffect(() => {
-        fetchAll(() => {}, () => {});
+        fetchAll();
     }, []);
+
     return (        
         <>
             <Helmet>
@@ -35,7 +36,7 @@ function GamesPage() {
             <div className={styles.pageGrid}>
                 <div className={styles.sideBar}>
                     <CompetenciesList className={styles.competenciesList}>
-                        {competencies.all().map((c, i) => (
+                        {competencies.array().map((c, i) => (
                             <Competence key={i} competence={c} enablePopup />
                         ))}
                     </CompetenciesList>
@@ -47,7 +48,7 @@ function GamesPage() {
                                 <h2 className={styles.gamesSectionCaption}>Рекомендуемые</h2>
                             </div>
                             <GamesCardsCarousel>
-                                { games.all().sort(g => -g.createdAt).map((game, i) => (
+                                { games.array().map((game, i) => (
                                     <GameCard key={i} className={styles.carouselCard} game={game} />
                                 ))} 
                             </GamesCardsCarousel>
@@ -57,9 +58,7 @@ function GamesPage() {
                                 <h2 className={styles.gamesSectionCaption}>Все игры</h2>
                             </div>
                             <div className={styles.gamesGrid}>
-                                { games.all().sort(g => -g.createdAt).map((game, i) => (
-                                    <GameCard key={i} game={game} />
-                                ))} 
+                                {games.array().map((game, i) => <GameCard key={i} game={game} />)} 
                             </div>
                         </div>
                     </div>

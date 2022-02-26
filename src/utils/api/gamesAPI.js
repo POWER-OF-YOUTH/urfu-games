@@ -37,8 +37,13 @@ export async function getGame(gameId) {
     }
 }
 
-export async function getGames() {
-    const url = apiConfig.APIURL + `/games`;
+/**
+ * @param {number} start
+ * @param {number} count
+ */
+export async function getGames(start = 0, count = 10) {
+    const url = new URL(apiConfig.APIURL + "/games");
+    url.search = new URLSearchParams({ start, count }).toString();
 
     try {
         const response = await fetch(url, {

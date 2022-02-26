@@ -33,7 +33,7 @@ export async function getComment(gameId, commentId) {
     }
 }
 
-export async function addComment(token, gameId, text) {
+export async function addComment(gameId, text) {
     const url = apiConfig.APIURL + `/games/${gameId}/comments`;
 
     try {
@@ -50,7 +50,7 @@ export async function addComment(token, gameId, text) {
     }
 }
 
-export async function updateComment(token, gameId, commentId, text) {
+export async function updateComment(gameId, commentId, text) {
     const url = apiConfig.APIURL + `/games/${gameId}/comments/${commentId}`;
 
     try {
@@ -67,7 +67,7 @@ export async function updateComment(token, gameId, commentId, text) {
     }
 }
 
-export async function deleteComment(token, gameId, commentId) {
+export async function deleteComment(gameId, commentId) {
     const url = apiConfig.APIURL + `/games/${gameId}/comments/${commentId}`;
 
     try {

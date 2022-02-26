@@ -7,8 +7,8 @@
 
 .content {
     display: flex;
-    width: 100vw;
-    height: calc(100vh - var(--header-height));
+    width: 100%;
+    height: 100%;
     background-color: var(--content-background-color);
     flex-flow: column nowrap;
     justify-content: center;

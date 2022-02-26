@@ -1,10 +1,6 @@
-import React, { 
-    useState, 
-    useContext
-} from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 
-import { Redirect } from "react-router-dom";
 import { 
     Button, 
     Typography, 
@@ -17,23 +13,13 @@ import { useStore } from "../hooks";
 
 import styles from "./SignInPage.module.css";
 
-function SignInPage({ history, ...props }) {
+function SignInPage({ history }) {
     const { auth } = useStore();
 
     const handleFormSubmit = async (values) => {
         await auth.signIn(values);
-
-        // Если в процессе входа ошибок не возникло
-        if (auth.errors.length === 0)
-            window.ym(86784357, 'reachGoal', 'signin');
     };
-  
-    const alert = auth.errors.length > 0 ? 
-        <Alert className={styles.alert} severity="error">
-            {auth.errors[0].message}
-        </Alert>
-        : 
-        <></>; 
+
     React.useEffect(() => {
         auth.clearErrors();
     }, []);
@@ -46,6 +32,14 @@ function SignInPage({ history, ...props }) {
                 history.push("/games");
         }
     }, [auth.authenticated]);
+  
+    const alert = auth.errors.length > 0 ? 
+        <Alert className={styles.alert} severity="error">
+            {auth.errors[0].message}
+        </Alert>
+        : 
+        <></>; 
+
     return (
         <>
             <Helmet>

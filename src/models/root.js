@@ -1,13 +1,11 @@
 import React from "react";
 
-import AuthStore from "./auth";
-import { GamesStore } from "./game";
+import { AuthStore } from "./auth";
 
 import { types } from "mobx-state-tree";
 
 const RootStore = types
     .model({
-        games: types.optional(GamesStore, {}),
         auth: types.optional(AuthStore, {})
     });
 

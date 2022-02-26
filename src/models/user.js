@@ -9,9 +9,9 @@ const User = types
         login: types.string,
         email: types.string,
         role: types.number,
-        name: types.string,
-        surname: types.string,
-        patronymic: types.string,
+        name: types.maybeNull(types.string),
+        surname: types.maybeNull(types.string),
+        patronymic: types.maybeNull(types.string),
         avatar: "",
         createdAt: DateTime,
     })
@@ -21,8 +21,8 @@ const User = types
         }
     }))
     .actions(self => ({
-        update: flow(function* (id, data = {}) {
-            const response = yield usersAPI.updateUser(id, data);
+        update: flow(function* (data = {}) {
+            const response = yield usersAPI.updateUser(self.id, data);
 
             if (response.ok) {
                 const json = yield response.json();
@@ -34,10 +34,10 @@ const User = types
 
 const UsersStore = types
     .model({
-        users: types.optional(types.map(User), {})
+        users: types.map(User)
     })
     .actions(self => ({
-        loadUsers: flow(function* (ids = []) {
+        load: flow(function* (ids = []) {
             ids = ids.filter(id => !self.users.has(id));
 
             if (ids.length > 0) {
@@ -51,21 +51,6 @@ const UsersStore = types
 
                     applySnapshot(self.users, users);
                 }
-            }
-        }),
-        loadUser: flow(function* (id) {
-            if (!self.users.has(id)) {
-                const response = yield usersAPI.getUser(id);
-
-                if (response.ok) {
-                    const json = yield response.json();
-
-                    const user = json;
-
-                    self.users.set(user.id, user);
-                }
-
-                console.log(self.toJSON());
             }
         })
     }));

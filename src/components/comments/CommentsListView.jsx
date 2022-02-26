@@ -4,11 +4,18 @@ import { observer } from "mobx-react-lite";
 import CommentView from "./CommentView";
 import styles from "./CommentsListView.module.css";
 
-function CommentsListView({ comments }) {
+// store - CommentsStore
+function CommentsListView({ store }) {
+    const handleCommentDelete = (comment) => store.delete(comment.id);
+
     return (
         <div className={styles.commentsContainer}>
-            {comments.orderedByDateDescending().map((comment, i) => ( 
-                <CommentView key={i} store={comments} comment={comment} /> 
+            {store.array().map((comment, i) => ( 
+                <CommentView 
+                    key={i} 
+                    comment={comment} 
+                    onDelete={handleCommentDelete}
+                /> 
             ))}
         </div>
     );

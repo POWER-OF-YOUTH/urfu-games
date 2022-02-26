@@ -13,20 +13,20 @@ import { useStore } from "../hooks";
 
 import styles from "./SignUpPage.module.css";
 
-function SignUpPage({ history, ...props }) {
+function SignUpPage({ history }) {
     const { auth } = useStore();
 
     const handleFormSubmit = async (values) => {
         await auth.signUp(values);
 
-        // Если в процессе регистрации ошибок не возникло
-        if (auth.errors.length === 0) {
-            window.ym(86784357, 'reachGoal', 'signup');
-
+        if (auth.errors.length === 0)
             history.push("/signin", history.location.state);
-        }
     };
   
+    React.useEffect(() => {
+        auth.clearErrors();
+    }, []);
+
     const alert = auth.errors.length > 0 ? 
         <Alert className={styles.alert} severity="error">
             {auth.errors[0].message}
@@ -34,19 +34,6 @@ function SignUpPage({ history, ...props }) {
         : 
         <></>; 
 
-    React.useEffect(() => {
-        auth.clearErrors();
-    }, []);
-    React.useEffect(() => {
-        if (auth.authenticated)
-        {
-            if (history.location.state !== undefined 
-             && history.location.state.redirectTo !== undefined)
-                history.push(history.location.state.redirectTo);
-            else
-                history.push("/games");
-        }
-    }, [auth.authenticated]);
     return (
         <>
             <Helmet>

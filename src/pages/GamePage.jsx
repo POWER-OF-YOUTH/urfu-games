@@ -16,7 +16,6 @@ import {
     CommentsListView
 } from "../components/comments";
 import { fetchGame } from "../models/game";
-import { CompetenciesStore } from "../models/competence";
 import { useStore } from "../hooks";
 
 import styles from "./GamePage.module.css";
@@ -25,29 +24,27 @@ function GamePage({ history }) {
     const { gameId } = useParams();
 
     const { auth } = useStore();
-    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     const [game, setGame] = useState(null);
 
-    const handleCommentFormSubmit = (text) => game.comment(text); 
+    const handleCommentFormSubmit = (text) => game.comments.add(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
     const handlePlayButtonClick = () => {
-        window.ym(86784357, 'reachGoal', 'play_button_click');
+        if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
+            window.ym(86784357, "reachGoal", "play_button_click");
+        }
     };
     const fetchAll = async () => {
         const game = await fetchGame(gameId);
         setGame(game);
 
-        // Подгружаем компетенции привязанные к данной игре
-        await Promise.all([
-            game.comments.load(),
-            ...game.competencies.map(c => competencies.loadOne(c))
-        ]);
+        await game.comments.load();
     };
 
     React.useEffect(() => {
-        fetchAll(() => {}, () => history.push("/404"));
+        fetchAll().then(() => {}, () => history.push("/404"));
     }, []);
+
     return (
         <>
             { game ? 
@@ -82,7 +79,7 @@ function GamePage({ history }) {
                                                 }
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
-                                                    {competencies.all().map((c, i) => (
+                                                    {game.competencies.map((c, i) => (
                                                         <Competence key={i} competence={c} enablePopup />
                                                     ))}
                                                 </span> 
@@ -138,7 +135,7 @@ function GamePage({ history }) {
                                         <p className={styles.blockCaption}>{`Комментарии (${game.comments.comments.size})`}</p>
                                         <div>
                                             {auth.authenticated ? <CommentForm onSubmit={handleCommentFormSubmit} /> : <></>}
-                                            <CommentsListView comments={game.comments} />
+                                            <CommentsListView store={game.comments} />
                                         </div>
                                     </div>
                                 </div>

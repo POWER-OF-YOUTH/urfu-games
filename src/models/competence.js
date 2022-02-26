@@ -35,11 +35,14 @@ const Competence = types
 
 const CompetenciesStore = types
     .model({
-        competencies: types.array(Competence)
+        competencies: types.map(Competence)
     })
     .views(self => ({
-        all() {
-            return self.competencies;
+        array() {
+            return values(self.competencies);
+        },
+        get(id) {
+            return self.competencies[id];
         }
     }))
     .actions(self => ({
@@ -49,16 +52,10 @@ const CompetenciesStore = types
             if (response.ok) {
                 const json = yield response.json();
 
-                applySnapshot(self.competencies, json);
-            }
-        }),
-        loadOne: flow(function* (competenceId) {
-            if (self.competencies.find(c => c.id === competenceId) === undefined)
-            {
-                const response = yield competenciesAPI.getCompetence(competenceId);
+                const competencies = {};
+                json.forEach(c => competencies[c.id] = c);
 
-                if (response.ok) 
-                    self.competencies.push(yield response.json());
+                self.competencies = competencies;
             }
         })
     }));

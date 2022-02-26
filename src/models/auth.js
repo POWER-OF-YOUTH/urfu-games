@@ -1,5 +1,5 @@
 import validator from "validator";
-import { types, flow, applySnapshot } from "mobx-state-tree";
+import { types, flow } from "mobx-state-tree";
 
 import authAPI from "../utils/api/authAPI";
 import { User } from "./user";
@@ -28,8 +28,7 @@ const AuthStore = types
     .model({
         user: types.maybeNull(User),
         token: types.maybeNull(types.string),
-        errors: types.optional(types.array(APIError), []),
-        isLoading: false,
+        errors: types.array(APIError),
         authenticated: false
     })
     .actions(self => ({
@@ -37,58 +36,59 @@ const AuthStore = types
             self.check();
         },
         signUp: flow(function* (data) {
-            self.isLoading = true;
-    
-            self.errors.clear();
-    
-            const validationErrors = validateSignUpData(data);
-            if (validationErrors.length > 0)
-                self.errors = validationErrors; 
-            else {
-                const response = yield authAPI.signUp(data); 
-                const json = yield response.json();
+            if (!self.authenticated) {
+                self.errors.clear();
+        
+                const validationErrors = validateSignUpData(data);
+                if (validationErrors.length > 0)
+                    self.errors = validationErrors; 
+                else {
+                    const response = yield authAPI.signUp(data); 
+                    const json = yield response.json();
 
-                if (response.ok)
-                    applySnapshot(self, json);
-                else
-                    self.errors = json.errors;
+                    if (response.ok) {
+                        if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
+                            window.ym(86784357, "reachGoal", "signup");
+                        }       
+                    }
+                    else 
+                        self.errors = json.errors;
+                }
             }
-            
-            self.isLoading = false;
         }),       
         signIn: flow(function* (data) {
-            self.isLoading = true;
-
-            const response = yield authAPI.signIn(data);
-            const json = yield response.json();
-
-            if (response.ok) {
-                self.errors.clear();
-
-                applySnapshot(self, json);
-
-                self.authenticated = response.ok;
-
-                localStorage.setItem("token", json.token);
-            }
-            else
-                self.errors = json.errors;
-
-            self.isLoading = false;
-        }),
-        check: flow(function* () {
-            self.isLoading = true;   
-
-
-            self.token = localStorage.getItem("token");
-            if (self.token) {
-                const response = yield authAPI.check(self.token);
+            if (!self.authenticated) {
+                const response = yield authAPI.signIn(data);
                 const json = yield response.json();
 
                 if (response.ok) {
                     self.errors.clear();
 
-                    applySnapshot(self, json);
+                    self.token = json.access_token;
+
+                    localStorage.setItem("access_token", json.access_token);
+
+                    yield self.check();
+
+                    if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
+                        window.ym(86784357, "reachGoal", "signin");
+                    }       
+                }
+                else
+                    self.errors = json.errors;
+            }
+        }),
+        check: flow(function* () {
+            self.token = localStorage.getItem("access_token");
+
+            if (self.token) {
+                const response = yield authAPI.check();
+                const json = yield response.json();
+
+                if (response.ok) {
+                    self.errors.clear();
+
+                    self.user = json;
 
                     self.authenticated = true;
                 }
@@ -98,11 +98,9 @@ const AuthStore = types
             else {
                 self.authenticated = false;
             }
-
-            self.isLoading = false;
         }),
         logout() {
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
             
             self.authenticated = false;
         },
@@ -111,4 +109,4 @@ const AuthStore = types
         }
     }));
 
-export default AuthStore;
+export { AuthStore };
