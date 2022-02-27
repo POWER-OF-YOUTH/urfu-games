@@ -1,4 +1,4 @@
-const APIURL = "http://api.urfugames.ru";
+const APIURL = "https://api.urfugames.ru";
 
 function getDefaultRequestInit() {
     return {
