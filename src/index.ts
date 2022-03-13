@@ -9,7 +9,7 @@ import sequelize from "./utils/sequelize";
     await sequelize.sync();
 
     app.listen(
-        3000, 
+        Number(process.env.PORT), 
         "localhost", 
         () => console.log("Server is running on localhost:80")
     );
