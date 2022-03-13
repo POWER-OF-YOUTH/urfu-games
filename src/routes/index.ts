@@ -34,7 +34,7 @@ router.post("/games/:gameId/progress",
 
         // Проверяем существование игры
         try {
-            await axios.get(`${process.env.MAIN_SEERVICE_URL}/games/${req.params.gameId}`);
+            await axios.get(`${process.env.MAIN_SERVICE_URI}/games/${req.params.gameId}`);
         }
         catch (err) {
             return next(new Error("Game not found. 404"));
@@ -42,7 +42,7 @@ router.post("/games/:gameId/progress",
 
         // Проверяем существование пользователя
         try {
-            await axios.get(`${process.env.MAIN_SEERVICE_URL}/users/${req.body.user}`);
+            await axios.get(`${process.env.MAIN_SERVICE_URI}/users/${req.body.user}`);
         }
         catch (err) {
             return next(new Error("User not found. 404"));
@@ -99,7 +99,7 @@ router.get("/games/:gameId/progress",
 
         // Проверяем существование игры
         try {
-            await axios.get(`${process.env.MAIN_SERVICE_URL}/games/${req.params.gameId}`);
+            await axios.get(`${process.env.MAIN_SERVICE_URI}/games/${req.params.gameId}`);
         }
         catch (err) {
             return next(new Error("Game not found. 404"));
@@ -110,7 +110,7 @@ router.get("/games/:gameId/progress",
             try {
                 // @ts-ignore
                 await Promise.all(req.query.users.map(u => 
-                    axios.get(`${process.env.MAIN_SERVICE_URL}/users/${u}`)
+                    axios.get(`${process.env.MAIN_SERVICE_URI}/users/${u}`)
                 ));
             }
             catch (err) {
@@ -157,7 +157,7 @@ router.delete("/games/:gameId/progress/:progressId",
 
         // Проверяем существование игры
         try {
-            await axios.get(`${process.env.MAIN_SERVICE_URL}/games/${req.params.gameId}`);
+            await axios.get(`${process.env.MAIN_SERVICE_URI}/games/${req.params.gameId}`);
         }
         catch (err) {
             return next(new Error("Game not found. 404"));

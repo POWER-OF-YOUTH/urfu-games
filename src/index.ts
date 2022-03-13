@@ -11,6 +11,6 @@ import sequelize from "./utils/sequelize";
     app.listen(
         Number(process.env.PORT), 
         "localhost", 
-        () => console.log("Server is running on localhost:80")
+        () => console.log(`Server is running on localhost:${process.env.PORT}`)
     );
 }());

@@ -13,7 +13,7 @@ Game.init({
         primaryKey: true
     },
     checkpointsCount: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         defaultValue: 0
     }
 }, { sequelize, modelName: "game" });
