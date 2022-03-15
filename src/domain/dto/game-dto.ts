@@ -8,7 +8,6 @@ class GameDTO {
     public readonly rating: number;
     public readonly author: string;
     public readonly participants: Array<string>;
-    public readonly url: string;
     public readonly createdAt: Date;
     public readonly uploaded: boolean;
 
@@ -20,7 +19,6 @@ class GameDTO {
         this.rating = game.rating;
         this.author = game.author;
         this.participants = game.participants;
-        this.url = game.url;
         this.createdAt = game.createdAt;
         this.uploaded = game.uploaded;
     }
