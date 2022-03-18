@@ -105,7 +105,6 @@ gamesRouter.post("/",
             image: req.data.image,
             author: author.id,
             participants: participants.map(p => p.id),
-            url: path.join("/public", process.env.PUBLIC_GAMES_SUBDIR, id),
             createdAt: Date.now()
         });
 
@@ -188,6 +187,18 @@ gamesRouter.put("/:gameId",
         body("image")
             .optional()
             .isString(),
+        body("loaderUrl")
+            .optional()
+            .isString(),
+        body("dataUrl")
+            .optional()
+            .isString(),
+        body("frameworkUrl")
+            .optional()
+            .isString(),
+        body("codeUrl")
+            .optional()
+            .isString(),
         body("participants")
             .default([])
             .isArray(),
@@ -221,12 +232,7 @@ gamesRouter.put("/:gameId",
             ));
         }
 
-        game.set({
-            name: req.data.name,
-            description: req.data.description,
-            image: req.data.image,
-            participants: participants.map(p => p.id)
-        });
+        game.set(req.body);
 
         await game.save();
 
@@ -258,10 +264,6 @@ gamesRouter.delete("/:gameId",
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
             return next(new AccessError(req.originalUrl));
-
-        // Удаляем директорию, содержащую файлы игры, если она существует
-        if (fs.existsSync(game.url))
-            fs.rmSync(game.url, { recursive: true });
 
         // Удаляем комментарии, относящиеся к игре
         await Comment.deleteMany({ game: game.id }); 

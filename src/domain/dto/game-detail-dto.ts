@@ -13,7 +13,10 @@ class GameDetailDTO {
     public readonly rating: number;
     public readonly author: UserDTO;
     public readonly participants: Array<Readonly<UserDTO>>;
-    public readonly url: string;
+    public readonly loaderUrl: string;
+    public readonly dataUrl: string;
+    public readonly frameworkUrl: string;
+    public readonly codeUrl: string;
     public readonly createdAt: Date;
     public readonly uploaded: boolean;
 
@@ -31,7 +34,10 @@ class GameDetailDTO {
         this.rating = game.rating;
         this.author = new UserDTO(author);
         this.participants = participants.map(p => new UserDTO(p));
-        this.url = game.url;
+        this.loaderUrl = game.loaderUrl;
+        this.dataUrl = game.dataUrl;
+        this.frameworkUrl = game.frameworkUrl;
+        this.codeUrl = game.codeUrl;
         this.createdAt = game.createdAt;
         this.uploaded = game.uploaded;
     }

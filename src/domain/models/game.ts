@@ -15,7 +15,10 @@ interface IGame {
     rating: number;
     author: string;
     participants: Array<string>;
-    url: string;
+    loaderUrl: string;
+    dataUrl: string;
+    frameworkUrl: string;
+    codeUrl: string;
     uploaded: boolean;
     createdAt: Date;
 }
@@ -104,9 +107,21 @@ const gameSchema = new Schema<IGame, IGameModel>(
             type: [String],
             default: []
         },
-        url: {
+        loaderUrl: {
             type: String,
-            required: true
+            default: ""
+        },
+        dataUrl: {
+            type: String,
+            default: ""
+        },
+        frameworkUrl: {
+            type: String,
+            default: ""
+        },
+        codeUrl: {
+            type: String,
+            default: ""
         },
         uploaded: {
             type: Boolean,
