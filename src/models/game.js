@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { 
     types, 
-    flow 
+    flow,
+    applySnapshot
 } from "mobx-state-tree";
 
 import * as gamesAPI from "../utils/api/gamesAPI";
@@ -12,22 +14,44 @@ import { values } from "mobx";
 
 const Game = types
     .model({
-        id: types.identifier,
+        id: "",
         competencies: types.array(Competence),
-        image: types.string,
-        name: types.string,
-        description: types.string,
-        rating: types.number,
-        author: User,
+        image: "",
+        name: "",
+        description: "",
+        rating: 0,
+        author: types.maybeNull(User),
         participants: types.array(User),
-        url: types.string,
-        uploaded: types.boolean,
-        createdAt: DateTime,
-        comments: types.maybe(CommentsStore)
+        codeUrl: "",
+        dataUrl: "",
+        frameworkUrl: "",
+        loaderUrl: "",
+        uploaded: false,
+        createdAt: types.maybeNull(DateTime),
+        comments: types.optional(CommentsStore, () => CommentsStore.create()),
+        loaded: false
     })
     .actions(self => ({
-        afterCreate() {
-            self.comments = CommentsStore.create({ gameId: self.id });
+        setName(name) {
+            self.name = name;
+        },
+        setDescription(description) {
+            self.description = description;
+        },
+        setCodeUrl(url) {
+            self.codeUrl = url;
+        },
+        setDataUrl(url) {
+            self.dataUrl = url;
+        },
+        setFrameworkUrl(url) {
+            self.frameworkUrl = url;
+        },
+        setLoaderUrl(url) {
+            self.loaderUrl = url;
+        },
+        comment(text) {
+            self.comments.add(self.id, text);
         },
         rate: flow(function* (value) {
             if (value != null) {
@@ -48,6 +72,35 @@ const Game = types
         }),
         delete: flow(function* () {
             yield gamesAPI.deleteGame(self.id);
+        }),
+        load: flow(function* (gameId) {
+            const gameResponse = yield gamesAPI.getGame(gameId);
+
+            if (gameResponse.ok) {
+                applySnapshot(self, yield gameResponse.json());
+                self.loaded = true;
+            }
+            else
+                throw new Error("Failed to load the game.");
+        }),
+        loadComments: flow(function* () {
+            yield self.comments.load(self.id);
+        }),
+        save: flow(function* () {
+            const updateGameResponse = yield gamesAPI.updateGame(
+                self.id, 
+                {
+                    name: self.name,
+                    description: self.description,
+                    codeUrl: self.codeUrl,
+                    dataUrl: self.dataUrl,
+                    frameworkUrl: self.frameworkUrl,
+                    loaderUrl: self.loaderUrl,
+                }
+            );
+
+            if (!updateGameResponse.ok)
+                throw new Error("Failed to update game.");
         })
     }));
 
@@ -81,12 +134,4 @@ const GamesStore = types
         }
     }));
 
-async function fetchGame(id) {
-    const response = await gamesAPI.getGame(id);
-
-    if (response.ok)
-        return Game.create(await response.json());
-    return Promise.reject(response);
-}
-
-export { Game, GamesStore, fetchGame };
+export { Game, GamesStore };

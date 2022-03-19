@@ -30,8 +30,8 @@ const Comment = types
 
 const CommentsStore = types
     .model({
-        gameId: types.string,
         comments: types.map(Comment),
+        loaded: false
     })
     .views(self => ({
         array() {
@@ -41,9 +41,14 @@ const CommentsStore = types
             return self.comments[id];
         }
     }))
+    .views(self => ({
+        get size() {
+            return self.comments.size;
+        }
+    }))
     .actions(self => ({
-        load: flow(function* () {
-            const response = yield commentsAPI.getComments(self.gameId);
+        load: flow(function* (gameId) {
+            const response = yield commentsAPI.getComments(gameId);
             
             if (response.ok) {
                 const json = yield response.json();
@@ -52,10 +57,12 @@ const CommentsStore = types
                 json.forEach((c) => comments[c.id] = c); 
 
                 self.comments = comments;
+
+                self.loaded = true;
             }
         }),
-        add: flow(function* (text) {
-            const response = yield commentsAPI.addComment(self.gameId, text);
+        add: flow(function* (gameId, text) {
+            const response = yield commentsAPI.addComment(gameId, text);
             const json = yield response.json();
 
             if (response.ok)
