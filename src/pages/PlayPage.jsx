@@ -40,6 +40,9 @@ function PlayPage() {
             unityContext.on("loaded", () => {
                 setGameDownloaded(true);
             });
+            unityContext.on("error", (message) => console.error(message));
+
+            return () => unityContext.removeAllEventListeners();
         }
     }, [unityContext]);
     return (
