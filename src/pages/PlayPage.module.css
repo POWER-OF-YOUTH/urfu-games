@@ -1,25 +1,24 @@
 @import "../styles/variables.css";
 
-.wrapper {
-    height: 100%;
-    width: 100%;
-}
-
 .content {
     width: 100%;
     height: 100%;
 }
 
-.gameContainer {
-    width: 100%;
+.gameBlock {
+    display: flex;
     height: 100%;
-}
-
-.gameFrame {
     width: 100%;
-    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .back {
+    position: absolute;
     text-decoration: none;
+}
+
+.gameCanvas {
+    display: block;
+    height: 100%;
 }

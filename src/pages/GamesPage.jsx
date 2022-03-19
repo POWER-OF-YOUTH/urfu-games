@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Flickity from "react-flickity-component";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
@@ -17,17 +17,10 @@ function GamesPage() {
     const games = useLocalObservable(() => GamesStore.create());
     const competencies = useLocalObservable(() => CompetenciesStore.create());
 
-    const fetchAll = async () => {
-        await Promise.all([
-            games.load(),
-            competencies.load()
-        ]);
-    };
-
-    React.useEffect(() => {
-        fetchAll();
+    useEffect(() => {
+        games.load().catch(err => console.error(err));
+        competencies.load().catch(err => console.error(err));
     }, []);
-
     return (        
         <>
             <Helmet>

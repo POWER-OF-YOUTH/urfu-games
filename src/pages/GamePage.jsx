@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { NavLink, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
@@ -6,52 +7,47 @@ import {
     Rating
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { observer, useLocalObservable } from "mobx-react-lite";
 
-import Header from "../components/Header";
 import Block from "../components/Block";
 import Competence from "../components/Competence";
 import {
     CommentForm,
     CommentsListView
 } from "../components/comments";
-import { fetchGame } from "../models/game";
+import { Game } from "../models/game";
 import { useStore } from "../hooks";
 
 import styles from "./GamePage.module.css";
 
-function GamePage({ history }) {
-    const { gameId } = useParams();
+function GamePage() {
+    const params = useParams(); // { gameId: string }
 
     const { auth } = useStore();
 
-    const [game, setGame] = useState(null);
+    const game = useLocalObservable(() => Game.create());
 
-    const handleCommentFormSubmit = (text) => game.comments.add(text); 
+    const handleCommentFormSubmit = (text) => game.comment(text); 
     const handleRatingChange = (evt, value) => game.rate(value);
     const handlePlayButtonClick = () => {
         if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
             window.ym(86784357, "reachGoal", "play_button_click");
         }
     };
-    const fetchAll = async () => {
-        const game = await fetchGame(gameId);
-        setGame(game);
 
-        await game.comments.load();
-    };
-
-    React.useEffect(() => {
-        fetchAll().then(() => {}, () => history.push("/404"));
+    useEffect(() => {
+        game.load(params.gameId).catch(err => console.error(err));
     }, []);
-
+    useEffect(() => {
+        if (game.loaded)
+            game.loadComments().catch(err => console.error(err));
+    }, [game.loaded]);
     return (
         <>
-            { game ? 
+            <Helmet>
+                <title>{game.loaded ? game.name : "Загрузка"}</title>
+            </Helmet>
+            {game.loaded ? 
                 <>
-                    <Helmet>
-                        <title>{game.name}</title>
-                    </Helmet>
                     <div className={styles.wrapper}>
                         <Block className={styles.paper}>
                             <div className={styles.contentWrapper}>
@@ -102,7 +98,7 @@ function GamePage({ history }) {
                                             <div className={styles.gameButtonsContainer}>
                                                 <NavLink 
                                                     className={styles.playButtonLink} 
-                                                    to={`/games/${gameId}/play`}
+                                                    to={`/games/${params.gameId}/play`}
                                                 >
                                                     <Button className={styles.playButton} variant="contained" onClick={handlePlayButtonClick}>
                                                         Играть
@@ -111,7 +107,7 @@ function GamePage({ history }) {
                                                 { auth.authenticated && auth.user.id === game.author.id ? 
                                                     <NavLink 
                                                         className={styles.settingsButtonLink} 
-                                                        to={`/games/${gameId}/settings`}
+                                                        to={`/games/${params.gameId}/settings`}
                                                     >
                                                         <Button className={styles.settingsButton} variant="contained">
                                                             <SettingsIcon />
@@ -132,9 +128,11 @@ function GamePage({ history }) {
                                         </div>
                                     </div>
                                     <div className={styles.commentsBlock}>
-                                        <p className={styles.blockCaption}>{`Комментарии (${game.comments.comments.size})`}</p>
+                                        <p className={styles.blockCaption}>
+                                            {`Комментарии (${game.comments.size})`}
+                                        </p>
                                         <div>
-                                            {auth.authenticated ? <CommentForm onSubmit={handleCommentFormSubmit} /> : <></>}
+                                            {auth.authenticated && <CommentForm onSubmit={handleCommentFormSubmit} />}
                                             <CommentsListView store={game.comments} />
                                         </div>
                                     </div>
