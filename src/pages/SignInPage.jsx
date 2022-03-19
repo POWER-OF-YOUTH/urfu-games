@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 import { 
@@ -6,7 +6,7 @@ import {
     Typography, 
     TextField,
     Alert
-} from "@material-ui/core";
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 
 import { useStore } from "../hooks";
@@ -20,10 +20,10 @@ function SignInPage({ history }) {
         await auth.signIn(values);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         auth.clearErrors();
     }, []);
-    React.useEffect(() => {
+    useEffect(() => {
         if (auth.authenticated) {
             if (history.location.state !== undefined 
              && history.location.state.redirectTo !== undefined)
@@ -32,14 +32,11 @@ function SignInPage({ history }) {
                 history.push("/games");
         }
     }, [auth.authenticated]);
-  
-    const alert = auth.errors.length > 0 ? 
+    const alert = auth.errors.length > 0 && (
         <Alert className={styles.alert} severity="error">
             {auth.errors[0].message}
         </Alert>
-        : 
-        <></>; 
-
+    ); 
     return (
         <>
             <Helmet>
@@ -59,9 +56,8 @@ function SignInForm({ onSubmit, onChange }) {
         password: "",
     });
 
-    const handleFieldChange = (name) => (evt) => {
-        const value = evt.target.value;
-        setValues({ ...values, [name]: value });
+    const handleFieldChange = (evt) => {
+        setValues({ ...values, [evt.target.name]: evt.target.value });
     };
 
     const handleSubmit = () => onSubmit(values);
@@ -73,18 +69,20 @@ function SignInForm({ onSubmit, onChange }) {
                 <div className={styles.fieldsContainer}>
                     <TextField 
                         id="outlined-basic" 
-                        variant="outlined" 
                         className={styles.field} 
+                        variant="outlined" 
+                        name="login"
                         label="Логин"
-                        onChange={handleFieldChange("login")} 
+                        onChange={handleFieldChange} 
                     />
                     <TextField 
                         id="outlined-basic" 
-                        variant="outlined" 
                         className={styles.field} 
+                        variant="outlined" 
+                        name="password"
                         label="Пароль"
                         type="password"
-                        onChange={handleFieldChange("password")} 
+                        onChange={handleFieldChange} 
                     />
                 </div>
                 <Button 

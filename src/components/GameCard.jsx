@@ -1,5 +1,5 @@
 import React from "react";
-import { Rating as MUIRating } from "@material-ui/core";
+import { Rating as MUIRating } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 

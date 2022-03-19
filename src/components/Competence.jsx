@@ -1,15 +1,18 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { 
+    Typography,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    IconButton
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { observer } from "mobx-react-lite";
 
 function Competence({ competence, enablePopup = false, size = "medium" }) {
     const [popupOpen, setPopupOpen] = React.useState(false);
+
     const handleClick = () => {
         setPopupOpen(true);
     };
@@ -25,7 +28,7 @@ function Competence({ competence, enablePopup = false, size = "medium" }) {
                 </CompetenceName>
             </CompetenceContainer>
 
-            { enablePopup ? (
+            { enablePopup && (
                 <CompetenceDialog onClose={handlePopupClose} open={popupOpen}>
                     <CompetenceDialogTitle onClose={handlePopupClose}>
                         {competence.name}
@@ -36,8 +39,6 @@ function Competence({ competence, enablePopup = false, size = "medium" }) {
                         </Typography>
                     </DialogContent >
                 </CompetenceDialog>
-            ) : (
-                <></>
             )}
         </>
     );
