@@ -54,12 +54,19 @@ function PlayPage() {
                     </Button>
                 </NavLink>
                 <Block className={styles.gameBlock}>
-                    {!gameDownloaded && 
+                    {!gameDownloaded && (
                         <p>{`Загрузка ${Math.round(gameDownloadingProgress * 100)}%...`}</p>
-                    }
-                    {unityContext !== null &&
-                        <Unity className={styles.gameCanvas} unityContext={unityContext} /> 
-                    }
+                    )}
+                    {unityContext !== null && (
+                        <Unity 
+                            className={styles.gameCanvas} 
+                            style={{ 
+                                /* Не показываем игру пока все её файлы не загружены */
+                                ...(!gameDownloaded ? { display: "none" } : {})
+                            }}
+                            unityContext={unityContext} 
+                        /> 
+                    )}
                 </Block>
             </main>
         </>

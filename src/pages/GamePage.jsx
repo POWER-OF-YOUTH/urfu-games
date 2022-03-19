@@ -46,7 +46,7 @@ function GamePage() {
             <Helmet>
                 <title>{game.loaded ? game.name : "Загрузка"}</title>
             </Helmet>
-            {game.loaded ? 
+            {game.loaded ? (
                 <>
                     <div className={styles.wrapper}>
                         <Block className={styles.paper}>
@@ -63,16 +63,14 @@ function GamePage() {
                                                     <span className={styles.caption}>Автор: </span>
                                                     <span className={styles.login}>{game.author.login}</span>
                                                 </p>
-                                                {game.participants.length > 0 ? 
+                                                {game.participants.length > 0 && (
                                                     <p>
                                                         <span className={styles.caption}>Участники: </span>
                                                         <span>
                                                             {game.participants.map(p => p.login).join(", ")}
                                                         </span>
                                                     </p>
-                                                    :
-                                                    <></>
-                                                }
+                                                )}
                                                 <span className={styles.caption}>Компетенции: </span>
                                                 <span className={styles.competencies}>
                                                     {game.competencies.map((c, i) => (
@@ -104,7 +102,7 @@ function GamePage() {
                                                         Играть
                                                     </Button>
                                                 </NavLink>
-                                                { auth.authenticated && auth.user.id === game.author.id ? 
+                                                { auth.authenticated && auth.user.id === game.author.id && (
                                                     <NavLink 
                                                         className={styles.settingsButtonLink} 
                                                         to={`/games/${params.gameId}/settings`}
@@ -113,9 +111,7 @@ function GamePage() {
                                                             <SettingsIcon />
                                                         </Button>
                                                     </NavLink>
-                                                    : 
-                                                    <></> 
-                                                }
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -141,9 +137,9 @@ function GamePage() {
                         </Block>
                     </div>
                 </>
-                : 
+            ) : ( 
                 <></> 
-            }
+            )}
         </>
     );
 }
