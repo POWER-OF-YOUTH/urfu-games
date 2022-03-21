@@ -34,6 +34,7 @@ function PlayPage() {
     }, [game.loaded]);
     useEffect(() => {
         if (unityContext !== null) {
+            // Internal events ----
             unityContext.on("progress", (progress) => {
                 setGameDownloadingProgress(progress);
             });
@@ -41,6 +42,11 @@ function PlayPage() {
                 setGameDownloaded(true);
             });
             unityContext.on("error", (message) => console.error(message));
+            // ---- Internal events
+
+            // Custom events ----
+            unityContext.on("Test", () => window.alert("Test"));
+            // ---- Custom events
 
             return () => unityContext.removeAllEventListeners();
         }

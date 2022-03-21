@@ -1,40 +1,35 @@
 import * as apiConfig from "../../helpers/apiConfig";
 
 /**
- * @param {{ name: string, description?: string, participants?: Array<string>, competencies?: Array<string> }} data
+ * @param {{ 
+ *     name: string, 
+ *     description?: string, 
+ *     participants?: Array<string>, 
+ *     competencies?: Array<string> 
+ * }} data
  */
 export async function addGame(data) {
     const url = apiConfig.APIURL + "/games";
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "POST",
-            body: JSON.stringify(data)
-            
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "POST",
+        body: JSON.stringify(data)
+        
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 export async function getGame(gameId) {
     const url = apiConfig.APIURL + `/games/${gameId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "GET"
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "GET"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 /**
@@ -45,53 +40,46 @@ export async function getGames(start = 0, count = 10) {
     const url = new URL(apiConfig.APIURL + "/games");
     url.search = new URLSearchParams({ start, count }).toString();
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "GET"
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "GET"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 /**
- * @param {{ name: string, description?: string, participants?: Array<string>, competencies?: Array<string> }} data
+ * @param {{ 
+ *     name: string, 
+ *     description?: string, 
+ *     participants?: Array<string>, 
+ *     competencies?: Array<string> 
+ * }} data
  */
 export async function updateGame(gameId, data) {
     const url = apiConfig.APIURL + `/games/${gameId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "PUT",
-            body: JSON.stringify(data)
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "PUT",
+        body: JSON.stringify(data)
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
+/**
+ * @param {string} gameId
+ */
 export async function deleteGame(gameId) {
     const url = apiConfig.APIURL + `/games/${gameId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "DELETE",
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "DELETE",
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 /*
@@ -101,16 +89,11 @@ export async function deleteGame(gameId) {
 export async function rateGame(gameId, value) {
     const url = new URL(apiConfig.APIURL + `/games/${gameId}/ratings`);
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "PUT",
-            body: JSON.stringify({ value })
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "PUT",
+        body: JSON.stringify({ value })
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }

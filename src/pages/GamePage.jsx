@@ -46,7 +46,7 @@ function GamePage() {
             <Helmet>
                 <title>{game.loaded ? game.name : "Загрузка"}</title>
             </Helmet>
-            {game.loaded ? (
+            {game.loaded && (
                 <>
                     <div className={styles.wrapper}>
                         <Block className={styles.paper}>
@@ -137,8 +137,6 @@ function GamePage() {
                         </Block>
                     </div>
                 </>
-            ) : ( 
-                <></> 
             )}
         </>
     );
