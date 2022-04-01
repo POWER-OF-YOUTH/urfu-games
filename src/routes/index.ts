@@ -65,6 +65,12 @@ router.post("/games/:gameId/progress",
                 data: req.body.data
             });
         }
+        else {
+            progress.checkpointsCollected = req.body.checkpointsCollected;
+            progress.data = req.body.data;
+            
+            await progress.save();
+        }
 
         res.json({
             id: progress.id,
