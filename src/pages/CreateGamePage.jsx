@@ -25,6 +25,7 @@ function GamesNewPage() {
             </div>
             <div></div>
             <div></div>
+            <div></div>
         </div>
     );
 }
