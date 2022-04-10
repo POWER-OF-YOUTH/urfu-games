@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
-import { 
-    Button, 
-    Typography, 
-    TextField,
-    Alert
-} from "@mui/material";
+import { Button, Typography, TextField, Alert } from "@mui/material";
 import { observer } from "mobx-react-lite";
 
 import { useStore } from "../hooks";
@@ -19,10 +14,9 @@ function SignUpPage({ history }) {
     const handleFormSubmit = async (values) => {
         await auth.signUp(values);
 
-        if (auth.errors.length === 0)
-            history.push("/signin", history.location.state);
+        if (auth.errors.length === 0) history.push("/signin", history.location.state);
     };
-  
+
     useEffect(() => {
         auth.clearErrors();
     }, []);
@@ -30,7 +24,7 @@ function SignUpPage({ history }) {
         <Alert className={styles.alert} severity="error">
             {auth.errors[0].message}
         </Alert>
-    ); 
+    );
     return (
         <>
             <Helmet>
@@ -60,49 +54,47 @@ function SignUpForm({ onSubmit }) {
 
     return (
         <div className={styles.signUpForm}>
-            <Typography variant="h5" className={styles.title}>Регистрация</Typography>
+            <Typography variant="h5" className={styles.title}>
+                Регистрация
+            </Typography>
             <div className={styles.signUpFormBody}>
                 <div className={styles.fieldsContainer}>
-                    <TextField 
-                        id="outlined-basic" 
-                        className={styles.field} 
+                    <TextField
+                        id="outlined-basic"
+                        className={styles.field}
                         name="login"
-                        variant="outlined" 
+                        variant="outlined"
                         label="Логин"
-                        onChange={handleFieldChange} 
+                        onChange={handleFieldChange}
                     />
-                    <TextField 
-                        id="outlined-basic" 
-                        variant="outlined" 
-                        className={styles.field} 
+                    <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        className={styles.field}
                         name="email"
                         label="Email"
-                        onChange={handleFieldChange} 
+                        onChange={handleFieldChange}
                     />
-                    <TextField 
-                        id="outlined-basic" 
-                        className={styles.field} 
-                        variant="outlined" 
+                    <TextField
+                        id="outlined-basic"
+                        className={styles.field}
+                        variant="outlined"
                         name="password"
                         label="Пароль"
                         type="password"
-                        onChange={handleFieldChange} 
+                        onChange={handleFieldChange}
                     />
-                    <TextField 
-                        id="outlined-basic" 
-                        className={styles.field} 
-                        variant="outlined" 
+                    <TextField
+                        id="outlined-basic"
+                        className={styles.field}
+                        variant="outlined"
                         name="passwordRepeat"
                         label="Повтор пароля"
                         type="password"
-                        onChange={handleFieldChange} 
+                        onChange={handleFieldChange}
                     />
                 </div>
-                <Button 
-                    className={styles.registerButton} 
-                    variant="contained" 
-                    onClick={handleSubmit}
-                >
+                <Button className={styles.registerButton} variant="contained" onClick={handleSubmit}>
                     Зарегистрироваться
                 </Button>
             </div>

@@ -25,6 +25,7 @@ function App() {
         <Router history={history}>
             <MainLayout>
                 <Switch>
+                    
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/signin" component={SignInPage} />
                     <Route exact path="/signup" component={SignUpPage} />
