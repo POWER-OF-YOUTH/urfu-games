@@ -21,4 +21,5 @@
 .gameCanvas {
     display: block;
     height: 100%;
+    user-select: none;
 }
