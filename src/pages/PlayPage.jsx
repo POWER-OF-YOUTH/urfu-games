@@ -12,6 +12,8 @@ import { useStore } from "../hooks";
 
 import styles from "./PlayPage.module.css";
 
+const defaultProgress = { data: "" };
+
 function PlayPage() {
     const params = useParams(); // { gameId: string }
 
@@ -33,13 +35,13 @@ function PlayPage() {
                 progressAPI.getProgress(game.id, auth.user.id)
                     .then((r) => r.json())
                     .then((json) => { 
-                        window.userProgress = json[0];
+                        window.userProgress = json.length > 0 ? json[0] : defaultProgress;
                         setProgressLoaded(true);
                     })
                     .catch((err) => console.error(err));
             }
             else {
-                window.userProgress = { data: "" };
+                window.userProgress = defaultProgress;
                 setProgressLoaded(true);
             }
         }
