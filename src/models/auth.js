@@ -29,7 +29,8 @@ const AuthStore = types
         user: types.maybeNull(User),
         token: types.maybeNull(types.string),
         errors: types.array(APIError),
-        authenticated: false
+        authenticated: false,
+        checked: false
     })
     .actions(self => ({
         afterCreate() {
@@ -98,6 +99,8 @@ const AuthStore = types
             else {
                 self.authenticated = false;
             }
+
+            self.checked = true;
         }),
         logout() {
             localStorage.removeItem("access_token");

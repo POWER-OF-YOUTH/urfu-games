@@ -1,27 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { useParams, NavLink } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import { Button } from "@mui/material";
-import { observer, useLocalObservable } from "mobx-react-lite";
 import Unity, { UnityContext } from "react-unity-webgl";
+import { Button } from "@mui/material";
+import { Helmet } from "react-helmet";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useParams, NavLink } from "react-router-dom";
 
+import * as progressAPI from "../utils/api/progressAPI";
 import Block from "../components/Block";
 import { Game } from "../models/game";
+import { useStore } from "../hooks";
 
 import styles from "./PlayPage.module.css";
 
+const defaultProgress = { data: "" };
+
 function PlayPage() {
     const params = useParams(); // { gameId: string }
+
+    const { auth } = useStore();
 
     const game = useLocalObservable(() => Game.create());
 
     const [unityContext, setUnityContext] = useState(null);
     const [gameDownloadingProgress, setGameDownloadingProgress] = useState(0);
     const [gameDownloaded, setGameDownloaded] = useState(false);
+    const [progressLoaded, setProgressLoaded] = useState(false);
 
     useEffect(() => {
         game.load(params.gameId).catch(err => console.error(err));
     }, []);
+    useEffect(() => {
+        if (auth.checked && game.loaded) {
+            if (auth.authenticated) {
+                progressAPI.getProgress(game.id, auth.user.id)
+                    .then((r) => r.json())
+                    .then((json) => { 
+                        window.userProgress = json.length > 0 ? json[0] : defaultProgress;
+                        setProgressLoaded(true);
+                    })
+                    .catch((err) => console.error(err));
+            }
+            else {
+                window.userProgress = defaultProgress;
+                setProgressLoaded(true);
+            }
+        }
+    }, [auth.checked, game.loaded]);
     useEffect(() => {
         if (game.loaded) {
             setUnityContext(new UnityContext({
@@ -45,7 +69,13 @@ function PlayPage() {
             // ---- Internal events
 
             // Custom events ----
-            unityContext.on("Test", () => window.alert("Test"));
+            unityContext.on("saveProgress", (data) => {
+                if (auth.authenticated) {
+                    progressAPI.saveProgress(game.id, auth.user.id, data)
+                        .catch(err => console.error(err));
+                }
+            });
+            unityContext.on("loadProgress", () => {});
             // ---- Custom events
 
             return () => unityContext.removeAllEventListeners();
@@ -66,7 +96,7 @@ function PlayPage() {
                     {!gameDownloaded && (
                         <p>{`Загрузка ${Math.round(gameDownloadingProgress * 100)}%...`}</p>
                     )}
-                    {unityContext !== null && (
+                    {(unityContext !== null && progressLoaded) && (
                         <Unity 
                             className={styles.gameCanvas} 
                             style={{ 
