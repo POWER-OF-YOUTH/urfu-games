@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Button, Typography, TextField, InputBase, CardMedia, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -31,21 +31,40 @@ const InputForm = styled(InputBase)({
     padding: "0 10px",
 });
 
-// useEffect(() => {
-//     // const actualBtn = document.getElementsByClassName("uploadForm")[0];
-//     // const fileChosen = document.getElementsByClassName("choosenFile");
-//     // actualBtn.addEventListener("change", function () {
-//     //     fileChosen.textContent = this.files[0].name;
-//     // });
-// });
+const FileInputButton = styled(Button)({
+    backgroundColor: "#84DCC6",
+    marginLeft: "5px",
+    width: "150px",
+    height: "30px",
+    color: "#000",
+    textTransform: "none",
+    boxShadow: "none",
+    fontFamily: "var(--main-font-family)",
+    fontWeight: "bold",
+    fontSize: "25",
+    "&:hover": {
+        backgroundColor: "#84DCC6",
+        boxShadow: "none",
+    },
+});
 
 function GamesNewPage() {
+    const [fileName, setFileName] = useState({
+        fileInput1: "",
+        fileInput2: "",
+        fileInput3: "",
+        fileInput4: "",
+    });
+
+    const handleFieldChange = (evt) => {
+        setFileName({ ...fileName, [evt.target.name]: evt.target.files[0].name });
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.cover}>
                 <span className={styles.textCaption}>Обложка</span>
                 <div className={styles.cover__content}>
-                    {/* <img src="../components/images/test.jpg"></img> */}
                     <input accept="image/*" id="cover" multiple type="file" className={styles.uploadForm} />
                     <label htmlFor="cover">
                         <CoverButton
@@ -63,9 +82,7 @@ function GamesNewPage() {
                 <div className={styles.info__name}>
                     <span className={styles.textCaption}>Название</span>
                     <div className={styles.info__name__form}>
-                        {/* <input className={styles.inputForm}></input> */}
                         <InputForm placeholder="Введите название" className={styles.inputForm}></InputForm>
-                        {/* <TextField id="standard-basic" label="Standard" className={styles.inputForm}></TextField> */}
                     </div>
                 </div>
                 <div className={styles.competencies}>
@@ -98,13 +115,10 @@ function GamesNewPage() {
             <div className={styles.files}>
                 <span className={styles.textCaption}>Файлы игры</span>
                 <div className={styles.files__list}>
-                    <input accept="image/*" id="contained-button-file" multiple type="file" />
-                    <label htmlFor="contained-button-file">
-                        <span className={styles.choosenFile}>Файл</span>
-                        {/* <Button variant="contained" color="primary" component="span">
-                            Upload
-                        </Button> */}
-                    </label>
+                    <FileInputItem name="fileInput1" onChange={handleFieldChange}></FileInputItem>
+                    <FileInputItem name="fileInput2" onChange={handleFieldChange}></FileInputItem>
+                    <FileInputItem name="fileInput3" onChange={handleFieldChange}></FileInputItem>
+                    <FileInputItem name="fileInput4" onChange={handleFieldChange}></FileInputItem>
                 </div>
             </div>
             <div className={styles.upload}>
@@ -112,6 +126,46 @@ function GamesNewPage() {
                     <span className={styles.textCaption}>Опубликовать</span>
                 </ColorButton>
             </div>
+        </div>
+    );
+}
+
+function FileInputItem(props) {
+    const [fileName, setFileName] = useState("");
+
+    const handleFieldChange = (evt) => {
+        setFileName(evt.target.files[0].name);
+        props.onChange(evt);
+    };
+
+    const id = `contained-button-file-${props.name}`;
+
+    return (
+        <div className={styles.files__list__item}>
+            {/* <input
+                accept="image/*"
+                id={id}
+                type="file"
+                {...props}
+                onChange={handleFieldChange}
+                className={styles.uploadForm}
+            /> */}
+            <label className={styles.files__list__item}>
+                <input
+                    accept="image/*"
+                    id={id}
+                    type="file"
+                    {...props}
+                    onChange={handleFieldChange}
+                    className={styles.uploadForm}
+                />
+                <div className={styles.files__item__name}>
+                    <span className={styles.choosenFile}>{fileName}</span>
+                </div>
+                <FileInputButton variant="contained" color="primary" component="span">
+                    Обзор..
+                </FileInputButton>
+            </label>
         </div>
     );
 }

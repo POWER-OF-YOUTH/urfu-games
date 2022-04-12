@@ -123,6 +123,23 @@
     border-radius: 5px;
 }
 
+.files__list__item {
+    display: flex;
+    margin: 0 7px;
+}
+
+.file__list__button {
+    font: var(--main-font-family);
+}
+
+.files__item__name {
+    width: 291px;
+    height: 30px;
+    border: 2px solid #95a3b3;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
 .upload {
     margin-left: 125px;
     grid-column: 1 / 3;
