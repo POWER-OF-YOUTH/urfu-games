@@ -9,7 +9,6 @@ import {
     ValidationError,
     AccessError
 } from "./utils/errors";
-import sendResponse from "./utils/send-response";
 import mainRouter from "./routes";
 
 const app = express();
@@ -24,20 +23,18 @@ app.use("/", mainRouter);
 // Промежуточная функция, которая обрабатывает все виды ошибок,
 // и в зависимости от их типа возвращает ответ с определенным статусом
 app.use(<TError>(err: TError, req: Request, res: Response, next: NextFunction) => {
-    const sendError = <T>(status: number, error: T) => {
-        sendResponse(res, { errors: [ error ] }, status);
-    };
-
     if (err instanceof ValidationError)
-        sendError(422, err);
+        res.status(422).json({ errors: [{ ...err, instance: req.originalUrl, type: "validation" }]});
     else if (err instanceof LogicError)
-        sendError(404, err);
+        res.status(404).json({ errors: [{ ...err, instance: req.originalUrl, type: "logic" }]});
     else if (err instanceof AccessError)
-        sendError(403, err);
+        res.status(403).json({ errors: [{ ...err, instance: req.originalUrl, type: "access" }]});
     else { // Internal error
         console.error(err);
 
-        sendError(500, new UnexpectedError(req.originalUrl));
+        res.status(500).json({ 
+            errors: [{ ...new UnexpectedError(), instance: req.originalUrl, type: "access"}]
+        });
     }
 });
 

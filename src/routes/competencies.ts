@@ -10,7 +10,6 @@ import { body, param, query } from "express-validator";
 import { v4 as uuid } from "uuid";
 
 import CompetenceDTO from "../domain/dto/competence-dto";
-import sendResponse from "../utils/send-response";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import { AccessError, LogicError } from "../utils/errors";
@@ -29,12 +28,8 @@ competenciesRouter.use("/:competenceId",
         res: Response, 
         next: NextFunction
     ): Promise<void> => {
-        if (!await Competence.exists({ id: req.params.competenceId })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.competenceWithIdNotExist
-            ));
-        }
+        if (!await Competence.exists({ id: req.params.competenceId }))
+            return next(new LogicError(strings.errors.logic.competenceWithIdNotExist));
         next();
     })
 )
@@ -57,14 +52,10 @@ competenciesRouter.post("/",
         next: NextFunction
     ): Promise<void> => {
         if (req.user.role !== Role.Admin)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
-        if (await Competence.exists({ name: req.body.name })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.competenceWithNameAlreadyExists
-            ));
-        }
+        if (await Competence.exists({ name: req.body.name }))
+            return next(new LogicError(strings.errors.logic.competenceWithNameAlreadyExists));
 
         const competence: CompetenceDocument = await Competence.create({
             id: uuid(),
@@ -73,10 +64,7 @@ competenciesRouter.post("/",
             createdAt: Date.now()
         });
 
-        sendResponse(
-            res, 
-            await CompetenceDTO.create(competence)
-        );
+        res.json(await CompetenceDTO.create(competence));
     })
 );
 
@@ -86,12 +74,11 @@ competenciesRouter.get("/:competenceId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const competence: CompetenceDocument = await Competence.findOne({ id: req.params.competenceId });
+        const competence: CompetenceDocument = await Competence.findOne({ 
+            id: req.params.competenceId 
+        });
 
-        sendResponse(
-            res, 
-            await CompetenceDTO.create(competence)
-        );
+        res.json(await CompetenceDTO.create(competence));
     })
 );
 
@@ -116,12 +103,9 @@ competenciesRouter.get("/",
             .skip(req.query.start)
             .limit(req.query.count);
 
-        sendResponse(
-            res, 
-            await Promise.all(
-                competencies.map(c => CompetenceDTO.create(c))
-            )   
-        );
+        res.json(await Promise.all(
+            competencies.map(c => CompetenceDTO.create(c))
+        ));
     })
 );
 
@@ -147,7 +131,7 @@ competenciesRouter.put("/:competenceId",
         const competence: CompetenceDocument = await Competence.findOne({ id: req.params.competenceId });
 
         if (req.user.role !== Role.Admin)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         competence.set({ 
             name: req.body.name, 
@@ -156,10 +140,7 @@ competenciesRouter.put("/:competenceId",
 
         await competence.save();
 
-        sendResponse(
-            res, 
-            await CompetenceDTO.create(competence)
-        );
+        res.json(await CompetenceDTO.create(competence));
     })
 );
 
@@ -175,14 +156,11 @@ competenciesRouter.delete("/:competenceId",
         });
 
         if (req.user.role !== Role.Admin)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         await competence.delete();
 
-        sendResponse(
-            res, 
-            await CompetenceDTO.create(competence)
-        );
+        res.json(await CompetenceDTO.create(competence));
     })
 );
 

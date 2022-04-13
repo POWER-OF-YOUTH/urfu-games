@@ -9,7 +9,6 @@ import { body, param, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
 
 import UserDTO from "../domain/dto/user-dto";
-import sendResponse from "../utils/send-response";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import { AccessError, LogicError } from "../utils/errors";
@@ -27,12 +26,8 @@ usersRouter.use("/:userId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        if (!await User.exists({ id: req.params.userId })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithIdNotExists
-            ));
-        }
+        if (!await User.exists({ id: req.params.userId }))
+            return next(new LogicError(strings.errors.logic.userWithIdNotExists));
         next();
     })
 );
@@ -73,12 +68,7 @@ usersRouter.get("/",
                 .limit(req.query.count)
         }
 
-        sendResponse(
-            res,
-            await Promise.all(
-                users.map(u => UserDTO.create(u))
-            )
-        );
+        res.json(await Promise.all(users.map(u => UserDTO.create(u))));
     })
 );
 
@@ -90,10 +80,7 @@ usersRouter.get("/:userId",
     ): Promise<void> => {
         const user: UserDocument = await User.findOne({ id: req.params.userId });
 
-        sendResponse(
-            res,
-            await UserDTO.create(user)
-        );
+        res.json(await UserDTO.create(user));
     })
 );
 
@@ -121,7 +108,7 @@ usersRouter.put("/:userId",
         const user: UserDocument = await User.findOne({ id: req.params.userId });
 
         if (user.id !== req.user.id)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         if (req.body.name !== undefined)
             user.set({ name: req.body.name });
@@ -134,10 +121,7 @@ usersRouter.put("/:userId",
 
         await user.save();
 
-        sendResponse(
-            res,
-            await UserDTO.create(user)
-        );
+        res.json(await UserDTO.create(user));
     })
 );
 

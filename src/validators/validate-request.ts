@@ -18,7 +18,6 @@ function validateRequest(...validators: Array<any>) {
                 // объектами ValidationError
                 formatter: err => { 
                     return new ValidationError(
-                        req.originalUrl, 
                         err.param, 
                         <string> err.location, 
                         err.msg
@@ -28,7 +27,6 @@ function validateRequest(...validators: Array<any>) {
 
             if (!validationErrors.isEmpty())
                 return next(validationErrors.array()[0]);
-
             next();
         }
     ]

@@ -17,12 +17,8 @@ const verifyToken = [
         if (err instanceof UnauthorizedError) {
             res.set("WWW-Authenticate", "Bearer");
 
-            return next(new AccessError(
-                req.originalUrl, 
-                strings.errors.access.notAuthorized
-            ));
+            return next(new AccessError(strings.errors.access.notAuthorized));
         }
-
         next(err);
     }
 ];

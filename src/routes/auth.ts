@@ -9,7 +9,6 @@ import { asyncMiddleware } from "middleware-async";
 import { body } from "express-validator";
 import { v4 as uuid } from "uuid";
 
-import sendResponse from "../utils/send-response";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import { AccessError, LogicError } from "../utils/errors";
@@ -45,19 +44,11 @@ authRouter.post("/signup",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        if (await User.exists({ login: req.body.login })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithLoginAlreadyExists
-            ));
-        }
+        if (await User.exists({ login: req.body.login }))
+            return next(new LogicError(strings.errors.logic.userWithLoginAlreadyExists));
 
-        if (await User.exists({ email: req.body.email })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithEmailAlreadyExists
-            ));
-        }
+        if (await User.exists({ email: req.body.email }))
+            return next(new LogicError(strings.errors.logic.userWithEmailAlreadyExists));
 
         req.body.password = User.encryptPassword(
             req.body.password, 
@@ -71,7 +62,7 @@ authRouter.post("/signup",
             password: req.body.password
         });
 
-        sendResponse(res, {});
+        res.json({});
     })
 );
 
@@ -101,10 +92,7 @@ authRouter.post("/signin",
         const user: UserDocument = await User.findByLogin(req.body.login);
 
         if (user === null) {
-            return next(new LogicError(
-                req.originalUrl,
-                strings.errors.logic.userWithLoginNotExists
-            ));
+            return next(new LogicError(strings.errors.logic.userWithLoginNotExists));
         }
 
         req.body.password = User.encryptPassword(
@@ -112,16 +100,10 @@ authRouter.post("/signin",
             <string> process.env.USER_PWD_SALT
         );
 
-        if (req.body.password !== user.password) {
-            return next(new AccessError(
-                req.originalUrl, 
-                strings.errors.access.passwordIncorrect
-            ));
-        }
+        if (req.body.password !== user.password)
+            return next(new AccessError(strings.errors.access.passwordIncorrect));
 
-        sendResponse(res, { 
-            access_token: user.generateJWT() 
-        });
+        res.json({ access_token: user.generateJWT() });
     })
 );
 
@@ -134,17 +116,10 @@ authRouter.post("/check",
     ): Promise<void> => {
         const user: UserDocument = await User.findOne({ id: req.user.id });
 
-        if (user === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithIdNotExists
-            ));
-        }
+        if (user === null)
+            return next(new LogicError(strings.errors.logic.userWithIdNotExists));
 
-        sendResponse(
-            res, 
-            await UserDTO.create(user)
-        );
+        res.json(await UserDTO.create(user));
     })
 );
 

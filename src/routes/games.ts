@@ -13,7 +13,6 @@ import CommentDetailDTO from "../domain/dto/comment-detail-dto";
 import CompetenceDTO from "../domain/dto/competence-dto";
 import GameDetailDTO from "../domain/dto/game-detail-dto";
 import RatingDetailDTO from "../domain/dto/rating-detail-dto";
-import sendResponse from "../utils/send-response";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import { Comment, CommentDocument } from "../domain/models/comment";
@@ -35,12 +34,8 @@ gamesRouter.use("/:gameId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        if (!await Game.exists({ id: req.params.gameId })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                "Игры с указанным id не существует."
-            ));
-        }
+        if (!await Game.exists({ id: req.params.gameId }))
+            return next(new LogicError("Игры с указанным id не существует."));
         next();
     })
 );
@@ -87,12 +82,8 @@ gamesRouter.post("/",
             id: { $in: req.body.participants }
         });
 
-        if (participants.length !== req.body.participants.length) {
-            return next(new LogicError(
-                req.originalUrl, 
-                "Один или несколько участников не найдены."
-            ));
-        }
+        if (participants.length !== req.body.participants.length)
+            return next(new LogicError("Один или несколько участников не найдены."));
 
         const id: string = uuid();
         const game: GameDocument = await Game.create({ 
@@ -105,14 +96,11 @@ gamesRouter.post("/",
             createdAt: Date.now()
         });
 
-        sendResponse(
-            res, 
-            await GameDetailDTO.create(
-                game, 
-                author, 
-                participants
-            )
-        );
+        res.json(await GameDetailDTO.create(
+            game, 
+            author, 
+            participants
+        ));
     })
 );
 
@@ -129,10 +117,7 @@ gamesRouter.get("/:gameId",
     ): Promise<void> => {
         const game: GameDocument = await Game.findOne({ id: req.params.gameId });
 
-        sendResponse(
-            res, 
-            await GameDetailDTO.create(game)
-        );
+        res.json(await GameDetailDTO.create(game));
     })
 );
 
@@ -161,12 +146,9 @@ gamesRouter.get("/",
             .skip(req.query.start)
             .limit(req.query.count);
 
-        sendResponse(
-            res,
-            await Promise.all(
-                games.map(g => GameDetailDTO.create(g))
-            )
-        );
+        res.json(await Promise.all(
+            games.map(g => GameDetailDTO.create(g))
+        ));
     })
 );
 
@@ -228,12 +210,8 @@ gamesRouter.put("/:gameId",
             id: { $in: req.body.participants }
         });
 
-        if (participants.length !== req.body.participants.length) {
-            return next(new LogicError(
-                req.originalUrl, 
-                "Один или несколько участников не найдены."
-            ));
-        }
+        if (participants.length !== req.body.participants.length)
+            return next(new LogicError("Один или несколько участников не найдены."));
 
         game.set(req.body);
 
@@ -241,14 +219,11 @@ gamesRouter.put("/:gameId",
 
         const author: UserDocument = await game.getAuthor();
 
-        sendResponse(
-            res,
-            await GameDetailDTO.create(
-                game,
-                author,
-                participants
-            )
-        );
+        res.json(await GameDetailDTO.create(
+            game,
+            author,
+            participants
+        ));
     })
 );
 
@@ -263,7 +238,7 @@ gamesRouter.delete("/:gameId",
         const game: GameDocument = await Game.findOne({ id: req.params.gameId });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin) 
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         // Удаляем комментарии, относящиеся к игре
         await Comment.deleteMany({ game: game.id }); 
@@ -272,10 +247,7 @@ gamesRouter.delete("/:gameId",
 
         await game.delete();
 
-        sendResponse(
-            res, 
-            await GameDetailDTO.create(game)
-        );
+        res.json(await GameDetailDTO.create(game));
     })
 );
 
@@ -289,12 +261,8 @@ gamesRouter.use("/:gameId/comments/:commentId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        if (!await Comment.exists({ id: req.params.commentId })) {
-            return next(new LogicError(
-                req.originalUrl,
-                "Комментарий с указанным id не существует."
-            ));
-        }
+        if (!await Comment.exists({ id: req.params.commentId }))
+            return next(new LogicError("Комментарий с указанным id не существует."));
         next();
     })
 );
@@ -326,10 +294,7 @@ gamesRouter.post("/:gameId/comments",
 
         await game.save();
 
-        sendResponse(
-            res,
-            await CommentDetailDTO.create(comment)
-        );
+        res.json(await CommentDetailDTO.create(comment));
     })
 );
 
@@ -347,16 +312,9 @@ gamesRouter.get("/:gameId/comments/:commentId",
             id: req.params.gameId 
         });
 
-        console.log(game);
-
         const comment: CommentDocument = await game.getComment(req.params.commentId);
 
-        console.log(comment);
-
-        sendResponse(
-            res,
-            await CommentDetailDTO.create(comment)
-        );
+        res.json(await CommentDetailDTO.create(comment));
     })
 );
 
@@ -386,12 +344,9 @@ gamesRouter.get("/:gameId/comments/",
             req.query.count
         );
 
-        sendResponse(
-            res,
-            await Promise.all(
-                comments.map(c => CommentDetailDTO.create(c))
-            )
-        );
+        res.json(await Promise.all(
+            comments.map(c => CommentDetailDTO.create(c))
+        ));
     })
 );
 
@@ -418,16 +373,13 @@ gamesRouter.put("/:gameId/comments/:commentId",
         );
 
         if (comment.author !== req.user.id)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         comment.set({ text: req.body.text });
 
         await comment.save();
 
-        sendResponse(
-            res,
-            await CommentDetailDTO.create(comment)
-        );
+        res.json(await CommentDetailDTO.create(comment));
     })
 );
 
@@ -445,16 +397,13 @@ gamesRouter.delete("/:gameId/comments/:commentId",
         const comment: CommentDocument = await game.getComment(req.params.commentId);
 
         if (comment.author !== req.user.id && req.user.role !== Role.Admin)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         await game.deleteComment(req.params.commentId);
 
         await game.save();
 
-        sendResponse(
-            res,
-            await CommentDetailDTO.create(comment)
-        );
+        res.json(await CommentDetailDTO.create(comment));
 
     })
 );
@@ -471,12 +420,8 @@ gamesRouter.use("/:gameId/competencies/:competenceId",
         res: Response, 
         next: NextFunction
     ): Promise<void> => {
-        if (!await Competence.exists({ id: req.params.competenceId })) {
-            return next(new LogicError(
-                req.originalUrl, 
-                "Компетенции с указанным id не существует."
-            ));
-        }
+        if (!await Competence.exists({ id: req.params.competenceId }))
+            return next(new LogicError("Компетенции с указанным id не существует."));
         next();
     })
 );
@@ -507,24 +452,17 @@ gamesRouter.post("/:gameId/competencies/",
             id: { $in: req.body.id }
         });
 
-        if (competencies.length !== req.body.id.length) {
-            return next(new LogicError(
-                req.originalUrl,
-                "Одна или несколько компетенций не найдены."
-            ));
-        }
+        if (competencies.length !== req.body.id.length)
+            return next(new LogicError("Одна или несколько компетенций не найдены."));
 
         game.competencies = [];
         await game.addCompetencies(competencies);
 
         await game.save();
 
-        sendResponse(
-            res, 
-            await Promise.all(
-                competencies.map(c => CompetenceDTO.create(c))
-            )
-        );
+        res.json(await Promise.all(
+            competencies.map(c => CompetenceDTO.create(c))
+        ));
     })
 );
 
@@ -539,12 +477,9 @@ gamesRouter.get("/:gameId/competencies/",
 
         const competencies: Array<CompetenceDocument> = await game.getCompetencies();
 
-        sendResponse(
-            res,
-            await Promise.all(
-                competencies.map(c => CompetenceDTO.create(c))
-            )
-        );
+        res.json(await Promise.all(
+            competencies.map(c => CompetenceDTO.create(c))
+        ));
     }
 ));
 
@@ -568,31 +503,22 @@ gamesRouter.delete("/:gameId/competencies/",
         });
 
         if (game.author !== req.user.id && req.user.role !== Role.Admin)
-            return next(new AccessError(req.originalUrl));
+            return next(new AccessError());
 
         const competencies: Array<CompetenceDocument> = await Competence.find({ 
             id: { $in: req.body.id }
         });
 
-        if (competencies.length !== req.body.id) {
-            return next(new LogicError(
-                req.originalUrl,
-                "Одна или несколько компетенций не найдены."
-            ));
-        }
+        if (competencies.length !== req.body.id)
+            return next(new LogicError("Одна или несколько компетенций не найдены."));
 
-        await Promise.all(
-            competencies.map(c => game.removeCompetence(c))
-        );
+        await Promise.all(competencies.map(c => game.removeCompetence(c)));
 
         await game.save();
 
-        sendResponse(
-            res,
-            await Promise.all(
-                competencies.map(c => CompetenceDTO.create(c))
-            )
-        );
+        res.json(await Promise.all(
+            competencies.map(c => CompetenceDTO.create(c))
+        ));
     })
 );
 
@@ -620,10 +546,7 @@ gamesRouter.put("/:gameId/ratings/",
 
         await game.save();
 
-        sendResponse(
-            res,
-            await RatingDetailDTO.create(rating)
-        );
+        res.json(await RatingDetailDTO.create(rating));
     })
 );
 
@@ -653,12 +576,9 @@ gamesRouter.get("/:gameId/ratings/",
             req.body.count
         );
 
-        sendResponse(
-            res,
-            await Promise.all(
-                ratings.map(r => RatingDetailDTO.create(r))
-            )
-        );
+        res.json(await Promise.all(
+            ratings.map(r => RatingDetailDTO.create(r))
+        ));
     })
 );
 
@@ -680,21 +600,14 @@ gamesRouter.delete("/:gameId/ratings/",
 
         const rating: RatingDocument = await game.getRating(author);
 
-        if (rating === null) {
-            return next(new LogicError(
-                req.originalUrl,
-                "Пользователь не оценивал игру."
-            ));
-        }
+        if (rating === null)
+            return next(new LogicError("Пользователь не оценивал игру."));
 
         await game.deleteRate(author);
 
         await game.save();
 
-        sendResponse(
-            res,
-            await RatingDetailDTO.create(rating)
-        );
+        res.json(await RatingDetailDTO.create(rating));
     })
 );
 
