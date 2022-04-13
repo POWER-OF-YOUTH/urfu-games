@@ -177,7 +177,7 @@ gameSchema.method("hasComment", function (
     return Comment.exists({ id, game: this.id });
 });
 
-gameSchema.method("getComment", async function (id: string) {
+gameSchema.method("getComment", function (id: string) {
     return Comment.findOne({ id, game: this.id });
 });
 

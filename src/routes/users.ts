@@ -1,4 +1,4 @@
-import strings from "../../config/api/strings.json";
+import strings from "../config/strings.json";
 
 import express, { 
     Request, 
@@ -8,14 +8,34 @@ import express, {
 import { body, param, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
 
-import UserDTO from "../../domain/dto/user-dto";
-import sendResponse from "../../utils/send-response";
-import validateRequest from "../../validators/validate-request";
-import verifyToken from "../../validators/verify-token";
-import { AccessError, LogicError } from "../../utils/errors";
-import { User, UserDocument } from "../../domain/models/user";
+import UserDTO from "../domain/dto/user-dto";
+import sendResponse from "../utils/send-response";
+import validateRequest from "../validators/validate-request";
+import verifyToken from "../validators/verify-token";
+import { AccessError, LogicError } from "../utils/errors";
+import { User, UserDocument } from "../domain/models/user";
 
 const usersRouter = express.Router();
+
+usersRouter.use("/:userId", 
+    validateRequest(
+        param("userId")
+            .isUUID()
+    ),
+    asyncMiddleware(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        if (!await User.exists({ id: req.params.userId })) {
+            return next(new LogicError(
+                req.originalUrl, 
+                strings.errors.logic.userWithIdNotExists
+            ));
+        }
+        next();
+    })
+);
 
 usersRouter.get("/", 
     validateRequest(
@@ -40,13 +60,17 @@ usersRouter.get("/",
     ): Promise<void> => {
         let users: Array<UserDocument> = [];
 
-        if (req.data.id !== undefined)
-            users = await User.find({id: {$in: req.data.id}});
+        if (req.query.id !== undefined) {
+            // @ts-ignore
+            users = await User.find({
+                id: { $in: req.query.id }
+            });
+        }
         else {
             users = await User.find()
                 .sort("createdAt")
-                .skip(req.data.start)
-                .limit(req.data.count)
+                .skip(req.query.start)
+                .limit(req.query.count)
         }
 
         sendResponse(
@@ -59,23 +83,12 @@ usersRouter.get("/",
 );
 
 usersRouter.get("/:userId", 
-    validateRequest(
-        param("userId")
-            .isUUID()
-    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const user: UserDocument = await User.findOne({ id: req.data.userId });
-
-        if (user === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithIdNotExists
-            ));
-        }
+        const user: UserDocument = await User.findOne({ id: req.params.userId });
 
         sendResponse(
             res,
@@ -87,8 +100,6 @@ usersRouter.get("/:userId",
 usersRouter.put("/:userId", 
     verifyToken, 
     validateRequest(
-        param("userId")
-            .isUUID(),
         body("name")
             .optional()
             .isLength({ min: 0, max: 50 }),
@@ -107,26 +118,19 @@ usersRouter.put("/:userId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const user: UserDocument = await User.findOne({ id: req.data.userId });
-
-        if (user === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.userWithIdNotExists
-            ));
-        }
+        const user: UserDocument = await User.findOne({ id: req.params.userId });
 
         if (user.id !== req.user.id)
             return next(new AccessError(req.originalUrl));
 
-        if (req.data.name !== undefined)
-            user.set({ name: req.data.name });
+        if (req.body.name !== undefined)
+            user.set({ name: req.body.name });
 
-        if (req.data.surname !== undefined)
-            user.set({ surname: req.data.name });
+        if (req.body.surname !== undefined)
+            user.set({ surname: req.body.name });
 
-        if (req.data.patronymic !== undefined)
-            user.set({ patronymic: req.data.patronymic });
+        if (req.body.patronymic !== undefined)
+            user.set({ patronymic: req.body.patronymic });
 
         await user.save();
 

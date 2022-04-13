@@ -4,14 +4,13 @@ import morgan from "morgan";
 import { Request, Response, NextFunction } from "express";
 
 import { 
-    DatabaseError, 
     LogicError, 
     UnexpectedError, 
     ValidationError,
     AccessError
 } from "./utils/errors";
 import sendResponse from "./utils/send-response";
-import apiRouter from "./routes/api";
+import mainRouter from "./routes";
 
 const app = express();
 
@@ -20,7 +19,7 @@ app.use(morgan("dev")); // Логгер запросов
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", apiRouter);
+app.use("/", mainRouter);
 
 // Промежуточная функция, которая обрабатывает все виды ошибок,
 // и в зависимости от их типа возвращает ответ с определенным статусом

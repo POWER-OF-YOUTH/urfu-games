@@ -1,4 +1,4 @@
-import strings from "../../config/api/strings.json";
+import strings from "../config/strings.json";
 
 import express, { 
     Request, 
@@ -9,15 +9,35 @@ import { asyncMiddleware } from "middleware-async";
 import { body, param, query } from "express-validator";
 import { v4 as uuid } from "uuid";
 
-import CompetenceDTO from "../../domain/dto/competence-dto";
-import sendResponse from "../../utils/send-response";
-import validateRequest from "../../validators/validate-request";
-import verifyToken from "../../validators/verify-token";
-import { AccessError, LogicError } from "../../utils/errors";
-import { Competence, CompetenceDocument } from "../../domain/models/competence";
-import { Role } from "../../domain/models/user";
+import CompetenceDTO from "../domain/dto/competence-dto";
+import sendResponse from "../utils/send-response";
+import validateRequest from "../validators/validate-request";
+import verifyToken from "../validators/verify-token";
+import { AccessError, LogicError } from "../utils/errors";
+import { Competence, CompetenceDocument } from "../domain/models/competence";
+import { Role } from "../domain/models/user";
 
 const competenciesRouter = express.Router();
+
+competenciesRouter.use("/:competenceId",
+    validateRequest(
+        param("competenceId")
+            .isUUID()
+    ),
+    asyncMiddleware(async (
+        req: Request, 
+        res: Response, 
+        next: NextFunction
+    ): Promise<void> => {
+        if (!await Competence.exists({ id: req.params.competenceId })) {
+            return next(new LogicError(
+                req.originalUrl, 
+                strings.errors.logic.competenceWithIdNotExist
+            ));
+        }
+        next();
+    })
+)
 
 competenciesRouter.post("/", 
     verifyToken, 
@@ -39,7 +59,7 @@ competenciesRouter.post("/",
         if (req.user.role !== Role.Admin)
             return next(new AccessError(req.originalUrl));
 
-        if (await Competence.exists({ name: req.data.name })) {
+        if (await Competence.exists({ name: req.body.name })) {
             return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.competenceWithNameAlreadyExists
@@ -48,8 +68,8 @@ competenciesRouter.post("/",
 
         const competence: CompetenceDocument = await Competence.create({
             id: uuid(),
-            name: req.data.name,
-            description: req.data.description,
+            name: req.body.name,
+            description: req.body.description,
             createdAt: Date.now()
         });
 
@@ -61,23 +81,12 @@ competenciesRouter.post("/",
 );
 
 competenciesRouter.get("/:competenceId", 
-    validateRequest(
-        param("competenceId")
-            .isUUID()
-    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const competence: CompetenceDocument = await Competence.findOne({ id: req.data.competenceId });
-
-        if (competence === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.competenceWithIdNotExist
-            ));
-        }
+        const competence: CompetenceDocument = await Competence.findOne({ id: req.params.competenceId });
 
         sendResponse(
             res, 
@@ -104,8 +113,8 @@ competenciesRouter.get("/",
     ): Promise<void> => {
         const competencies: Array<CompetenceDocument> = await Competence.find()
             .sort("name")
-            .skip(req.data.start)
-            .limit(req.data.count);
+            .skip(req.query.start)
+            .limit(req.query.count);
 
         sendResponse(
             res, 
@@ -119,8 +128,6 @@ competenciesRouter.get("/",
 competenciesRouter.put("/:competenceId", 
     verifyToken,
     validateRequest(
-        param("competenceId")
-            .isUUID(),
         body("name")
             .optional()
             .isString()
@@ -137,21 +144,14 @@ competenciesRouter.put("/:competenceId",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const competence: CompetenceDocument = await Competence.findOne({ id: req.data.competenceId });
+        const competence: CompetenceDocument = await Competence.findOne({ id: req.params.competenceId });
 
         if (req.user.role !== Role.Admin)
             return next(new AccessError(req.originalUrl));
 
-        if (competence === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.competenceWithIdNotExist
-            ));
-        }
-
         competence.set({ 
-            name: req.data.name, 
-            description: req.data.description 
+            name: req.body.name, 
+            description: req.body.description 
         });
 
         await competence.save();
@@ -165,28 +165,17 @@ competenciesRouter.put("/:competenceId",
 
 competenciesRouter.delete("/:competenceId",
     verifyToken,
-    validateRequest(
-        param("competenceId")
-            .isUUID(),
-    ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
         const competence: CompetenceDocument = await Competence.findOne({ 
-            id: req.data.competenceId 
+            id: req.params.competenceId 
         });
 
         if (req.user.role !== Role.Admin)
             return next(new AccessError(req.originalUrl));
-
-        if (competence === null) {
-            return next(new LogicError(
-                req.originalUrl, 
-                strings.errors.logic.competenceWithIdNotExist
-            ));
-        }
 
         await competence.delete();
 

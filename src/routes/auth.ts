@@ -1,4 +1,4 @@
-import strings from "../../config/api/strings.json";
+import strings from "../config/strings.json";
 
 import express, { 
     Request, 
@@ -9,12 +9,12 @@ import { asyncMiddleware } from "middleware-async";
 import { body } from "express-validator";
 import { v4 as uuid } from "uuid";
 
-import sendResponse from "../../utils/send-response";
-import validateRequest from "../../validators/validate-request";
-import verifyToken from "../../validators/verify-token";
-import { AccessError, LogicError } from "../../utils/errors";
-import { User, UserDocument } from "../../domain/models/user";
-import UserDTO from "../../domain/dto/user-dto";
+import sendResponse from "../utils/send-response";
+import validateRequest from "../validators/validate-request";
+import verifyToken from "../validators/verify-token";
+import { AccessError, LogicError } from "../utils/errors";
+import { User, UserDocument } from "../domain/models/user";
+import UserDTO from "../domain/dto/user-dto";
 
 const authRouter = express.Router();
 
@@ -45,30 +45,30 @@ authRouter.post("/signup",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        if (await User.exists({ login: req.data.login })) {
+        if (await User.exists({ login: req.body.login })) {
             return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithLoginAlreadyExists
             ));
         }
 
-        if (await User.exists({ email: req.data.email })) {
+        if (await User.exists({ email: req.body.email })) {
             return next(new LogicError(
                 req.originalUrl, 
                 strings.errors.logic.userWithEmailAlreadyExists
             ));
         }
 
-        req.data.password = User.encryptPassword(
-            req.data.password, 
+        req.body.password = User.encryptPassword(
+            req.body.password, 
             <string> process.env.USER_PWD_SALT
         );
 
         await User.create({ 
             id: uuid(),
-            login: req.data.login,
-            email: req.data.email,
-            password: req.data.password
+            login: req.body.login,
+            email: req.body.email,
+            password: req.body.password
         });
 
         sendResponse(res, {});
@@ -98,7 +98,7 @@ authRouter.post("/signin",
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const user: UserDocument = await User.findByLogin(req.data.login);
+        const user: UserDocument = await User.findByLogin(req.body.login);
 
         if (user === null) {
             return next(new LogicError(
@@ -107,12 +107,12 @@ authRouter.post("/signin",
             ));
         }
 
-        req.data.password = User.encryptPassword(
-            req.data.password, 
+        req.body.password = User.encryptPassword(
+            req.body.password, 
             <string> process.env.USER_PWD_SALT
         );
 
-        if (req.data.password !== user.password) {
+        if (req.body.password !== user.password) {
             return next(new AccessError(
                 req.originalUrl, 
                 strings.errors.access.passwordIncorrect
