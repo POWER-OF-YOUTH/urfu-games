@@ -59,7 +59,8 @@ authRouter.post("/signup",
             id: uuid(),
             login: req.body.login,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            createdAt: Date.now()
         });
 
         res.json({});

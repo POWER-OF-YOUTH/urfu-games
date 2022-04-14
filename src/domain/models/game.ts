@@ -1,10 +1,10 @@
-import { v4 as uuid } from "uuid";
 import mongoose, { Schema, HydratedDocument, Model } from "mongoose";
+import { v4 as uuid } from "uuid";
 
-import { User, UserDocument } from "./user";
 import { Comment, CommentDocument } from "./comment";
-import { Rating, RatingDocument } from "./rating";
 import { Competence, CompetenceDocument } from "./competence";
+import { Rating, RatingDocument } from "./rating";
+import { User, UserDocument } from "./user";
 
 interface IGame {
     id: string;
@@ -128,11 +128,14 @@ const gameSchema = new Schema<IGame, IGameModel>(
             default: false
         },
         createdAt: {
-            type: Date
+            type: Date,
+            required: true
         }
     },
     { versionKey: false }
 );
+
+gameSchema.index({ name: "text" });
 
 // instance methods
 gameSchema.method("getAuthor", async function () {

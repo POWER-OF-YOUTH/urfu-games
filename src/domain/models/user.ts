@@ -57,8 +57,7 @@ const userSchema = new Schema<IUser, IUserModel>(
         login: {
             type: String,
             required: true,
-            unique: true,
-            index: true
+            unique: true
         },
         email: {
             type: String,
@@ -79,10 +78,15 @@ const userSchema = new Schema<IUser, IUserModel>(
             type: String,
             default: DEFAULT_USER_AVATAR
         },
-        createdAt: { type: Date }
+        createdAt: { 
+            type: Date, 
+            required: true
+        }
     },
     { versionKey: false }
 );
+
+userSchema.index({ login: "text" });
 
 userSchema.method("generateJWT", function () {
     return jwt.sign(
