@@ -20,7 +20,7 @@ searchRouter.get("/users",
     validateRequest(
         query("q")
             .isString()
-            .matches("^[a-zA-Z0-9 ]+$"),
+            .matches("^[a-zA-Z0-9 ]*$"),
         query("start")
             .default(0)
             .isInt({ gt: -1 })
@@ -56,7 +56,7 @@ searchRouter.get("/games",
     validateRequest(
         query("q")
             .isString()
-            .matches("^[a-zA-Zа-я0-9 ]+$"),
+            .matches("^[a-zA-Zа-я0-9 ]*$"),
         query("start")
             .default(0)
             .isInt({ gt: -1 })
