@@ -8,9 +8,11 @@ import express, {
 import { asyncMiddleware } from "middleware-async";
 import { query } from "express-validator";
 
+import CompetenceDTO from "../domain/dto/competence-dto";
 import GameSearchResultDTO from "../domain/dto/game-search-result-dto";
 import UserSearchResultDTO from "../domain/dto/user-search-result-dto";
 import validateRequest from "../validators/validate-request";
+import { Competence, CompetenceDocument } from "../domain/models/competence";
 import { Game, GameDocument } from "../domain/models/game";
 import { User, UserDocument } from "../domain/models/user";
 
@@ -50,13 +52,13 @@ searchRouter.get("/users",
 
         res.json(await Promise.all(users.map(u => UserSearchResultDTO.create(u))));
     })
-)
+);
 
 searchRouter.get("/games",
     validateRequest(
         query("q")
             .isString()
-            .matches("^[a-zA-Zа-я0-9 ]*$"),
+            .matches("^[a-zA-Zа-яА-Я0-9 ]*$"),
         query("start")
             .default(0)
             .isInt({ gt: -1 })
@@ -86,6 +88,42 @@ searchRouter.get("/games",
 
         res.json(await Promise.all(games.map(g => GameSearchResultDTO.create(g))))
     })
-)
+);
+
+searchRouter.get("/competencies",
+    validateRequest(
+        query("q")
+            .isString()
+            .matches("^[a-zA-Zа-яА-Я0-9 ]*$"),
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt(),
+        query("sort")
+            .default("createdAt")
+            .isIn(["name", "createdAt"]),
+        query("order")
+            .default("ascending")
+            .isIn(["ascending", "descending"])
+    ),
+    asyncMiddleware(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        const competencies: Array<CompetenceDocument> = await Competence
+            .find({ name: { $regex: `^${req.query.q}.*$`, $options: "i" }})
+            // @ts-ignore
+            .sort({ [req.query.sort]: req.query.order === "ascending" ? 1 : -1 })
+            .skip(req.query.start)
+            .limit(req.query.count);
+
+        res.json(await Promise.all(competencies.map(c => CompetenceDTO.create(c))));
+    })
+);
 
 export default searchRouter;

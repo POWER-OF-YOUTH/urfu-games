@@ -40,6 +40,8 @@ const competenceSchema = new Schema<ICompetence, ICompetenceModel>(
     { versionKey: false }
 );
 
+competenceSchema.index({ name: "text" });
+
 const Competence = mongoose.model<ICompetence, ICompetenceModel>("Competence", competenceSchema);
 
 type CompetenceDocument = HydratedDocument<ICompetence & ICompetenceInstanceMethods>;
