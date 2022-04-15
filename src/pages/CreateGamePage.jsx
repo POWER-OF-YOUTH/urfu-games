@@ -88,7 +88,7 @@ function GamesNewPage() {
                 <div className={styles.competencies}>
                     <span className={styles.textCaption}>Компетенции</span>
                     <div className={styles.competencies__search}>
-                        <div className={styles.competencies__search__field}>
+                        <div className={styles.search__field}>
                             <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Поиск компетенции" />
                             <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
                                 <SearchIcon />
@@ -110,14 +110,25 @@ function GamesNewPage() {
             </div>
             <div className={styles.members}>
                 <span className={styles.textCaption}>Участники/Разработчики</span>
-                <div className={styles.members__list}></div>
+                <div className={styles.members__list}>
+                    <div className={styles.search__field}>
+                        <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Поиск участника" />
+                        <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                            <SearchIcon />
+                        </IconButton>
+                    </div>
+                </div>
             </div>
             <div className={styles.files}>
                 <span className={styles.textCaption}>Файлы игры</span>
                 <div className={styles.files__list}>
+                    <span className={styles.files__list__item__cover}>Загрузите файл вида example.framework.js</span>
                     <FileInputItem name="fileInput1" onChange={handleFieldChange}></FileInputItem>
+                    <span className={styles.files__list__item__cover}>Загрузите файл вида example.data</span>
                     <FileInputItem name="fileInput2" onChange={handleFieldChange}></FileInputItem>
+                    <span className={styles.files__list__item__cover}>Загрузите файл вида example.loader.js</span>
                     <FileInputItem name="fileInput3" onChange={handleFieldChange}></FileInputItem>
+                    <span className={styles.files__list__item__cover}>Загрузите файл вида example.wasm</span>
                     <FileInputItem name="fileInput4" onChange={handleFieldChange}></FileInputItem>
                 </div>
             </div>
@@ -138,35 +149,16 @@ function FileInputItem(props) {
         props.onChange(evt);
     };
 
-    const id = `contained-button-file-${props.name}`;
-
     return (
-        <div className={styles.files__list__item}>
-            {/* <input
-                accept="image/*"
-                id={id}
-                type="file"
-                {...props}
-                onChange={handleFieldChange}
-                className={styles.uploadForm}
-            /> */}
-            <label className={styles.files__list__item}>
-                <input
-                    accept="image/*"
-                    id={id}
-                    type="file"
-                    {...props}
-                    onChange={handleFieldChange}
-                    className={styles.uploadForm}
-                />
-                <div className={styles.files__item__name}>
-                    <span className={styles.choosenFile}>{fileName}</span>
-                </div>
-                <FileInputButton variant="contained" color="primary" component="span">
-                    Обзор..
-                </FileInputButton>
-            </label>
-        </div>
+        <label className={styles.files__list__item}>
+            <input accept="image/*" type="file" {...props} onChange={handleFieldChange} className={styles.uploadForm} />
+            <div className={styles.files__item__name}>
+                <span className={styles.choosenFile}>{fileName}</span>
+            </div>
+            <FileInputButton variant="contained" color="primary" component="span">
+                Обзор..
+            </FileInputButton>
+        </label>
     );
 }
 
