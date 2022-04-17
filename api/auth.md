@@ -24,7 +24,7 @@
 
 Запрос:
 ```url
-POST https://api.urfugames.ru/signin
+POST https://api.urfugames.ru/auth/signin
 
 {
     "login": "example",
