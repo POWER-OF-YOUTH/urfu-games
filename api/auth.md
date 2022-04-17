@@ -25,6 +25,11 @@
 Запрос:
 ```url
 POST https://api.urfugames.ru/signin
+
+{
+    "login": "example",
+    "password": "example1234"
+}
 ```
 
 Ответ:
