@@ -39,7 +39,7 @@ function UsersSearch(
         else
             setOptions([]);
     };
-    const handleUserSelect = async (evt, user) => { 
+    const handleUserSelect = (evt, user) => { 
         if (user !== null) {
             onSelect(user);
             setValue(defaultUsersSearchValue);

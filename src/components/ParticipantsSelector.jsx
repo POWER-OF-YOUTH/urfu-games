@@ -34,11 +34,11 @@ function ParticipantsSelector(
         return result;
     };
 
-    const handleParticipantSelect = async (user) => { 
+    const handleParticipantSelect = (user) => { 
         if (user !== null)
             setSelectedParticipants([user, ...selectedParticipants]);
     };
-    const handleParticipantDelete = async (userIndex) => {
+    const handleParticipantDelete = (userIndex) => {
         selectedParticipants.splice(userIndex, 1);
         setSelectedParticipants([...selectedParticipants]);
     };
