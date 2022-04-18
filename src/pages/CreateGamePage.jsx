@@ -59,13 +59,23 @@ function GamesNewPage() {
     const handleFieldChange = (evt) => {
         setFileName({ ...fileName, [evt.target.name]: evt.target.files[0].name });
     };
+    const UploadCover = (e) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (reader.readyState === 2) {
+                this.setState({ profileImg: reader.result });
+            }
+        };
+        reader.readAsDataURL(e.tearget.files[0]);
+    };
 
     return (
         <div className={styles.container}>
             <div className={styles.cover}>
                 <span className={styles.textCaption}>Обложка</span>
                 <div className={styles.cover__content}>
-                    <input accept="image/*" id="cover" multiple type="file" className={styles.uploadForm} />
+                    <input accept="image/*" id="cover" type="file" onChange={UploadCover} />
+                    {/* className={styles.uploadForm} */}
                     <label htmlFor="cover">
                         <CoverButton
                             variant="contained"
@@ -74,6 +84,7 @@ function GamesNewPage() {
                             className={styles.cover__image}
                         >
                             <CardMedia component="img" image={uploadCover}></CardMedia>
+                            {/* || <img> </img>                           */}
                         </CoverButton>
                     </label>
                 </div>
