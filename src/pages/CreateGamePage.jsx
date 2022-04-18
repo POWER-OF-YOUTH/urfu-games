@@ -3,6 +3,8 @@ import { styled } from "@mui/material/styles";
 import { Button, Typography, TextField, InputBase, CardMedia, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { observer, useLocalObservable } from "mobx-react-lite";
+import Competence from "../components/Competence";
+import ParticipantsSelector from "../components/CompetenciesSelector";
 import uploadCover from "../components/images/uploadCover.svg";
 import styles from "./CreateGamePage.module.css";
 
@@ -107,11 +109,14 @@ function GamesNewPage() {
                 <div className={styles.competencies}>
                     <span className={styles.textCaption}>Компетенции</span>
                     <div className={styles.competencies__search}>
-                        <div className={styles.search__field}>
+                        {/* <div className={styles.search__field}>
                             <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Поиск компетенции" />
                             <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
                                 <SearchIcon />
                             </IconButton>
+                        </div> */}
+                        <div>
+                            <ParticipantsSelector></ParticipantsSelector>
                         </div>
                     </div>
                 </div>
