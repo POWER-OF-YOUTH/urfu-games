@@ -17,8 +17,8 @@ order|string|Режим сортировки: по возрастанию или
 ### Примеры использования
 
 Запрос:
-```url
-GET https://api.urfugames.ru/search/users?q=a
+```http
+GET /search/users?q=a
 ```
 
 Ответ:
@@ -60,8 +60,8 @@ order|string|Режим сортировки: по возрастанию или
 ### Примеры использования
 
 Запрос:
-```url
-GET https://api.urfugames.ru/search/games?q=test
+```http
+GET /search/games?q=test
 ```
 
 Ответ:
@@ -105,8 +105,8 @@ order|string|Режим сортировки: по возрастанию или
 ### Примеры использования
 
 Запрос:
-```url
-GET https://api.urfugames.ru/search/competencies?q=п
+```http
+GET /search/competencies?q=п
 ```
 
 Ответ:
