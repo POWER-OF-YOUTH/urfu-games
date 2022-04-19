@@ -49,6 +49,10 @@ const FileInputButton = styled(Button)({
 });
 
 function GamesNewPage() {
+    const [coverFile, setCoverFile] = useState({
+        file: "",
+        coverUrl: "",
+    });
     const [fileName, setFileName] = useState({
         fileInput1: "",
         fileInput2: "",
@@ -61,12 +65,17 @@ function GamesNewPage() {
     };
     const UploadCover = (e) => {
         const reader = new FileReader();
+        let file = e.target.files[0];
         reader.onload = () => {
-            if (reader.readyState === 2) {
-                this.setState({ profileImg: reader.result });
-            }
+            setCoverFile({
+                file: file,
+                coverUrl: reader.result,
+            });
+            // if (reader.readyState === 2) {
+            //     this.setState({ profileImg: reader.result });
+            // }
         };
-        reader.readAsDataURL(e.tearget.files[0]);
+        reader.readAsDataURL(file);
     };
 
     return (
@@ -74,8 +83,7 @@ function GamesNewPage() {
             <div className={styles.cover}>
                 <span className={styles.textCaption}>Обложка</span>
                 <div className={styles.cover__content}>
-                    <input accept="image/*" id="cover" type="file" onChange={UploadCover} />
-                    {/* className={styles.uploadForm} */}
+                    <input accept="image/*" id="cover" type="file" onChange={UploadCover} className={styles.uploadForm}/>                    
                     <label htmlFor="cover">
                         <CoverButton
                             variant="contained"
@@ -83,10 +91,10 @@ function GamesNewPage() {
                             component="span"
                             className={styles.cover__image}
                         >
-                            <CardMedia component="img" image={uploadCover}></CardMedia>
-                            {/* || <img> </img>                           */}
+                            {coverFile.coverUrl ? <CardMedia component="img" image={coverFile.coverUrl}></CardMedia> : <CardMedia component="img" image={uploadCover}></CardMedia>}                         
+                            
                         </CoverButton>
-                    </label>
+                    </label>                    
                 </div>
             </div>
             <div className={styles.info}>
