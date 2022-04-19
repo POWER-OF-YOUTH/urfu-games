@@ -4,7 +4,7 @@ import { Button, Typography, TextField, InputBase, CardMedia, IconButton } from 
 import SearchIcon from "@mui/icons-material/Search";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import Competence from "../components/Competence";
-import ParticipantsSelector from "../components/CompetenciesSelector";
+import CompetenciesSelector from "../components/CompetenciesSelector";
 import uploadCover from "../components/images/uploadCover.svg";
 import styles from "./CreateGamePage.module.css";
 
@@ -116,7 +116,7 @@ function GamesNewPage() {
                             </IconButton>
                         </div> */}
                         <div>
-                            <ParticipantsSelector></ParticipantsSelector>
+                            <CompetenciesSelector></CompetenciesSelector>
                         </div>
                     </div>
                 </div>
