@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import classNames from "classnames";
 import { styled } from "@mui/material/styles";
-import { Button, Typography, TextField, InputBase, CardMedia, IconButton } from "@mui/material";
+import { Button, InputBase, CardMedia, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import Competence from "../components/Competence";
+import { observer } from "mobx-react-lite";
+import ParticipantsSelector from "../components/ParticipantsSelector";
 import CompetenciesSelector from "../components/CompetenciesSelector";
 import uploadCover from "../components/images/uploadCover.svg";
+
+import Block from "../components/Block";
+
 import styles from "./CreateGamePage.module.css";
 
 const ColorButton = styled(Button)({
@@ -81,6 +85,55 @@ function GamesNewPage() {
     };
 
     return (
+        <Block className={classNames(styles.content)}>
+            <fieldset className={classNames(styles.gamePublicationForm)}>
+                <legend>Публикация игры</legend>
+                <label>
+                    Обложка
+                    <input 
+                        className={styles.uploadForm}
+                        accept="image/*" 
+                        type="file" 
+                    />                    
+                </label>
+                <label>
+                    Название
+                    <input className={styles.name} />
+                </label>
+                <label>
+                    Описание
+                    <textarea/>
+                </label>
+                <div className={classNames(styles.competenciesSelectorContainer)}>
+                    <CompetenciesSelector />
+                </div>
+                <div className={classNames(styles.participantsSelectorContainer)}>
+                    <ParticipantsSelector />
+                </div>
+                <label>
+                    Загрузите файл вида example.framework.js
+                    <input type="file" onChange={handleFieldChange} />
+                </label>
+                <label>
+                    Загрузите файл вида example.data
+                    <input type="file" onChange={handleFieldChange} />
+                </label>
+                <label>
+                    Загрузите файл вида example.loader.js
+                    <input type="file" onChange={handleFieldChange} />
+                </label>
+                <label>
+                    Загрузите файл вида example.wasm
+                    <input type="file" onChange={handleFieldChange} />
+                </label>
+                <ColorButton variant="contained" className={styles.uploadButton}>
+                    Опубликовать
+                </ColorButton>
+            </fieldset>
+        </Block>
+    );
+    /*
+    return (
         <div className={styles.container}>
             <div className={styles.cover}>
                 <span className={styles.textCaption}>Обложка</span>
@@ -114,7 +167,7 @@ function GamesNewPage() {
                             <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
                                 <SearchIcon />
                             </IconButton>
-                        </div> */}
+                        </div> }
                         <div>
                             <CompetenciesSelector></CompetenciesSelector>
                         </div>
@@ -163,6 +216,7 @@ function GamesNewPage() {
             </div>
         </div>
     );
+    */
 }
 
 function FileInputItem(props) {

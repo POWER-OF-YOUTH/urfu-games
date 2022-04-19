@@ -1,6 +1,24 @@
-:root {
+.gamePublicationForm {
+    display: flex;
+    gap: 10px;
+    flex-flow: column nowrap;
 }
 
+.uploadButton {
+    width: 100%;
+}
+
+.competenciesSelectorContainer {
+    padding: 10px;
+    border: 1px solid grey;
+}
+
+.participantsSelectorContainer {
+    padding: 10px;
+    border: 1px solid grey;
+}
+
+/*
 .textCaption {
     font-size: 18px;
     font-weight: 700;
@@ -170,3 +188,4 @@
 .choosenFile {
 
 }
+*/

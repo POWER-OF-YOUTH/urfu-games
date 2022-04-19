@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
+import classNames from "classnames";
 import { styled } from "@mui/material/styles";
 import { IconButton, Select, MenuItem } from "@mui/material";
 //import classNames from "classnames";
@@ -86,7 +87,7 @@ function Competence({
     useEffect(() => onRoleChange(role), [role]);
 
     return (
-        <li className={styles.selectedParticipants__participant}>
+        <li className={classNames(styles.selectedParticipants__participant, styles.participant)}>
             <div className={styles.participant__loginContainer}>
                 <span className={styles.participant__login}>{user.name}</span>
             </div>
