@@ -8,7 +8,7 @@ import GamePublishForm from "./GamePublishForm";
 
 import styles from "./GamePublishPage.module.css";
 
-function CreateGamePage() {
+function GamePublishPage() {
     const handleSubmit = (values) => {
         console.log(values);
     };
@@ -28,4 +28,4 @@ function CreateGamePage() {
     );
 }
 
-export default CreateGamePage;
+export default GamePublishPage;
