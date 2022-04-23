@@ -12,11 +12,11 @@
 .selectedParticipants__headers {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-gap: 5px;
 }
 
 .selectedParticipants__header {
     display: block;
-    padding: 0 5px;
     margin: 10px 0;
     color: grey;
 }
@@ -24,10 +24,13 @@
 .selectedParticipants__list {
     display: flex;
     flex-flow: column nowrap;
-    gap: 5px;
     margin: 0;
     overflow-y: auto;
     padding: 0;
+}
+
+.selectedParticipants__participant {
+    border-bottom: 1px solid var(--grey-01);
 }
 
 .selectedParticipants__participant:hover {

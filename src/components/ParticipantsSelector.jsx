@@ -51,16 +51,18 @@ function ParticipantsSelector(
                 onSelect={handleParticipantSelect} 
                 filterOptions={filterUnselectedParticipants} 
             />
-            <SelectedParticipants className={classNames(styles.participantsSelector__selectedParticipants)}>
-                {selectedParticipants.map((u, index) => (
-                    <Participant 
-                        key={u.id}
-                        user={u} 
-                        onDelete={() => handleParticipantDelete(index)} 
-                        enableDelete 
-                    />
-                ))}
-            </SelectedParticipants>
+            {selectedParticipants.length > 0 && (
+                <SelectedParticipants className={classNames(styles.participantsSelector__selectedParticipants)}>
+                    {selectedParticipants.map((u, index) => (
+                        <Participant 
+                            key={u.id}
+                            user={u} 
+                            onDelete={() => handleParticipantDelete(index)} 
+                            enableDelete 
+                        />
+                    ))}
+                </SelectedParticipants>
+            )}
         </div>
     );
 }

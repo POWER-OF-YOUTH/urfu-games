@@ -8,7 +8,7 @@ import SignUpPage from "./pages/SignUpPage";
 import GamesPage from "./pages/GamesPage";
 import GamePage from "./pages/GamePage";
 import PlayPage from "./pages/PlayPage";
-import CreateGamePage from "./pages/CreateGamePage";
+import GamePublishPage from "./pages/GamePublishPage";
 import { NotFoundPage } from "./pages/error";
 import { MainLayout } from "./layouts";
 
@@ -30,7 +30,7 @@ function App() {
                     <Route exact path="/signin" component={SignInPage} />
                     <Route exact path="/signup" component={SignUpPage} />
                     <Route exact path="/games" component={GamesPage} />
-                    <Route exact path="/games/new" component={CreateGamePage} />
+                    <Route exact path="/games/new" component={GamePublishPage} />
                     <Route exact path="/games/:gameId" component={GamePage} />
                     <Route exact path="/games/:gameId/play" component={PlayPage} />
                     <Route exact path="/404" component={NotFoundPage} />

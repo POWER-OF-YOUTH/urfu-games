@@ -45,11 +45,13 @@ function CompetenciesSelector({
     return (
         <div className={styles.participantsSelector}>
             <CompetenciesSearch onSelect={handleParticipantSelect} filterOptions={filterUnselectedParticipants} />
-            <SelectedCompetencies className={styles.participantsSelector__selectedParticipants}>
-                {selectedParticipants.map((u, index) => (
-                    <Competence key={u.id} user={u} onDelete={() => handleParticipantDelete(index)} enableDelete />
-                ))}
-            </SelectedCompetencies>
+            {selectedParticipants.length > 0 && (
+                <SelectedCompetencies className={styles.participantsSelector__selectedParticipants}>
+                    {selectedParticipants.map((u, index) => (
+                        <Competence key={u.id} user={u} onDelete={() => handleParticipantDelete(index)} enableDelete />
+                    ))}
+                </SelectedCompetencies>
+            )}
         </div>
     );
 }
