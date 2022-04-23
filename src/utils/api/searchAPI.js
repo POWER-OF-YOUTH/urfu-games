@@ -1,7 +1,7 @@
 import * as apiConfig from "../../helpers/apiConfig";
 
 export async function searchUsers(query = "", start, count, sort, order) {
-    const url = new URL(apiConfig.APIURL + `/search/users`);
+    const url = new URL(apiConfig.APIURL + "/search/users");
     url.search = new URLSearchParams({
         q: query,
         ...(start !== undefined && start),
@@ -18,7 +18,7 @@ export async function searchUsers(query = "", start, count, sort, order) {
 }
 
 export async function searchCompetencies(query = "", start, count, sort, order) {
-    const url = new URL(apiConfig.APIURL + `/search/competencies`);
+    const url = new URL(apiConfig.APIURL + "/search/competencies");
     url.search = new URLSearchParams({
         q: query,
         ...(start !== undefined && start),
