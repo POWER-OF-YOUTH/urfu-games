@@ -3,5 +3,3 @@
 package-lock.json
 yarn.lock
 .env
-.eslintrc.json
-src/public
