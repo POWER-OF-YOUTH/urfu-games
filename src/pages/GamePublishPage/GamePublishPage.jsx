@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import classNames from "classnames";
 
 import PageLayout from "../../layouts/PageLayout";
@@ -13,12 +14,17 @@ function CreateGamePage() {
     };
 
     return (
-        <PageLayout>
-            <PageTitle className={classNames(styles.title)}>
-                Публикация игры
-            </PageTitle>
-            <GamePublishForm onSubmit={handleSubmit} />
-        </PageLayout>
+        <>
+            <Helmet>
+                <title>Публикация игры</title>
+            </Helmet>
+            <PageLayout>
+                <PageTitle className={classNames(styles.title)}>
+                    Публикация игры
+                </PageTitle>
+                <GamePublishForm onSubmit={handleSubmit} />
+            </PageLayout>
+        </>
     );
 }
 
