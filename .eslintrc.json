@@ -34,7 +34,7 @@
             "error",
             "always"
         ],
-        "no-unused-vars": ["warn"],
+        "no-unused-vars": "off",
         "react/prop-types": 0
     },
     "settings": {
