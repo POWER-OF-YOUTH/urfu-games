@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
+import { observer, useLocalObservable } from "mobx-react-lite";
 
 import PageLayout from "../../layouts/PageLayout";
 import PageTitle from "../../components/PageTitle";
@@ -19,13 +20,11 @@ function GamePublishPage() {
                 <title>Публикация игры</title>
             </Helmet>
             <PageLayout>
-                <PageTitle className={classNames(styles.title)}>
-                    Публикация игры
-                </PageTitle>
+                <PageTitle className={classNames(styles.title)}>Публикация игры</PageTitle>
                 <GamePublishForm onSubmit={handleSubmit} />
             </PageLayout>
         </>
     );
 }
 
-export default GamePublishPage;
+export default observer(GamePublishPage);

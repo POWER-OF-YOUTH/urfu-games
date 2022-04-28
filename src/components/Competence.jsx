@@ -1,11 +1,5 @@
 import React from "react";
-import { 
-    Typography,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    IconButton
-} from "@mui/material";
+import { Typography, Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { observer } from "mobx-react-lite";
@@ -22,22 +16,16 @@ function Competence({ competence, enablePopup = false, size = "medium" }) {
 
     return (
         <>
-            <CompetenceContainer size={size} color={competence.color} onClick={handleClick}>
-                <CompetenceName>
-                    {competence.name}
-                </CompetenceName>
+            <CompetenceContainer size={size} color="#665533" onClick={handleClick}>
+                <CompetenceName>{competence.name}</CompetenceName>
             </CompetenceContainer>
 
-            { enablePopup && (
+            {enablePopup && (
                 <CompetenceDialog onClose={handlePopupClose} open={popupOpen}>
-                    <CompetenceDialogTitle onClose={handlePopupClose}>
-                        {competence.name}
-                    </CompetenceDialogTitle>
+                    <CompetenceDialogTitle onClose={handlePopupClose}>{competence.name}</CompetenceDialogTitle>
                     <DialogContent dividers>
-                        <Typography gutterBottom>
-                            {competence.description}
-                        </Typography>
-                    </DialogContent >
+                        <Typography gutterBottom>{competence.description}</Typography>
+                    </DialogContent>
                 </CompetenceDialog>
             )}
         </>
@@ -54,22 +42,22 @@ const CompetenceContainer = styled("div")(({ color, size }) => ({
     textAlign: "center",
     backgroundColor: color,
     ...(size === "small" && {
-        padding: "1px 5px"
+        padding: "1px 5px",
     }),
     ...(size === "medium" && {
-        padding: "2px 10px"
+        padding: "2px 10px",
     }),
     ...(size === "large" && {
-        padding: "5px 15px"
+        padding: "5px 15px",
     }),
     "&:hover": {
-        filter: "brightness(1.05)"
-    }
+        filter: "brightness(1.05)",
+    },
 }));
 
 const CompetenceName = styled("span")({
     color: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
 });
 
 const CompetenceDialog = styled(Dialog)(({ theme }) => ({

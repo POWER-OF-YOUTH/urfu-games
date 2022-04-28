@@ -4,6 +4,8 @@
 import React, { useState, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import classNames from "classnames";
+import Competence from "./Competence";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { styled } from "@mui/material/styles";
 import { IconButton, Select, MenuItem } from "@mui/material";
 //import classNames from "classnames";
@@ -14,7 +16,7 @@ import styles from "./CompetenciesSelector.module.css";
 
 function CompetenciesSelector({
     className,
-    // Вызвается, когда изменяется список выбранных участников.
+    // Вызвается, когда изменяется список выбранных компетенций.
     onChange = (f) => f,
     ...props
 }) {
@@ -47,9 +49,12 @@ function CompetenciesSelector({
             <CompetenciesSearch onSelect={handleParticipantSelect} filterOptions={filterUnselectedParticipants} />
             {selectedParticipants.length > 0 && (
                 <SelectedCompetencies className={styles.participantsSelector__selectedParticipants}>
-                    {selectedParticipants.map((u, index) => (
-                        <Competence key={u.id} user={u} onDelete={() => handleParticipantDelete(index)} enableDelete />
+                    {selectedParticipants.map((c, i) => (
+                        <CompetenceItem key={i} competence={c} onDelete={handleParticipantDelete} enableDelete />
                     ))}
+                    {/* {selectedParticipants.map((u, index) => (
+                        <Competence key={u.id} competence={u} enablePopup="true" />
+                    ))} */}
                 </SelectedCompetencies>
             )}
         </div>
@@ -72,40 +77,29 @@ function SelectedCompetencies({ className, children, ...props }) {
 
 // `Participant` используется для отображения информации об участнике.
 // Его следует передавать передавать в `SelectedParticipants`.
-function Competence({
+function CompetenceItem({
     className,
-    user,
-    onRoleChange = (f) => f,
+    competence,
     onDelete = (f) => f,
     enableDelete = false, // Если указано значение false, то крестик отображаться не будет.
     ...props
 }) {
-    const [role, setRole] = useState(null);
-
-    const handleRoleChange = (evt) => {
-        setRole(evt.target.value);
-    };
-
-    useEffect(() => onRoleChange(role), [role]);
-
     return (
         <li className={classNames(styles.selectedParticipants__participant, styles.participant)}>
-            <div className={styles.participant__loginContainer}>
-                <span className={styles.participant__login}>{user.name}</span>
-            </div>
+            <Competence competence={competence} enablePopup />
             <div className={styles.participant__deleteButtonContainer}>
                 {enableDelete && (
-                    <IconButton onClick={onDelete}>
+                    <DeleteButton onClick={onDelete}>
                         <ClearIcon />
-                    </IconButton>
+                    </DeleteButton>
                 )}
             </div>
         </li>
     );
 }
 
-const RoleSelect = styled(Select)({
-    width: "100%",
+const DeleteButton = styled(IconButton)({
+    padding: "0px",
 });
 
-export default CompetenciesSelector;
+export default observer(CompetenciesSelector);

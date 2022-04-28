@@ -2,7 +2,7 @@
 // с помощью которого можно искать пользователей по логину.
 
 import React, { useState, useEffect } from "react";
-//import classNames from "classnames";
+import classNames from "classnames";
 import { TextField, Autocomplete } from "@mui/material";
 
 import * as searchAPI from "../utils/api/searchAPI";
@@ -48,7 +48,6 @@ function CompetenciesSearch({
             searchAPI
                 .searchCompetencies()
                 .then((r) => {
-                    console.log(r.name);
                     if (r.ok) return r.json();
                     return [];
                 })
@@ -61,7 +60,7 @@ function CompetenciesSearch({
         return (
             <TextField
                 {...props}
-                className={styles.usersSearch__input}
+                className={classNames(props.className, styles.usersSearch__input)}
                 onChange={handleInputChange}
                 placeholder="Поиск компетенций"
             />
@@ -69,14 +68,14 @@ function CompetenciesSearch({
     };
     const renderOption = (props, option) => {
         return (
-            <li {...props} className={styles.usersSearch__option}>
+            <li {...props} className={classNames(props.className, styles.usersSearch__option)}>
                 {option.name}
             </li>
         );
     };
     return (
         <Autocomplete
-            className={styles.usersSearch}
+            className={classNames(className, styles.competenciesSearch)}
             filterOptions={filterOptions}
             open={open}
             onOpen={handleOpen}
