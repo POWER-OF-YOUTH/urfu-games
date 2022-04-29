@@ -1,14 +1,11 @@
-// Компонент `ParticipantSelector` используется для выбора
-// пользователей, участвовавших в разработке игры.
+// Компонент `CompetenciesSelector` используется для выбора компетенций.
 
 import React, { useState, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import classNames from "classnames";
 import Competence from "./Competence";
-import { observer, useLocalObservable } from "mobx-react-lite";
 import { styled } from "@mui/material/styles";
 import { IconButton, Select, MenuItem } from "@mui/material";
-//import classNames from "classnames";
 
 import CompetenciesSearch from "./CompetenciesSearch";
 
@@ -20,41 +17,38 @@ function CompetenciesSelector({
     onChange = (f) => f,
     ...props
 }) {
-    const [selectedParticipants, setSelectedParticipants] = useState([]);
+    const [selectedCompetencies, setSelectedCompetencies] = useState([]);
 
-    // Передается в компонент `UsersSearch`. Используется для того, чтобы
-    // убрать из результата поиска тех пользователей, которых мы уже выбрали.
-    const filterUnselectedParticipants = (users) => {
+    // Передается в компонент `CompetenciesSearch`. Используется для того, чтобы
+    // убрать из результата поиска тех компетенций, которых мы уже выбрали.
+    const filterUnselectedParticipants = (competencies) => {
         const result = [];
 
-        for (const user of users) {
-            if (selectedParticipants.find((u) => u.name === user.name) === undefined) result.push(user);
+        for (const comp of competencies) {
+            if (selectedCompetencies.find((u) => u.name === comp.name) === undefined) result.push(comp);
         }
 
         return result;
     };
 
-    const handleParticipantSelect = (user) => {
-        if (user !== null) setSelectedParticipants([user, ...selectedParticipants]);
+    const handleCompetenceSelect = (user) => {
+        if (user !== null) setSelectedCompetencies([user, ...selectedCompetencies]);
     };
-    const handleParticipantDelete = (userIndex) => {
-        selectedParticipants.splice(userIndex, 1);
-        setSelectedParticipants([...selectedParticipants]);
+    const handleCompetenciesDelete = (userIndex) => {
+        selectedCompetencies.splice(userIndex, 1);
+        setSelectedCompetencies([...selectedCompetencies]);
     };
 
-    useEffect(() => onChange(selectedParticipants), [selectedParticipants]);
+    useEffect(() => onChange(selectedCompetencies), [selectedCompetencies]);
 
     return (
         <div className={styles.participantsSelector}>
-            <CompetenciesSearch onSelect={handleParticipantSelect} filterOptions={filterUnselectedParticipants} />
-            {selectedParticipants.length > 0 && (
+            <CompetenciesSearch onSelect={handleCompetenceSelect} filterOptions={filterUnselectedParticipants} />
+            {selectedCompetencies.length > 0 && (
                 <SelectedCompetencies className={styles.participantsSelector__selectedParticipants}>
-                    {selectedParticipants.map((c, i) => (
-                        <CompetenceItem key={i} competence={c} onDelete={handleParticipantDelete} enableDelete />
+                    {selectedCompetencies.map((c, i) => (
+                        <CompetenceItem key={i} competence={c} onDelete={handleCompetenciesDelete} enableDelete />
                     ))}
-                    {/* {selectedParticipants.map((u, index) => (
-                        <Competence key={u.id} competence={u} enablePopup="true" />
-                    ))} */}
                 </SelectedCompetencies>
             )}
         </div>
@@ -75,8 +69,8 @@ function SelectedCompetencies({ className, children, ...props }) {
     );
 }
 
-// `Participant` используется для отображения информации об участнике.
-// Его следует передавать передавать в `SelectedParticipants`.
+// `CompetenceItem` используется для отображения информации о компетенции.
+// Его следует передавать передавать в `SelectedCompetencies`.
 function CompetenceItem({
     className,
     competence,
@@ -102,4 +96,4 @@ const DeleteButton = styled(IconButton)({
     padding: "0px",
 });
 
-export default observer(CompetenciesSelector);
+export default CompetenciesSelector;

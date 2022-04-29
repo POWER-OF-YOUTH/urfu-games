@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
-import { observer, useLocalObservable } from "mobx-react-lite";
 
 import PageLayout from "../../layouts/PageLayout";
 import PageTitle from "../../components/PageTitle";
@@ -27,4 +26,4 @@ function GamePublishPage() {
     );
 }
 
-export default observer(GamePublishPage);
+export default GamePublishPage;

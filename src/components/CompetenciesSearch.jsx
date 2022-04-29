@@ -1,4 +1,4 @@
-// Компонент `UsersSearch` представляет собой текстовое поле,
+// Компонент `CompetenciesSearch` представляет собой текстовое поле,
 // с помощью которого можно искать пользователей по логину.
 
 import React, { useState, useEffect } from "react";
@@ -31,7 +31,6 @@ function CompetenciesSearch({
         setValue(defaultCompetenciesSearchValue);
     };
     const handleInputChange = async (evt) => {
-        console.log(await (await searchAPI.searchCompetencies(evt.target.value)).json());
         const competenciesSearchResponse = await searchAPI.searchCompetencies(evt.target.value);
         if (competenciesSearchResponse.ok) setOptions(await competenciesSearchResponse.json());
         else setOptions([]);
