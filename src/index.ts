@@ -1,12 +1,21 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
 import mongoose from "mongoose";
 import app from "./app";
 
+function checkEnvVariableDefined(name: string) {
+    if (process.env[name] === undefined) 
+        throw new Error(`You should define \`${name}\` environment variable.`);
+}
+
+checkEnvVariableDefined("MONGO_URI");
+checkEnvVariableDefined("MONGO_DBN");
+checkEnvVariableDefined("JWT_SECRET");
+checkEnvVariableDefined("USER_PWD_SALT");
+
 (async function () {
     await mongoose.connect(
-        <string> process.env.MONGO_URI, 
+        process.env.MONGO_URI, 
         {
             user: process.env.MONGO_USR,
             pass: process.env.MONGO_PWD,
