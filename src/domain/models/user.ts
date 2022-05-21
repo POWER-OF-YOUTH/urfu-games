@@ -19,6 +19,7 @@ interface IUser {
     password: string;
     role: Role;
     avatar: string;
+    checkpoints: Array<string>;
     createdAt: Date;
 }
 
@@ -77,6 +78,10 @@ const userSchema = new Schema<IUser, IUserModel>(
         avatar: {
             type: String,
             default: DEFAULT_USER_AVATAR
+        },
+        checkpoints: {
+            type: [String],
+            default: []
         },
         createdAt: { 
             type: Date, 

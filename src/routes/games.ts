@@ -5,6 +5,7 @@ import express, {
     Response, 
     NextFunction 
 } from "express";
+import mongoose from "mongoose";
 import { asyncMiddleware } from "middleware-async";
 import { body, param, query } from "express-validator";
 import { v4 as uuid } from "uuid";
@@ -21,6 +22,8 @@ import { Game, GameDocument } from "../domain/models/game";
 import { LogicError, AccessError } from "../utils/errors";
 import { Rating, RatingDocument } from "../domain/models/rating";
 import { User, Role, UserDocument } from "../domain/models/user";
+import Checkpoint from "../domain/models/checkpoint";
+import sequelize from "../sequelize";
 
 const gamesRouter = express.Router();
 
@@ -69,38 +72,51 @@ gamesRouter.post("/",
                     );
                 }
                 return Promise.resolve();
-            })
+            }),
+        body("checkpoints")
+            .default([])
+            .isArray(),
+        body("checkpoints.*.name")
+            .isString()
+            .notEmpty(),
+        body("checkpoints.*.competence")
+            .optional()
+            .isUUID(),
+        body("checkpoints.*.description")
+            .default("")
+            .isString()
     ),
     asyncMiddleware(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const author: UserDocument = await User.findOne({ id: req.user.id });
-
-        const participants: Array<UserDocument> = await User.find({ 
-            id: { $in: req.body.participants }
-        });
-
-        if (participants.length !== req.body.participants.length)
-            return next(new LogicError("Один или несколько участников не найдены."));
-
         const id: string = uuid();
+        // @ts-ignore
         const game: GameDocument = await Game.create({ 
             id,
             name: req.body.name,
             description: req.body.description,
             image: req.body.image,
-            author: author.id,
-            participants: participants.map(p => p.id),
+            author: req.user.id,
+            participants: req.body.participants,
             createdAt: Date.now()
         });
 
-        res.json(await GameDetailDTO.create(
-            game, 
-            author, 
-            participants
-        ));
+        if (req.body.checkpoints.length > 0) {
+            // Создадим чекпоинты
+            await sequelize.transaction(async (transaction) => {
+                await Promise.all(
+                    // @ts-ignore
+                    req.body.checkpoints.map((c) => Checkpoint.create({
+                        ...c,
+                        game: game.id
+                    }, { transaction }))
+                );
+            });
+        }
+
+        res.json(await GameDetailDTO.create(game));
     })
 );
 

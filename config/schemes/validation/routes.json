@@ -1,0 +1,238 @@
+{
+    "$id": "/routes",
+
+    "properties": {
+        "createGameProgressSettings": {
+            "$id": "/routes/createGameProgressSettings",
+
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "object",
+                    "properties": {
+                        "game": {
+                            "$ref": "/models/gameProgressSettings#/properties/id"
+                        },
+                        "checkpointsCount": {
+                            "$ref": "/models/gameProgressSettings#/properties/checkpointsCount"
+                        }
+                    },
+                    "required": [ "game", "checkpointsCount" ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "body" ]
+        },
+
+        "getGameProgressSettings": {
+            "$id": "/routes/getGameProgressSettings",
+            
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" }
+                    },
+                    "required": [ "gameId" ]
+                }
+            },
+            "required": [ "params" ]
+        },
+
+        "getGameProgressSettingsList": {
+            "$id": "/routes/getGameProgressSettingsList",
+
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "object",
+                    "properties": {
+                        "start": {
+                            "type": "number",
+                            "minimum": 0,
+                            "default": 0
+                        },
+                        "count": {
+                            "type": "number",
+                            "maximum": 100,
+                            "default": 10
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "query" ]
+        },
+
+        "updateGameProgressSettings": {
+            "$id": "/routes/updateGameProgressSettings",
+            
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" }
+                    }
+                },
+                "query": {
+                    "type": "object",
+                    "properties": {
+                        "keepProgress": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "body": {
+                    "type": "object",
+                    "properties": {
+                        "checkpointsCount": { 
+                            "$ref": "/models/gameProgressSettings#/properties/checkpointsCount" 
+                        }
+                    },
+                    "required": [ "checkpointsCount" ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "params", "query", "body" ]
+        },
+
+        "deleteGameProgressSettings": {
+            "$id": "/routes/deleteGameProgressSettings",
+            
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" }
+                    }
+                }
+            },
+            "required": [ "params" ]
+        },
+
+        "saveProgress": {
+            "$id": "/routes/saveProgress",
+
+            "type": "object",
+            "properties": {
+                "params": { 
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" }
+                    }
+                },
+                "body": {
+                    "type": "object",
+                    "properties": {
+                        "checkpointsCollected": {
+                            "$ref": "/models/progress#/properties/checkpointsCollected"
+                        },
+                        "data": { "$ref": "/models/progress#/properties/data" }
+                    },
+                    "required": [ "data" ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "params", "body" ]
+        },
+
+        "getProgress": {
+            "$id": "/routes/getProgress",
+
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" },
+                        "userId": { "$ref": "/models/user#/properties/id" }
+                    }
+                }
+            },
+            "required": [ "params" ]
+        },
+
+        "getUserProgressList": {
+            "$id": "/routes/getUserProgressList",
+
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "userId": { "$ref": "/models/user#/properties/id" }
+                    }
+                },
+                "query": {
+                    "type": "object",
+                    "properties": {
+                        "start": {
+                            "type": "number",
+                            "minimum": 0,
+                            "default": 0
+                        },
+                        "count": {
+                            "type": "number",
+                            "maximum": 100,
+                            "default": 10
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "query", "params" ]
+        },
+        
+        "getGameProgressList": {
+            "$id": "/routes/getGameProgressList",
+
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" }
+                    }
+                },
+                "query": {
+                    "type": "object",
+                    "properties": {
+                        "start": {
+                            "type": "number",
+                            "minimum": 0,
+                            "default": 0
+                        },
+                        "count": {
+                            "type": "number",
+                            "maximum": 100,
+                            "default": 10
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "required": [ "query", "params" ]
+        },
+
+        "deleteProgress": {
+            "$id": "/routes/deleteProgress",
+
+            "type": "object",
+            "properties": {
+                "params": { 
+                    "type": "object",
+                    "properties": {
+                        "gameId": { "$ref": "/models/game#/properties/id" },
+                        "userId": { "$ref": "/models/user#/properties/id" }
+                    }
+                }
+            },
+            "required": [ "params" ]
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import "dotenv/config";
 
 import mongoose from "mongoose";
+import sequelize from "./sequelize";
 import app from "./app";
 
 function checkEnvVariableDefined(name: string) {
@@ -22,6 +23,8 @@ checkEnvVariableDefined("USER_PWD_SALT");
             dbName: process.env.MONGO_DBN
         }
     );
+
+    await sequelize.sync();
 
     console.log("Successful connection to database.")
 
