@@ -1,10 +1,5 @@
-import strings from "../config/strings.json";
-
-import express, { 
-    Request, 
-    Response, 
-    NextFunction 
-} from "express";
+import express  from "express";
+import { Op } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
 import { query } from "express-validator";
 
@@ -12,13 +7,13 @@ import CompetenceDTO from "../domain/dto/competence-dto";
 import GameSearchResultDTO from "../domain/dto/game-search-result-dto";
 import UserSearchResultDTO from "../domain/dto/user-search-result-dto";
 import validateRequest from "../validators/validate-request";
-import { Competence, CompetenceDocument } from "../domain/models/competence";
-import { Game, GameDocument } from "../domain/models/game";
-import { User, UserDocument } from "../domain/models/user";
+import Competence from "../domain/models/competence";
+import Game from "../domain/models/game";
+import User from "../domain/models/user";
 
 const searchRouter = express.Router();
 
-searchRouter.get("/users",
+searchRouter.get("/search/users",
     validateRequest(
         query("q")
             .isString()
@@ -38,23 +33,25 @@ searchRouter.get("/users",
             .default("ascending")
             .isIn(["ascending", "descending"])
     ),
-    asyncMiddleware(async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        const users: Array<UserDocument> = await User
-            .find({ login: { $regex: `^${req.query.q}.*$`, $options: "i" }})
-            // @ts-ignore
-            .sort({ [req.query.sort]: req.query.order === "ascending" ? 1 : -1 })
-            .skip(req.query.start)
-            .limit(req.query.count);
+    asyncMiddleware(
+        async (req, res, next) => {
+            const users = await User.findAll({
+                where: {
+                    login: {
+                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                    }
+                },
+                offset: req.query.start,
+                limit: req.query.count,
+                order: [[req.query.sort, req.query.order === "ascending" ? "ASC" : "DESC"]]
+            })
 
-        res.json(await Promise.all(users.map(u => UserSearchResultDTO.create(u))));
-    })
+            res.json(await Promise.all(users.map(u => UserSearchResultDTO.create(u))));
+        }
+    )
 );
 
-searchRouter.get("/games",
+searchRouter.get("/search/games",
     validateRequest(
         query("q")
             .isString()
@@ -74,23 +71,25 @@ searchRouter.get("/games",
             .default("ascending")
             .isIn(["ascending", "descending"])
     ),
-    asyncMiddleware(async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        const games: Array<GameDocument> = await Game 
-            .find({ name: { $regex: `^${req.query.q}.*$`, $options: "i" }})
-            // @ts-ignore
-            .sort({ [req.query.sort]: req.query.order === "ascending" ? 1 : -1 })
-            .skip(req.query.start)
-            .limit(req.query.count);
+    asyncMiddleware(
+        async (req, res, next) => {
+            const games = await Game.findAll({
+                where: {
+                    name: {
+                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                    }
+                },
+                offset: req.query.start,
+                limit: req.query.count,
+                order: [[req.query.sort, req.query.order === "ascending" ? "ASC" : "DESC"]]
+            })
 
-        res.json(await Promise.all(games.map(g => GameSearchResultDTO.create(g))))
-    })
+            res.json(await Promise.all(games.map(g => GameSearchResultDTO.create(g))))
+        }
+    )
 );
 
-searchRouter.get("/competencies",
+searchRouter.get("/search/competencies/",
     validateRequest(
         query("q")
             .isString()
@@ -110,20 +109,22 @@ searchRouter.get("/competencies",
             .default("ascending")
             .isIn(["ascending", "descending"])
     ),
-    asyncMiddleware(async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> => {
-        const competencies: Array<CompetenceDocument> = await Competence
-            .find({ name: { $regex: `^${req.query.q}.*$`, $options: "i" }})
-            // @ts-ignore
-            .sort({ [req.query.sort]: req.query.order === "ascending" ? 1 : -1 })
-            .skip(req.query.start)
-            .limit(req.query.count);
+    asyncMiddleware(
+        async (req, res, next) => {
+            const competencies = await Competence.findAll({
+                where: {
+                    name: {
+                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                    }
+                },
+                offset: req.query.start,
+                limit: req.query.count,
+                order: [[req.query.sort, req.query.order === "ascending" ? "ASC" : "DESC"]]
+            })
 
-        res.json(await Promise.all(competencies.map(c => CompetenceDTO.create(c))));
-    })
+            res.json(await Promise.all(competencies.map(c => CompetenceDTO.create(c))));
+        }
+    )
 );
 
 export default searchRouter;

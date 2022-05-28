@@ -1,54 +1,37 @@
-import mongoose, { 
-    Schema, 
-    HydratedDocument, 
-    Model
-} from "mongoose";
+import { Model, DataTypes } from "sequelize";
 
-interface ICompetence {
-    id: string;
-    name: string;
-    description: string;
-    createdAt: Date;
-}
+import Checkpoint from "./checkpoint";
+import sequelize from "../../sequelize";
 
-interface ICompetenceInstanceMethods { }
+class Competence extends Model { }
 
-interface ICompetenceModel extends Model<ICompetence, any, ICompetenceInstanceMethods> { }
-
-const competenceSchema = new Schema<ICompetence, ICompetenceModel>(
-    {
-        id: {
-            type: String,
-            unique: true,
-            required: true,
-            index: true
-        },
-        name: {
-            type: String,
-            unique: true,
-            required: true,
-            index: true
-        },
-        description: {
-            type: String,
-            default: ""
-        },
-        createdAt: {
-            type: Date
-        }
+Competence.init({
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
     },
-    { versionKey: false }
-);
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, { sequelize, modelName: "Competence" });
 
-competenceSchema.index({ name: "text" });
-
-const Competence = mongoose.model<ICompetence, ICompetenceModel>("Competence", competenceSchema);
-
-type CompetenceDocument = HydratedDocument<ICompetence & ICompetenceInstanceMethods>;
+Competence.hasMany(Checkpoint, {
+    foreignKey: "competenceId",
+    onDelete: "SET NULL",
+    as: {
+        singular: "checkpoint",
+        plural: "checkpoints"
+    }
+});
+Checkpoint.belongsTo(Competence, {
+    as: "competence"
+});
 
 export default Competence;
-export {
-    ICompetence,
-    Competence,
-    CompetenceDocument
-};

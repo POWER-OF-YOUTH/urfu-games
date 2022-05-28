@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 
 import { 
@@ -12,6 +13,7 @@ import mainRouter from "./routes";
 
 const app = express();
 
+app.use(cors());
 app.use(morgan("dev")); // Логгер запросов 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));

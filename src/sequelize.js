@@ -1,10 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const databaseURI = process.env.DATABASE_URI ?? "sqlite::memory:";
-// const sequelize = new Sequelize(databaseURI);
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'database.sqlite'
-});
+const databaseURI = process.env.DATABASE_URI;
+const sequelize = new Sequelize(databaseURI);
 
 export default sequelize;

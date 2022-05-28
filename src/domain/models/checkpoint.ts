@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 
-import sequelize from "../../sequelize.js";
+import sequelize from "../../sequelize";
 
 class Checkpoint extends Model { }
 
@@ -9,13 +9,6 @@ Checkpoint.init({
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
-    },
-    competence: {
-        type: DataTypes.UUID
-    },
-    game: {
-        type: DataTypes.UUID,
-        allowNull: false
     },
     name: {
         type: DataTypes.STRING,

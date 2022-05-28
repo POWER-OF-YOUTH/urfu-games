@@ -1,29 +1,18 @@
 import "dotenv/config";
 
-import mongoose from "mongoose";
 import sequelize from "./sequelize";
 import app from "./app";
 
 function checkEnvVariableDefined(name: string) {
-    if (process.env[name] === undefined) 
+    if (process.env[name] === undefined)
         throw new Error(`You should define \`${name}\` environment variable.`);
 }
 
-checkEnvVariableDefined("MONGO_URI");
-checkEnvVariableDefined("MONGO_DBN");
 checkEnvVariableDefined("JWT_SECRET");
 checkEnvVariableDefined("USER_PWD_SALT");
+checkEnvVariableDefined("DATABASE_URI");
 
-(async function () {
-    await mongoose.connect(
-        process.env.MONGO_URI, 
-        {
-            user: process.env.MONGO_USR,
-            pass: process.env.MONGO_PWD,
-            dbName: process.env.MONGO_DBN
-        }
-    );
-
+(async function() {
     await sequelize.sync();
 
     console.log("Successful connection to database.")
