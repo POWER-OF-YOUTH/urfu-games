@@ -1,8 +1,16 @@
+/**
+ * @file Подключение к базе данных и запуск приложения
+ */
+
 import "dotenv/config";
 
 import sequelize from "./sequelize";
 import app from "./app";
 
+/**
+ * Функция, которая вызывает исключение, если переменная
+ * окружения с именем `name` не определена.
+ */
 function checkEnvVariableDefined(name: string) {
     if (process.env[name] === undefined)
         throw new Error(`You should define \`${name}\` environment variable.`);

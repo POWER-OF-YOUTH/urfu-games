@@ -1,3 +1,7 @@
+/**
+ * @file Определение модели игры. 
+ */
+
 import { Model, DataTypes } from "sequelize";
 
 import User from "./user";
@@ -9,16 +13,29 @@ import Competence from "./competence";
 import GameCompetencies from "./game-competencies";
 import Checkpoint from "./checkpoint";
 
+/**
+ * Модель игры.
+ */
 class Game extends Model {
     declare id: string;
+    /** Обложка игры. */
     declare image: string;
+    /** Название игры. */
     declare name: string;
+    /** Описание игры. */
     declare description: string;
     declare loaderUrl: string;
     declare dataUrl: string;
     declare frameworkUrl: string;
     declare codeUrl: string;
-    declare isPublicated: string;
+    /** 
+     * Флаг, который содержит значение `true` 
+     * если игра опубликована, - `false` в ином случае.
+     */ 
+    declare isPublicated: boolean;
+    /** 
+     * Дата создания игры.
+     */
     declare createdAt: Date;
 }
 
@@ -26,7 +43,10 @@ Game.init({
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+
+        }
     },
     image: {
         type: DataTypes.STRING,

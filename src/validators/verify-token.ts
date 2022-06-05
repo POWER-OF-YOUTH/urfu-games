@@ -1,3 +1,7 @@
+/**
+ * @file Промежуточные обработчики для проверки токена.
+ */
+
 import strings from "../config/strings.json";
 
 import { Request, Response, NextFunction } from "express";
@@ -5,9 +9,10 @@ import expressJWT, { UnauthorizedError } from "express-jwt";
 
 import { AccessError } from "../utils/errors";
 
-// Промежуточные функции, которые расшифровывают JWT токен,
-// помещают данные из токена в req.user и проверяют существование 
-// пользователя по id. 
+/**
+ * Промежуточные функции, которые расшифровывают JWT токен и
+ * помещают данные из токена в `req.user`.
+ */
 const verifyToken = [
     expressJWT({ 
         secret: <string> process.env.JWT_SECRET, 

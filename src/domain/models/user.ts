@@ -1,3 +1,7 @@
+/**
+ * @file Опредение модели пользователя.
+ */
+
 import { Model, DataTypes } from "sequelize";
 
 import Comment from "./comment";
@@ -13,15 +17,24 @@ enum Role {
     Admin
 }
 
+/** Модель пользователя. */
 class User extends Model { 
     declare id: string;
+    /** Имя. */
     declare name: string;
+    /** Фамилия. */
     declare surname: string;
+    /** Отчество. */
     declare patronymic: string;
+    /** Логин. */
     declare login: string;
+    /** Адрес электронной почты. */
     declare email: string;
+    /** Пароль. */ 
     declare password: string;
+    /** Роль пользователя (User, Admin и т.д). */ 
     declare role: Role;
+    /** Ссылка на аватар. */
     declare avatar: string;
     declare createdAt: Date;
 }
@@ -44,25 +57,41 @@ User.init({
     login: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+            is: /^[0-9A-Za-z]+$/
+        }
     },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+            isEmail: true
+        },
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            is: /^[0-9A-Za-z_\-@#%., ]+$/,
+            len: {
+                args: [ 6, 100 ],
+                msg: "Длинна пароля должна быть в промежутке от 6 до 100 символов."
+            }
+        }
     },
     role: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: Role.User
+        defaultValue: Role.User,
     },
     avatar: {
         type: DataTypes.STRING,
-        defaultValue: DEFAULT_USER_AVATAR
+        defaultValue: DEFAULT_USER_AVATAR,
+        validate: {
+            isUrl: true
+        }
     }
 }, { sequelize, modelName: "User" });
 

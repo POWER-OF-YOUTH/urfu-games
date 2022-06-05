@@ -10,11 +10,9 @@
         "build": "tsc"
     },
     "keywords": [],
-    "author": "Power of Youth",
+    "author": "Nikita Brekhuntsov <aceki320@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "ajv": "^8.11.0",
-        "ajv-formats": "^2.1.1",
         "axios": "^0.27.2",
         "cors": "^2.8.5",
         "dotenv": "^8.1.0",

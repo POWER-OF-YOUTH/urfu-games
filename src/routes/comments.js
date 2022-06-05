@@ -1,3 +1,7 @@
+/**
+ * @file Содержит маршруты для работы с комментариями к играм.
+ */
+
 import express from "express";
 import { asyncMiddleware } from "middleware-async";
 import { body, query } from "express-validator";
@@ -11,6 +15,7 @@ import sequelize from "../sequelize";
 
 const commentsRouter = express.Router();
 
+/** Создаёт комментарий для игры `gameId`. */
 commentsRouter.post("/games/:gameId/comments/",
     verifyToken,
     validateRequest(
@@ -38,6 +43,7 @@ commentsRouter.post("/games/:gameId/comments/",
     )
 );
 
+/** Возвращает информацию о комментарии `commentId`. */
 commentsRouter.get("/games/:gameId/comments/:commentId",
     asyncMiddleware(
         async (req, res) => {
@@ -61,6 +67,7 @@ commentsRouter.get("/games/:gameId/comments/:commentId",
     )
 );
 
+/** Возвращает информацию о комментариях игры `gameId` */
 commentsRouter.get("/games/:gameId/comments/",
     validateRequest(
         query("start")
@@ -92,6 +99,7 @@ commentsRouter.get("/games/:gameId/comments/",
     )
 );
 
+/** Обновляет комментарий `commentId`. */
 commentsRouter.put("/games/:gameId/comments/:commentId",
     verifyToken,
     validateRequest(
@@ -129,6 +137,7 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
     )
 );
 
+/** Удаляет комментарий `commentId`. */
 commentsRouter.delete("/games/:gameId/comments/:commentId",
     verifyToken,
     asyncMiddleware(async (req, res) => {

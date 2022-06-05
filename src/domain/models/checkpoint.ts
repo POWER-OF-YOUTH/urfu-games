@@ -1,8 +1,19 @@
+/**
+ * @file Определение модели чекпоинта.
+ */
+
 import { Model, DataTypes } from "sequelize";
 
 import sequelize from "../../sequelize";
 
-class Checkpoint extends Model { }
+/** Модель чекпоинта. */
+class Checkpoint extends Model {
+    declare id: string;
+    /** Название чекпоинта. */
+    declare name: string;
+    /** Описание чекпоинта. */
+    declare description: string;
+}
 
 Checkpoint.init({
     id: {

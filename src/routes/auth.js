@@ -1,3 +1,7 @@
+/**
+ * @file Содержит маршруты для регистрации/аутентификации.
+ */
+
 import strings from "../config/strings.json";
 
 import crypto from "crypto";
@@ -13,13 +17,19 @@ import verifyToken from "../validators/verify-token";
 import { AccessError, LogicError } from "../utils/errors";
 import { Op } from "sequelize";
 import sequelize from "../sequelize";
+import { ValidationError } from "sequelize";
 
 const authRouter = express.Router();
 
+/** Выполняет хеширование пароля. */
 function encryptPassword(password, salt) {
     return crypto.createHmac("sha1", salt).update(password).digest("hex");
 }
 
+/** 
+ * Генерирует JWT токен, который содержит поле `id` в качестве полезной нагрузки.
+ * @param {string} id - идентификатор пользователя
+ */
 function generateJWT(id) {
     return jwt.sign(
         { id }, 
@@ -28,31 +38,13 @@ function generateJWT(id) {
     );
 }
 
+/** Регистрирует пользователя в системе. */
 authRouter.post("/auth/signup",
-    validateRequest(
-        body("login")
-            .isString()
-            .withMessage(strings.errors.validation.loginMustBeString)
-            .trim()
-            .notEmpty()
-            .withMessage(strings.errors.validation.loginMustNotBeEmpty)
-            .matches("^[0-9A-Za-z]+$")
-            .withMessage(strings.errors.validation.loginNotMatchPattern + "^[0-9A-Za-z]+$."),
-        body("email")
-            .isEmail()
-            .withMessage(strings.errors.validation.emailInvalid)
-            .normalizeEmail(),
-        body("password")
-            .isString()
-            .withMessage(strings.errors.validation.passwordMustBeString)
-            .matches("^[0-9a-zA-Z_\\-@#%., ]+$")
-            .withMessage(strings.errors.validation.passwordNotMatchPattern + "^[0-9a-zA-Z_\\-@#%., ]+$.")
-            .isLength({ min: 6 })
-            .withMessage(strings.errors.validation.passwordTooShort),
-    ),
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
+            const transaction = await sequelize.transaction();
+
+            try {
                 let user = await User.findOne({
                     transaction,
                     where: {
@@ -72,12 +64,20 @@ authRouter.post("/auth/signup",
                     password
                 }, { transaction });
 
+                await transaction.commit();
+
                 res.json(await UserDTO.create(user));
-            });
+            }
+            catch (err) {
+                await transaction.rollback();
+
+                throw err;
+            }
         }
     )
 );
 
+/** Позволяет получить JWT токен. */
 authRouter.post("/auth/signin",
     validateRequest(
         body("login")
@@ -117,6 +117,7 @@ authRouter.post("/auth/signin",
     )
 );
 
+/** Проверяет действительность JWT токена. */
 authRouter.post("/auth/check",
     verifyToken,
     asyncMiddleware(

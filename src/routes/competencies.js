@@ -1,21 +1,23 @@
-import strings from "../config/strings.json";
+/**
+ * @file Содержит маршруты для работы с компетенциями.
+ */
 
 import express from "express";
 import { asyncMiddleware } from "middleware-async";
-import { body, param, query } from "express-validator";
+import { body, query } from "express-validator";
 
 import CompetenceDTO from "../domain/dto/competence-dto";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import Game from "../domain/models/game";
-import { AccessError, LogicError } from "../utils/errors";
+import { AccessError } from "../utils/errors";
 import Competence from "../domain/models/competence";
 import User, { Role } from "../domain/models/user";
 import sequelize from "../sequelize";
 
 const competenciesRouter = express.Router();
 
-// Получить информацию о привязанных к игре компетенциях 
+/** Возвращает информацию о привязанных к игре `gameId` компетенциях. */
 competenciesRouter.get("/games/:gameId/competencies/",
     validateRequest(
         query("start")
@@ -48,6 +50,7 @@ competenciesRouter.get("/games/:gameId/competencies/",
     )
 );
 
+/** Создаёт компетенцию. */
 competenciesRouter.post("/competencies/",
     verifyToken,
     validateRequest(
@@ -81,21 +84,21 @@ competenciesRouter.post("/competencies/",
     )
 );
 
+/** Возвращает информацию о компетенции `competenceId`. */
 competenciesRouter.get("/competencies/:competenceId",
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const competence = await Competence.findByPk(
-                    req.params.competenceId,
-                    { transaction, rejectOnEmpty: true }
-                );
+            const competence = await Competence.findByPk(
+                req.params.competenceId,
+                { transaction, rejectOnEmpty: true }
+            );
 
-                res.json(await CompetenceDTO.create(competence));
-            });
+            res.json(await CompetenceDTO.create(competence));
         }
     )
 );
 
+/** Возвращает информацию о множестве компетенций. */
 competenciesRouter.get("/competencies/",
     validateRequest(
         query("start")
@@ -124,6 +127,7 @@ competenciesRouter.get("/competencies/",
     )
 );
 
+/** Обновляет компетенцию `competenceId` */
 competenciesRouter.put("/competencies/:competenceId",
     verifyToken,
     validateRequest(
@@ -162,6 +166,7 @@ competenciesRouter.put("/competencies/:competenceId",
     )
 );
 
+/** Удаляет компетенцию `competenceId`. */
 competenciesRouter.delete("/competencies/:competenceId",
     verifyToken,
     asyncMiddleware(

@@ -1,3 +1,7 @@
+/**
+ * @file Содержит маршруты для работы поиска.
+ */
+
 import express  from "express";
 import { Op } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
@@ -13,6 +17,7 @@ import User from "../domain/models/user";
 
 const searchRouter = express.Router();
 
+/** Выполняет поиск пользователей по логину. */
 searchRouter.get("/search/users",
     validateRequest(
         query("q")
@@ -34,7 +39,7 @@ searchRouter.get("/search/users",
             .isIn(["ascending", "descending"])
     ),
     asyncMiddleware(
-        async (req, res, next) => {
+        async (req, res) => {
             const users = await User.findAll({
                 where: {
                     login: {
@@ -51,6 +56,7 @@ searchRouter.get("/search/users",
     )
 );
 
+/** Выполняет поиск игр по названию. */
 searchRouter.get("/search/games",
     validateRequest(
         query("q")
@@ -72,7 +78,7 @@ searchRouter.get("/search/games",
             .isIn(["ascending", "descending"])
     ),
     asyncMiddleware(
-        async (req, res, next) => {
+        async (req, res) => {
             const games = await Game.findAll({
                 where: {
                     name: {
@@ -89,6 +95,7 @@ searchRouter.get("/search/games",
     )
 );
 
+/** Выполняет поиск компетенций по названию. */
 searchRouter.get("/search/competencies/",
     validateRequest(
         query("q")
@@ -110,7 +117,7 @@ searchRouter.get("/search/competencies/",
             .isIn(["ascending", "descending"])
     ),
     asyncMiddleware(
-        async (req, res, next) => {
+        async (req, res) => {
             const competencies = await Competence.findAll({
                 where: {
                     name: {
@@ -122,7 +129,9 @@ searchRouter.get("/search/competencies/",
                 order: [[req.query.sort, req.query.order === "ascending" ? "ASC" : "DESC"]]
             })
 
-            res.json(await Promise.all(competencies.map(c => CompetenceDTO.create(c))));
+            res.json(await Promise.all(
+                competencies.map(c => CompetenceDTO.create(c))
+            ));
         }
     )
 );

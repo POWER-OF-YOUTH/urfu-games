@@ -1,3 +1,7 @@
+/**
+ * @file Содержит маршруты для работы с играми.
+ */
+
 import express from "express";
 import { asyncMiddleware } from "middleware-async";
 import { body, query } from "express-validator";
@@ -7,11 +11,10 @@ import GameDetailDTO from "../domain/dto/game-detail-dto";
 import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
-import { LogicError } from "../utils/errors";
 
 const gamesRouter = express.Router();
 
-// Добавить информацию об игре
+/** Добавляет информацию об игре. */
 gamesRouter.post("/games/",
     verifyToken,
     validateRequest(
@@ -99,13 +102,13 @@ gamesRouter.post("/games/",
             catch (err) {
                 await transaction.rollback();
 
-                return next(err);
+                throw err;
             }
         }
     )
 );
 
-// Получить информацию об игре с идентификатором `gameId`
+/** Возвращает информацию об игре `gameId`. */
 gamesRouter.get("/games/:gameId",
     asyncMiddleware(
         async (req, res) => {
@@ -121,9 +124,7 @@ gamesRouter.get("/games/:gameId",
     )
 );
 
-// Получить информацию о множестве игр.
-// Параметр `start` задаёт индекс первого элемента в возвращаемом массиве,
-// а параметр `count` - количество.
+/** Возвращает информацию о множестве игр. */
 gamesRouter.get("/games/",
     validateRequest(
         query("start")
@@ -152,7 +153,7 @@ gamesRouter.get("/games/",
     )
 );
 
-// Обновить информацию об игре с идентификатором `gameId`
+/** Обновляет информацию об игре `gameId`. */
 gamesRouter.put("/games/:gameId", 
     verifyToken,
     validateRequest(
@@ -200,7 +201,9 @@ gamesRouter.put("/games/:gameId",
     ),
     asyncMiddleware( // TODO:
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
+            const transaction = await sequelize.transaction();
+
+            try {
                 const game = await Game.findByPk(
                     req.params.gameId, 
                     { transaction, rejectOnEmpty: true }
@@ -225,13 +228,23 @@ gamesRouter.put("/games/:gameId",
                     )
                 );
 
+                await transaction.commit();
+
                 res.json(await GameDetailDTO.create(game));
-            });
+            }
+            catch (err) {
+                await transaction.rollback();
+
+                throw err;
+            }
         }
     )
 );
 
-// Удалить информацию об игре с идентификатором `gameId`
+/** 
+ * Удаляет игру с идентификатором `gameId` 
+ * и связанные с ней данные (оценки, комментарии и т.д.). 
+ */
 gamesRouter.delete("/games/:gameId",
     verifyToken,
     asyncMiddleware(

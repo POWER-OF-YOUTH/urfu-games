@@ -1,7 +1,9 @@
-import strings from "../config/strings.json";
+/**
+ * @file Содержит маршруты для работы с данными пользователей.
+ */
 
 import express from "express";
-import { body, param, query } from "express-validator";
+import { body, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
 
 import User from "../domain/models/user";
@@ -9,10 +11,11 @@ import UserDTO from "../domain/dto/user-dto";
 import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
-import { AccessError, LogicError } from "../utils/errors";
+import { AccessError } from "../utils/errors";
 
 const usersRouter = express.Router();
 
+/** Возвращает информацию о множестве пользователей. */
 usersRouter.get("/users/",
     validateRequest(
         query("start")
@@ -41,6 +44,7 @@ usersRouter.get("/users/",
     )
 );
 
+/** Возвращает информацию о пользователе `userId`. */
 usersRouter.get("/users/:userId", 
     asyncMiddleware(
         async (req, res) => {
@@ -55,6 +59,7 @@ usersRouter.get("/users/:userId",
     )
 );
 
+/** Обновляет данные пользователя `userId` */
 usersRouter.put("/users/:userId", 
     verifyToken, 
     validateRequest(
