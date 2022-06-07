@@ -5,11 +5,11 @@
 import asyncMiddleware from "middleware-async";
 import express from "express";
 
-import Checkpoint from "../domain/models/checkpoint.ts";
-import CheckpointDTO from "../domain/dto/checkpoint-dto.js";
+import Checkpoint from "../domain/models/checkpoint";
+import CheckpointDTO from "../domain/dto/checkpoint-dto";
 import Game from "../domain/models/game";
 import User from "../domain/models/user";
-import sequelize from "../sequelize.js";
+import sequelize from "../sequelize";
 import verifyToken from "../validators/verify-token";
 
 const checkpointsRouter = express.Router();
