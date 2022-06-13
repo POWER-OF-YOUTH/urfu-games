@@ -1,5 +1,5 @@
 /**
- * @file Опредение модели пользователя.
+ * @file Определение модели пользователя.
  */
 
 import { Model, DataTypes } from "sequelize";

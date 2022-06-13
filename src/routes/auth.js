@@ -138,3 +138,4 @@ authRouter.post("/auth/check",
 );
 
 export default authRouter;
+export { authRouter, encryptPassword, generateJWT };
