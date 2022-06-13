@@ -43,7 +43,7 @@ searchRouter.get("/search/users",
             const users = await User.findAll({
                 where: {
                     login: {
-                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                        [Op.iRegexp]: `^${req.query.q}.*$`
                     }
                 },
                 offset: req.query.start,
@@ -82,7 +82,7 @@ searchRouter.get("/search/games",
             const games = await Game.findAll({
                 where: {
                     name: {
-                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                        [Op.iRegexp]: `^${req.query.q}.*$`
                     }
                 },
                 offset: req.query.start,
@@ -121,7 +121,7 @@ searchRouter.get("/search/competencies/",
             const competencies = await Competence.findAll({
                 where: {
                     name: {
-                        [Op.regexp]: `/^${req.query.q}.*$/i`
+                        [Op.iRegexp]: `^${req.query.q}.*$`
                     }
                 },
                 offset: req.query.start,
