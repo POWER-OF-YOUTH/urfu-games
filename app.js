@@ -23,4 +23,6 @@ app.post("/upload/",
     }
 );
 
+app.use((req, res) => res.send("But nobody came."));
+
 export default app;
