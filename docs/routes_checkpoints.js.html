@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/checkpoints.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/checkpoints.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Содержит маршруты для работы с чекпоинтами.
+ */
+
+import asyncMiddleware from "middleware-async";
+import express from "express";
+
+import Checkpoint from "../domain/models/checkpoint";
+import CheckpointDTO from "../domain/dto/checkpoint-dto";
+import Game from "../domain/models/game";
+import User from "../domain/models/user";
+import sequelize from "../sequelize";
+import verifyToken from "../validators/verify-token";
+
+const checkpointsRouter = express.Router();
+
+/** Возвращает список чекпоинтов для игры `gameId`. */
+checkpointsRouter.get("/games/:gameId/checkpoints",
+    asyncMiddleware(
+        async (req, res) => {
+            await sequelize.transaction(async (transaction) => {
+                const game = await Game.findByPk(
+                    req.params.gameId, 
+                    { transaction, rejectOnEmpty: true }
+                );
+                const checkpoints = await game.getCheckpoints({ transaction });
+
+                res.json(await Promise.all(
+                    checkpoints.map((c) => CheckpointDTO.create(c))
+                ));
+            });
+        }
+    )
+);
+
+/** Возвращает информацию о чекпоинте `checkpointId`. */
+checkpointsRouter.get("/checkpoints/:checkpointId",
+    asyncMiddleware(
+        async (req, res) => {
+            const checkpoint = await Checkpoint.findByPk(
+                req.params.checkpointId,
+                { transaction, rejectOnEmpty: true }
+            );
+
+            res.json(await CheckpointDTO.create(checkpoint));
+        }
+    )
+);
+
+/** Обновляет чекпоинт `checkpointId`. */
+checkpointsRouter.put("/checkpoints/:checkpointId",
+    asyncMiddleware(
+        (req, res, next) => {
+            // TODO
+        }
+    )
+);
+
+/** Удаляет чекпоинт `checkpointId`. */
+checkpointsRouter.delete("/checkpoints/:checkpointId",
+    verifyToken,
+    asyncMiddleware(
+        async (req, res) => {
+            await sequelize.transaction(async (transaction) => {
+                const checkpoint = await Checkpoint.findByPk(
+                    req.params.checkpointId,
+                    { transaction, rejectOnEmpty: true }
+                );
+
+                await checkpoint.destroy({ transaction });
+
+                res.json(await CheckpointDTO.create(checkpoint));
+            });
+        }
+    )
+);
+
+/** Возвращает список чекпоинтов, активированных пользователем `userId`. */
+checkpointsRouter.get("/users/:userId/checkpoints",
+    asyncMiddleware(
+        async (req, res) => {
+            await sequelize.transaction(async (transaction) => {
+                const user = await User.findByPk(
+                    req.params.userId,
+                    { transaction, rejectOnEmpty: true }
+                );
+                const checkpoints = await user.getCheckpoints({ transaction });
+
+                res.json(await Promise.all(
+                    checkpoints.map((c) => CheckpointDTO.create(c))
+                ));
+            });
+        }
+    )
+);
+
+/** Активирует чекпоинт `checkpointId` для пользователя `userId`. */
+checkpointsRouter.put("/users/:userId/checkpoints/:checkpointId",
+    asyncMiddleware(
+        async (req, res) => {
+            const transaction = await sequelize.transaction();
+
+            try {
+                const user = await User.findByPk(
+                    req.params.userId,
+                    { transaction, rejectOnEmpty: true }
+                );
+                const checkpoint = await Checkpoint.findByPk(
+                    req.params.checkpointId,
+                    { transaction, rejectOnEmpty: true }
+                );
+
+                await user.addCheckpoint(checkpoint, { transaction });
+
+                await transaction.commit();
+
+                res.json(await CheckpointDTO.create(checkpoint));
+            }
+            catch (err) {
+                await transaction.rollback();
+
+                throw err;
+            }
+        }
+    )
+);
+
+export default checkpointsRouter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#ADMIN_EMAIL">ADMIN_EMAIL</a></li><li><a href="global.html#ADMIN_LOGIN">ADMIN_LOGIN</a></li><li><a href="global.html#ADMIN_PASSWORD">ADMIN_PASSWORD</a></li><li><a href="global.html#API_URI">API_URI</a></li><li><a href="global.html#checkEnvVariableDefined">checkEnvVariableDefined</a></li><li><a href="global.html#DATABASE_URI">DATABASE_URI</a></li><li><a href="global.html#encryptPassword">encryptPassword</a></li><li><a href="global.html#generateJWT">generateJWT</a></li><li><a href="global.html#HOSTNAME">HOSTNAME</a></li><li><a href="global.html#JWT_SECRET">JWT_SECRET</a></li><li><a href="global.html#PORT">PORT</a></li><li><a href="global.html#sequelize">sequelize</a></li><li><a href="global.html#USER_PWD_SALT">USER_PWD_SALT</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Jun 24 2022 19:53:28 GMT+0500 (Yekaterinburg Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
