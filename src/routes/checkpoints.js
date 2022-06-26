@@ -39,7 +39,7 @@ checkpointsRouter.get("/checkpoints/:checkpointId",
         async (req, res) => {
             const checkpoint = await Checkpoint.findByPk(
                 req.params.checkpointId,
-                { transaction, rejectOnEmpty: true }
+                { rejectOnEmpty: true }
             );
 
             res.json(await CheckpointDTO.create(checkpoint));
