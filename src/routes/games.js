@@ -33,10 +33,8 @@ gamesRouter.post("/games/",
             .isURL(),
         body("participants")
             .isArray({ min: 1 }),
-        body("participants.*.id")
+        body("participants.*")
             .isUUID(),
-        body("participants.*.role")
-            .isIn([0, 1]),
         body("competencies")
             .isArray({ min: 1 }),
         body("competencies.*")
@@ -87,14 +85,15 @@ gamesRouter.post("/games/",
                 await Promise.all(
                     req.body.participants.map((p) =>
                         game.addParticipant(
-                            p.id, 
+                            p, 
                             { 
                                 transaction, 
-                                through: { role: p.role }
+                                through: { role: 0 } // 0 - participant role
                             }
                         )
                     )
                 );
+                await game.addParticipant(req.user.id, { transaction, through: { role: 1 }}); // 1 - author role
 
                 await transaction.commit();
 
