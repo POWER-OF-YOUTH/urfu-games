@@ -1,0 +1,12 @@
+.checkpointsMaker {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 30px;
+}
+
+.checkpoint {
+    display: flex;
+    padding: 5px;
+    border: 1px solid grey;
+    flex-flow: column nowrap;
+}

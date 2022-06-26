@@ -1,27 +1,38 @@
-.participantsSelector {
+.competenciesSelector {
     display: flex;
     flex-flow: column nowrap;
     gap: 5px;
     height: 100%;
 }
 
-.participantsSelector__selectedParticipants {
+.competenciesSelector__selectedParticipants {
     overflow-y: auto;
 }
 
-.selectedParticipants__headers {
+.searchContainer {
+    display: flex;
+    width: 100%;
+    flex-flow: row nowrap;
+    gap: 10px;
+}
+
+.search {
+    width: 100%;
+}
+
+.selectedCompetencies__headers {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-.selectedParticipants__header {
+.selectedCompetencies__header {
     display: block;
     margin: 10px 0;
     color: grey;
     white-space: nowrap;
 }
 
-.selectedParticipants__list {
+.selectedCompetencies__list {
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
@@ -31,7 +42,7 @@
     padding: 0;
 }
 
-.participant {
+.competence {
     column-gap: 10px;
     display: flex;
     justify-content: space-between;
@@ -40,30 +51,7 @@
     width: 100%;
 }
 
-.participant__avatarContainer {
-    box-sizing: border-box;
-    height: 100%;
-    overflow: hidden;
-    padding: 5px;
-}
-
-.participant__avatar {
-    border-radius: 50%;
-    display: block;
-    height: 100%;
-}
-
-.participant__loginContainer {
-    align-items: center;
-    display: flex;
-}
-
-.participant__roleContainer {
-    align-items: center;
-    display: flex;
-}
-
-.participant__deleteButtonContainer {
+.competence__deleteButtonContainer {
     align-items: center;
     display: flex;
     justify-content: center;

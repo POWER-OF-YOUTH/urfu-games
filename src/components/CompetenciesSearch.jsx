@@ -1,5 +1,7 @@
-// Компонент `CompetenciesSearch` представляет собой текстовое поле,
-// с помощью которого можно искать пользователей по логину.
+/**
+ * Компонент `CompetenciesSearch` это текстовое поле,
+ * с помощью которого можно искать пользователей по логину.
+ */
 
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
@@ -13,16 +15,14 @@ const defaultCompetenciesSearchValue = { name: "" };
 
 function CompetenciesSearch({
     className,
-    // Вызывается, когда пользователь выбирает один
-    // из предложенных результатов поиска.
-    onSelect = (f) => f,
+    onSelect = (f) => f, ///< Вызывается, когда пользователь выбирает один из предложенных вариантов поиска.
     filterOptions = (f) => f,
     ...props
 }) {
     const [open, setOpen] = useState(false);
-    // Здесь будут храниться результаты поиска.
+    /// Результаты поиска.
     const [options, setOptions] = useState([]);
-    // Значение `value` компонента `Autocomplete`.
+    /// Значение `value` компонента `Autocomplete`.
     const [value, setValue] = useState(defaultCompetenciesSearchValue);
 
     const handleOpen = () => setOpen(true);
@@ -32,10 +32,11 @@ function CompetenciesSearch({
     };
     const handleInputChange = async (evt) => {
         const competenciesSearchResponse = await searchAPI.searchCompetencies(evt.target.value);
-        if (competenciesSearchResponse.ok) setOptions(await competenciesSearchResponse.json());
+        if (competenciesSearchResponse.ok)
+            setOptions(await competenciesSearchResponse.json());
         else setOptions([]);
     };
-    const handleCompetencieSelect = (evt, user) => {
+    const handleCompetenceSelect = (evt, user) => {
         if (user !== null) {
             onSelect(user);
             setValue(defaultCompetenciesSearchValue);
@@ -79,7 +80,7 @@ function CompetenciesSearch({
             open={open}
             onOpen={handleOpen}
             onClose={handleClose}
-            onChange={handleCompetencieSelect}
+            onChange={handleCompetenceSelect}
             options={options}
             getOptionLabel={(option) => option.name}
             value={value}

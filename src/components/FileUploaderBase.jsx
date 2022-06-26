@@ -1,44 +1,42 @@
-// В данном файле описан базовый компонент 
-// для всех полей выбора файлов.
+/**
+ * @file Базовый компонент для всех полей выбора файлов.
+ */
 
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 
+import * as uploadAPI from "../utils/api/uploadAPI";
+
 import styles from "./FileUploaderBase.module.css";
 
-// `FileUploaderBase` - является оберткой для полей выбра файлов
-// и не имеет графического представления. Выбранный файл 
-// загружается автоматически.
+/** 
+ * `FileUploaderBase` - является оберткой для полей выбра файлов
+ * и не имеет графического представления. Выбранный файл 
+ * загружается автоматически.
+ */
 function FileUploaderBase({ 
     className, 
     children, 
     onFileSelect = (f) => f,
     onFileLoad = (f) => f,
     onChange = (f) => f,
+    onError = (f) => f,
     ...props 
 }) {
-    const [fileReader] = useState(new FileReader());
-
-    const handleChange = (evt) => {
+    const handleChange = async (evt) => {
         if (evt.target.files.length > 0) {
-            onFileSelect(evt.target.files[0]);
+            onFileSelect(evt);
 
-            fileReader.readAsDataURL(evt.target.files[0]);
+            const response = await uploadAPI.upload(evt.target.files[0]);
+            if (response.ok) {
+                onFileLoad(await response.text());
+            }
+            else
+                onError(new Error("Failed to upload file."));
         }
 
         onChange(evt);
     }; 
-    const handleLoad = (evt) => {
-        onFileLoad(fileReader.result);
-    };
-
-    useEffect(() => {
-        fileReader.addEventListener("load", handleLoad);
-
-        return () => {
-            fileReader.removeEventListener("load", handleLoad);
-        };
-    }, []);
 
     return (
         <label className={classNames(className, styles.fileUploaderBase)}>

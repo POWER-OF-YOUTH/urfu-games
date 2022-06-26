@@ -7,6 +7,9 @@ import FileUploaderBase from "../../components/FileUploaderBase";
 
 import styles from "./CoverUploader.module.css";
 
+/**
+ * Компонент для загрузки обложки игры.
+ */
 function CoverUploader({ 
     className, 
     onFileLoad = (f) => f,
@@ -14,10 +17,10 @@ function CoverUploader({
 }) {
     const [dataUrl, setDataUrl] = useState(null);
 
-    const handleFileLoad = (dataUrl) => { 
-        setDataUrl(dataUrl); 
+    const handleFileLoad = (url) => { 
+        setDataUrl(url); 
 
-        onFileLoad(dataUrl);
+        onFileLoad(url);
     };
 
     return (

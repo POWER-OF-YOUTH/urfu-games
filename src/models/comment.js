@@ -8,7 +8,6 @@ import * as commentsAPI from "../utils/api/commentsAPI";
 const Comment = types
     .model({
         id: types.identifier,
-        game: types.string,
         author: User,
         text: types.string,
         createdAt: DateTime
@@ -18,13 +17,13 @@ const Comment = types
             const previousText = self.text;
             self.text = text;
 
-            const response = yield commentsAPI.updateComment(self.game, self.id, text);
+            const response = yield commentsAPI.updateComment(self.id, text);
 
             if (!response.ok) 
                 self.text = previousText;
         }),
         delete: flow(function* () {
-            yield commentsAPI.deleteComment(self.game, self.id);
+            yield commentsAPI.deleteComment(self.id);
         })
     }));
 

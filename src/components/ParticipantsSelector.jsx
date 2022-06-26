@@ -1,77 +1,100 @@
-// Компонент `ParticipantSelector` используется для выбора
-// пользователей, участвовавших в разработке игры.
+/*
+ * @file Компонент `ParticipantSelector`.
+ */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
-import { styled } from "@mui/material/styles";
-import { IconButton, Select, MenuItem } from "@mui/material";
+import { IconButton } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import classNames from "classnames";
 
 import UsersSearch from "./UsersSearch";
+import useStore from "../hooks/useStore";
 
 import styles from "./ParticipantsSelector.module.css";
 
-function ParticipantsSelector(
-    { 
-        className, 
-        // Вызвается, когда изменяется список выбранных участников.
-        onChange = (f) => f, 
-        ...props
-    }
-) {
+/**
+ * Компонент для выбора пользователей, участвовавших в разработке игры.
+ */
+function ParticipantsSelector({ 
+    className, 
+    onChange = (f) => f, 
+    required,
+    ...props
+}) {
+    const { auth } = useStore();
     const [selectedParticipants, setSelectedParticipants] = useState([]);
+    const selectElement = useRef(null);
 
-    // Передается в компонент `UsersSearch`. Используется для того, чтобы
-    // убрать из результата поиска тех пользователей, которых мы уже выбрали.
-    const filterUnselectedParticipants = (users) => {
+    const filterUnselectedParticipants = (participants) => {
         const result = [];
 
-        for (const user of users) {
-            if (selectedParticipants.find((u) => u.login === user.login) === undefined)
-                result.push(user);
+        for (const participant of participants) {
+            if ((auth.user !== null && participant.login !== auth.user.login) 
+            || (selectedParticipants.find((p) => p.login === participant.login) === undefined))
+                result.push(participant);
         }
 
         return result;
     };
 
-    const handleParticipantSelect = (user) => { 
-        if (user !== null)
-            setSelectedParticipants([user, ...selectedParticipants]);
+    const handleParticipantSelect = (participant) => { 
+        if (participant !== null) {
+            setSelectedParticipants([...selectedParticipants, participant]);
+        }
     };
-    const handleParticipantDelete = (userIndex) => {
-        selectedParticipants.splice(userIndex, 1);
+    const handleParticipantDelete = (participantIndex) => {
+        selectedParticipants.splice(participantIndex, 1);
         setSelectedParticipants([...selectedParticipants]);
     };
 
-    useEffect(() => onChange(selectedParticipants), [selectedParticipants]);
+    useEffect(() => {
+        if (selectElement !== null) {
+            selectElement.current.values = [...selectedParticipants];
+            selectElement.current.onchange = onChange;
+            selectElement.current.dispatchEvent(new Event("change"));
+        }
+    }, [selectedParticipants]);
 
     return (
-        <div className={classNames(className, styles.participantsSelector)}>
+        <div className={classNames(className, styles.participantsSelector)} {...props}>
             <UsersSearch 
                 onSelect={handleParticipantSelect} 
                 filterOptions={filterUnselectedParticipants} 
             />
-            {selectedParticipants.length > 0 && (
-                <SelectedParticipants className={classNames(styles.participantsSelector__selectedParticipants)}>
-                    {selectedParticipants.map((u, index) => (
-                        <Participant 
-                            key={u.id}
-                            user={u} 
-                            onDelete={() => handleParticipantDelete(index)} 
-                            enableDelete 
-                        />
-                    ))}
-                </SelectedParticipants>
-            )}
+            <select 
+                style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
+                ref={selectElement}
+                required={required && selectedParticipants.length === 0 && auth.user === null}
+            />
+            <SelectedParticipants className={classNames(styles.participantsSelector__selectedParticipants)}>
+                {auth.user && (
+                    <Participant 
+                        user={auth.user} 
+                        role="Автор"
+                    />
+                )}
+                {selectedParticipants.map((p, index) => (
+                    <Participant 
+                        key={p.id}
+                        user={p} 
+                        role="Участник"
+                        onDelete={() => handleParticipantDelete(index)} 
+                        enableDelete 
+                    />
+                ))}
+            </SelectedParticipants>
         </div>
     );
 }
 
-// Компонент `SelectedParticipants` - контейнер, в котором 
-// будут отображаться выбранные участники.
+/* 
+ * Компонент `SelectedParticipants` - контейнер, в котором 
+ * будут отображаться выбранные участники.
+ */
 function SelectedParticipants({ className, children, ...props }) { // TODO:
     return (
-        <div className={classNames(className, styles.selectedParticipants)}>
+        <div className={classNames(className, styles.selectedParticipants)} {...props}>
             <div className={classNames(styles.selectedParticipants__headers)}>
                 <span className={classNames(styles.selectedParticipants__header)}>Пользователь</span>
                 <span className={classNames(styles.selectedParticipants__header)}>Роль</span>
@@ -83,28 +106,25 @@ function SelectedParticipants({ className, children, ...props }) { // TODO:
     );
 }
 
-// `Participant` используется для отображения информации об участнике. 
-// Его следует передавать передавать в `SelectedParticipants`.
+/* 
+ * `Participant` используется для отображения информации об участнике. 
+ * Его следует передавать передавать в `SelectedParticipants`.
+ */
 function Participant(
     { 
         className, 
         user, 
-        onRoleChange = (f) => f,
+        role = "Участник",
         onDelete = (f) => f,
         enableDelete = false, // Если указано значение false, то крестик отображаться не будет.
         ...props 
     }
 ) {
-    const [role, setRole] = useState(null);
-
-    const handleRoleChange = (evt) => {
-        setRole(evt.target.value);
-    };
-
-    useEffect(() => onRoleChange(role), [role]);
-
     return (
-        <li className={classNames(className, styles.selectedParticipants__participant, styles.participant)}>
+        <li
+            className={classNames(className, styles.selectedParticipants__participant, styles.participant)}
+            {...props}
+        >
             <div className={classNames(styles.participant__avatarContainer)}>
                 <img 
                     className={classNames(styles.participant__avatar)} 
@@ -116,15 +136,7 @@ function Participant(
                 <span className={classNames(styles.participant__login)}>{user.login}</span>
             </div>
             <div className={classNames(styles.participant__roleContainer)}>
-                <RoleSelect 
-                    variant="standard"
-                    value={role} 
-                    onChange={handleRoleChange}
-                    displayEmpty
-                >
-                    <MenuItem value={null}>Не указана</MenuItem>
-                    <MenuItem value="Участник">Участник</MenuItem>
-                </RoleSelect>
+                <span>{role}</span>
             </div>
             <div className={classNames(styles.participant__deleteButtonContainer)}>
                 {enableDelete && (
@@ -137,9 +149,5 @@ function Participant(
     );
 }
 
-const RoleSelect = styled(Select)({
-    width: "100%"
-});
-
-export default ParticipantsSelector;
+export default observer(ParticipantsSelector);
 

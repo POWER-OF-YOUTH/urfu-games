@@ -5,6 +5,10 @@
     width: 100%;
 }
 
+.coverUploader:focus {
+    border-color: red;
+}
+
 .coverUploader::before {
     content: "";
     display: block;

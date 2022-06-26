@@ -59,10 +59,6 @@ function GamePage() {
                                         <div className={styles.gameData}>
                                             <p className={styles.name}>{game.name}</p>
                                             <div className={styles.details}>
-                                                <p>
-                                                    <span className={styles.caption}>Автор: </span>
-                                                    <span className={styles.login}>{game.author.login}</span>
-                                                </p>
                                                 {game.participants.length > 0 && (
                                                     <p>
                                                         <span className={styles.caption}>Участники: </span>
@@ -102,7 +98,7 @@ function GamePage() {
                                                         Играть
                                                     </Button>
                                                 </NavLink>
-                                                { auth.authenticated && auth.user.id === game.author.id && (
+                                                { auth.authenticated && 1 === 0 && (
                                                     <NavLink 
                                                         className={styles.settingsButtonLink} 
                                                         to={`/games/${params.gameId}/settings`}

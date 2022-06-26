@@ -9,7 +9,7 @@
     }
 }
 
-.gamePublishForm__container {
+.gamePublishForm__column {
     display: flex;
     flex-flow: column nowrap;
     gap: 30px;
@@ -19,6 +19,12 @@
     display: flex;
     gap: 10px;
     flex-flow: column nowrap;
+}
+
+@media (min-width: 1000px) {
+    .gamePublishForm__field_checkpoints {
+        grid-column: 1 / span 2;
+    }
 }
 
 .gamePublishForm__label {

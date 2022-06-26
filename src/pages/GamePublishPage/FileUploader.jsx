@@ -15,19 +15,17 @@ function FileUploader({
     const [file, setFile] = useState(null);
     const [loaded, setLoaded] = useState(false);
 
-    const handleFileSelect = (file) => {
+    const handleFileSelect = (evt) => {
         setLoaded(false);
 
-        setFile(file);
+        setFile(evt.target.files[0]);
 
-        onFileSelect(file);
+        onFileSelect(evt);
     };
-    const handleFileLoad = (dataUrl) => {
-        console.log(dataUrl);
-
+    const handleFileLoad = (url) => {
         setLoaded(true);
 
-        onFileLoad(dataUrl);
+        onFileLoad(url);
     };
 
     const renderText = () => {

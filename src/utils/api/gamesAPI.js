@@ -91,7 +91,7 @@ export async function rateGame(gameId, value) {
 
     const response = await fetch(url, {
         ...apiConfig.getDefaultRequestInit(),
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({ value })
     });
 

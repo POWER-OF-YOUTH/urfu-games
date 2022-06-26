@@ -1,31 +1,41 @@
-// Компонент `CompetenciesSelector` используется для выбора компетенций.
+/**
+ * @file Компонент `CompetenciesSelector`.
+ */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import classNames from "classnames";
 import Competence from "./Competence";
 import { styled } from "@mui/material/styles";
-import { IconButton, Select, MenuItem } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 import CompetenciesSearch from "./CompetenciesSearch";
+import NewCompetenceDialog from "./NewCompetenceDialog";
 
 import styles from "./CompetenciesSelector.module.css";
 
 function CompetenciesSelector({
     className,
-    // Вызвается, когда изменяется список выбранных компетенций.
-    onChange = (f) => f,
+    onChange = (f) => f, ///< Вызвается, когда изменяется список выбранных компетенций.
+    required,
     ...props
 }) {
     const [selectedCompetencies, setSelectedCompetencies] = useState([]);
+    const [newCompetenceDialogOpen, setNewCompetenceDialogOpen] = useState(false);
 
-    // Передается в компонент `CompetenciesSearch`. Используется для того, чтобы
-    // убрать из результата поиска тех компетенций, которых мы уже выбрали.
+    const selectElement = useRef(null);
+
+    /**
+     * Передается в компонент `CompetenciesSearch`. Используется для того, чтобы
+     * убрать из результата поиска те компетенции, которые уже были выбраны.
+     */
     const filterUnselectedParticipants = (competencies) => {
         const result = [];
 
         for (const comp of competencies) {
-            if (selectedCompetencies.find((u) => u.name === comp.name) === undefined) result.push(comp);
+            if (selectedCompetencies.find((u) => u.name === comp.name) === undefined)
+                result.push(comp);
         }
 
         return result;
@@ -38,50 +48,85 @@ function CompetenciesSelector({
         selectedCompetencies.splice(userIndex, 1);
         setSelectedCompetencies([...selectedCompetencies]);
     };
+    const handleNewCompetenceButtonClick = () => setNewCompetenceDialogOpen(true);
+    const handleNewCompetenceDialogClose = () => setNewCompetenceDialogOpen(false);
 
-    useEffect(() => onChange(selectedCompetencies), [selectedCompetencies]);
+    useEffect(() => {
+        if (selectElement !== null) {
+            selectElement.current.values = selectedCompetencies;
+            selectElement.current.onchange = onChange;
+            selectElement.current.dispatchEvent(new Event("change"));
+        }
+    }, [selectedCompetencies]);
 
     return (
-        <div className={styles.participantsSelector}>
-            <CompetenciesSearch onSelect={handleCompetenceSelect} filterOptions={filterUnselectedParticipants} />
+        <div className={styles.competenciesSelector}>
+            <div className={styles.searchContainer}>
+                <CompetenciesSearch
+                    className={styles.search}
+                    onSelect={handleCompetenceSelect}
+                    filterOptions={filterUnselectedParticipants}
+                />
+                <div className={styles.newButtonContainer}>
+                    <NewCompetenceButton
+                        variant="contained"
+                        color="success"
+                        onClick={handleNewCompetenceButtonClick}
+                    >
+                        <AddIcon />
+                    </NewCompetenceButton>
+                </div>
+            </div>
+            <select 
+                style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
+                ref={selectElement}
+                required={required && selectedCompetencies.length == 0}
+            />
             {selectedCompetencies.length > 0 && (
-                <SelectedCompetencies className={styles.participantsSelector__selectedParticipants}>
+                <SelectedCompetencies className={styles.competenciesSelector__selectedCompetencies}>
                     {selectedCompetencies.map((c, i) => (
                         <CompetenceItem key={i} competence={c} onDelete={handleCompetenciesDelete} enableDelete />
                     ))}
                 </SelectedCompetencies>
             )}
+            <NewCompetenceDialog
+                open={newCompetenceDialogOpen}
+                onClose={handleNewCompetenceDialogClose}
+            />
         </div>
     );
 }
 
-// Компонент `SelectedParticipants` - контейнер, в котором
-// будут отображаться выбранные участники.
+/** 
+ * Компонент `SelectedCompetencies` - контейнер, в котором
+ * будут отображаться выбранные компетенции.
+ */
 function SelectedCompetencies({ className, children, ...props }) {
     // TODO:
     return (
-        <div className={styles.selectedParticipants}>
-            <div className={styles.selectedParticipants__headers}>
-                <span className={styles.selectedParticipants__header}>Выбранные компетенции:</span>
+        <div className={styles.selectedCompetencies}>
+            <div className={styles.selectedCompetencies__headers}>
+                <span className={styles.selectedCompetencies__header}>Выбранные компетенции:</span>
             </div>
-            <ul className={styles.selectedParticipants__list}>{children}</ul>
+            <ul className={styles.selectedCompetencies__list}>{children}</ul>
         </div>
     );
 }
 
-// `CompetenceItem` используется для отображения информации о компетенции.
-// Его следует передавать передавать в `SelectedCompetencies`.
+/**
+ * `CompetenceItem` используется для отображения информации о компетенции.
+ * Его следует передавать передавать в `SelectedCompetencies`.
+ */
 function CompetenceItem({
-    className,
     competence,
     onDelete = (f) => f,
-    enableDelete = false, // Если указано значение false, то крестик отображаться не будет.
+    enableDelete = false, ///< Если указано значение false, то крестик отображаться не будет.
     ...props
 }) {
     return (
-        <li className={classNames(styles.selectedParticipants__participant, styles.participant)}>
+        <li className={classNames(styles.selectedCompetencies__participant, styles.competence)}>
             <Competence competence={competence} enablePopup />
-            <div className={styles.participant__deleteButtonContainer}>
+            <div className={styles.competence__deleteButtonContainer}>
                 {enableDelete && (
                     <DeleteButton onClick={onDelete}>
                         <ClearIcon />
@@ -94,6 +139,11 @@ function CompetenceItem({
 
 const DeleteButton = styled(IconButton)({
     padding: "0px",
+});
+
+const NewCompetenceButton = styled(Button)({
+    width: "100%",
+    height: "100%"
 });
 
 export default CompetenciesSelector;
