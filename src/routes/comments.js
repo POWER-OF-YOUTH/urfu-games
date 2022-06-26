@@ -40,7 +40,7 @@ commentsRouter.post("/games/:gameId/comments/",
                     text: req.body.text
                 }, { transaction });
 
-                res.setHeader("Location", `${globals.API_URI}/games/${game.id}/comments/${comment.id}`);
+                res.setHeader("Location", `${globals.API_URI}/comments/${comment.id}`);
                 res.json(await CommentDetailDTO.create(comment));
             });
         }
@@ -48,19 +48,14 @@ commentsRouter.post("/games/:gameId/comments/",
 );
 
 /** Возвращает информацию о комментарии `commentId`. */
-commentsRouter.get("/games/:gameId/comments/:commentId",
+commentsRouter.get("/comments/:commentId",
     asyncMiddleware(
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
-                const game = await Game.findByPk(
-                    req.params.gameId,
-                    { transaction, rejectOnEmpty: true }
-                );
                 const comment = await Comment.findOne({
                     transaction,
                     where: {
-                        id: req.params.commentId,
-                        gameId: game.id
+                        id: req.params.commentId
                     },
                     rejectOnEmpty: true,
                 });
@@ -104,7 +99,7 @@ commentsRouter.get("/games/:gameId/comments/",
 );
 
 /** Обновляет комментарий `commentId`. */
-commentsRouter.put("/games/:gameId/comments/:commentId",
+commentsRouter.put("/comments/:commentId",
     verifyToken,
     validateRequest(
         body("text")
@@ -116,15 +111,10 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
     asyncMiddleware(
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
-                const game = await Game.findByPk(
-                    req.params.gameId,
-                    { transaction, rejectOnEmpty: true }
-                );
                 const comment = await Comment.findOne({
                     transaction,
                     where: {
-                        id: req.params.commentId,
-                        gameId: game.id
+                        id: req.params.commentId
                     },
                     rejectOnEmpty: true
                 });
@@ -142,19 +132,14 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
 );
 
 /** Удаляет комментарий `commentId`. */
-commentsRouter.delete("/games/:gameId/comments/:commentId",
+commentsRouter.delete("/comments/:commentId",
     verifyToken,
     asyncMiddleware(async (req, res) => {
         await sequelize.transaction(async (transaction) => {
-            const game = await Game.findByPk(
-                req.params.gameId,
-                { transaction, rejectOnEmpty: true }
-            );
             const comment = await Comment.findOne({
                 transaction,
                 where: {
-                    id: req.params.commentId,
-                    gameId: game.id
+                    id: req.params.commentId
                 },
                 rejectOnEmpty: true
             });
