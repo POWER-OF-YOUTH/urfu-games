@@ -32,7 +32,8 @@ gamesRouter.post("/games/",
         body("image")
             .isURL(),
         body("participants")
-            .isArray({ min: 1 }),
+            .default([])
+            .isArray(),
         body("participants.*")
             .isUUID(),
         body("competencies")
