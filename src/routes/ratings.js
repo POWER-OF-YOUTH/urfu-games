@@ -36,10 +36,20 @@ ratingsRouter.put("/games/:gameId/ratings/",
                     rejectOnEmpty: true
                 });
 
-                const rating = await game.createRate({
-                    authorId: req.user.id,
-                    value: req.body.value
-                }, { transaction });
+                let rating = await Rating.findOne({
+                    transaction,
+                    where: {
+                        authorId: req.user.id
+                    }
+                });
+                if (rating === null) {
+                    rating = await game.createRating({
+                        authorId: req.user.id,
+                        value: 0
+                    }, { transaction });
+                }
+                rating.value = req.body.value;
+                await rating.save();
 
                 await transaction.commit();
 
