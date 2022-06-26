@@ -4,9 +4,9 @@
 
 import "dotenv/config";
 
-import sequelize from "./sequelize";
-import app from "./app";
 import * as globals from "./globals";
+import app from "./app";
+import sequelize from "./sequelize";
 import { User, Role } from "./domain/models/user";
 import { encryptPassword } from "./routes/auth";
 
