@@ -172,11 +172,10 @@ gamesRouter.put("/games/:gameId",
         body("image")
             .isURL(),
         body("participants")
-            .isArray({ min: 1 }),
-        body("participants.*.id")
+            .default([])
+            .isArray(),
+        body("participants.*")
             .isUUID(),
-        body("participants.*.role")
-            .isIn([0, 1]),
         body("competencies")
             .isArray({ min: 1 }),
         body("competencies.*")
@@ -224,11 +223,15 @@ gamesRouter.put("/games/:gameId",
                 await Promise.all(
                     req.body.participants.map((p) =>
                         game.addParticipant(
-                            p.id, 
-                            { transaction, through: { role: p.role }}
+                            p, 
+                            { 
+                                transaction, 
+                                through: { role: 0 } // 0 - participant role
+                            }
                         )
                     )
                 );
+                await game.addParticipant(req.user.id, { transaction, through: { role: 1 }}); // 1 - author role
 
                 await transaction.commit();
 

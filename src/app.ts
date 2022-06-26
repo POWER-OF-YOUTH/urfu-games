@@ -51,9 +51,16 @@ app.use(<TError>(err: TError, req: Request, res: Response, next: NextFunction) =
         console.error(err);
 
         res.status(500).json({ 
-            errors: [{ ...new UnexpectedError(), instance: req.originalUrl, type: "access"}]
+            errors: [{ ...new UnexpectedError(), instance: req.originalUrl, type: "unexpected"}]
         });
     }
 });
+app.use((req: Request, res: Response) => {
+    res.status(404).json({ errors: [{
+        ...new AccessError("Указанный путь не найден."),
+        instance: req.originalUrl,
+        type: "access"
+    }]});
+})
 
 export default app;

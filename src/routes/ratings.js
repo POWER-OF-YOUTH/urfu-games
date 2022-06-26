@@ -1,5 +1,5 @@
 /**
- * @file Содержит маршруты для работы с оценками игр.
+ * @file Маршруты для работы с оценками игр.
  */
 
 import express from "express";
@@ -10,14 +10,14 @@ import RatingDetailDTO from "../domain/dto/rating-detail-dto";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import Game from "../domain/models/game";
-import { LogicError } from "../utils/errors";
+import { AccessError, LogicError } from "../utils/errors";
 import Rating from "../domain/models/rating";
 import sequelize from "../sequelize";
 
 const ratingsRouter = express.Router();
 
 /** Добавляет оценку со значением `value` для игры `gameId`. */
-ratingsRouter.put("/games/:gameId/ratings/",
+ratingsRouter.post("/games/:gameId/ratings/",
     verifyToken,
     validateRequest(
         body("value")
@@ -38,21 +38,26 @@ ratingsRouter.put("/games/:gameId/ratings/",
 
                 let rating = await Rating.findOne({
                     transaction,
-                    where: {
-                        authorId: req.user.id
-                    }
+                    where: { authorId: req.user.id }
                 });
-                if (rating === null) {
-                    rating = await game.createRating({
-                        authorId: req.user.id,
-                        value: 0
-                    }, { transaction });
-                }
-                rating.value = req.body.value;
-                await rating.save();
+                if (rating !== null)
+                    await rating.destroy({ transaction });
+                rating = await game.createRating({
+                    authorId: req.user.id,
+                    value: req.body.value
+                }, { transaction });
+
+                // Update 'rating' game field.
+                const ratings = await game.getRatings({ transaction });
+                game.rating = ratings.reduce(
+                    (previous, current) => previous + (current.value / ratings.length), // count average
+                    0
+                );
+                await game.save({ transaction });
 
                 await transaction.commit();
 
+                res.setHeader("Location", `${API_URI}/ratings/${rating.id}`);
                 res.json(await RatingDetailDTO.create(rating));
             }
             catch (err) {
@@ -60,6 +65,20 @@ ratingsRouter.put("/games/:gameId/ratings/",
 
                 throw err;
             }
+        }
+    )
+);
+
+/** Возвращает информацию об оценке 'ratingId'. */
+ratingsRouter.get("/ratings/:ratingId",
+    asyncMiddleware(
+        async (req, res) => {
+            const rating = await Rating.findByPk(
+                req.params.ratingId,
+                { rejectOnEmpty: new LogicError("Оценка не найдена.") }
+            );
+
+            res.json(await RatingDetailDTO.create(rating));
         }
     )
 );
@@ -106,16 +125,61 @@ ratingsRouter.delete("/games/:gameId/ratings/",
     asyncMiddleware(
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
+                const game = await Game.findByPk(
+                    req.params.gameId,
+                    { transaction, rejectOnEmpty: true }
+                );
                 const rating = await Rating.findOne({
                     transaction,
                     where: {
                         authorId: req.user.id,
                         gameId: req.params.gameId
                     },
-                    rejectOnEmpty: new LogicError("Пользователь не оценивал игру.")
+                    rejectOnEmpty: new LogicError("Вы не оценивали игру.")
                 });
 
                 await rating.destroy({ transaction });
+
+                // Update game rating.
+                const ratings = await game.getRatings({ transaction });
+                game.rating = ratings.reduce(
+                    (previous, current) => previous + (current.value / ratings.length), // count average
+                    0
+                );
+                await game.save({ transaction });
+
+                res.json(await RatingDetailDTO.create(rating));
+            });
+        }
+    )
+);
+
+/** Удаляет оценку 'ratingId'. */
+ratingsRouter.delete("/ratings/:ratingId",
+    verifyToken,
+    asyncMiddleware(
+        async (req, res) => {
+            await sequelize.transaction(async (transaction) => {
+                const rating = await Rating.findByPk(
+                    req.params.ratingId,
+                    { 
+                        transaction,
+                        rejectOnEmpty: new LogicError("Оценка не найдена.")
+                    }
+                );
+                if (rating.authorId !== req.user.id)
+                    throw new AccessError("Вы не выставляли эту оценку.");
+                const game = await rating.getGame({ transaction });
+
+                await rating.destroy({ transaction });
+
+                // Update game rating.
+                const ratings = await game.getRatings({ transaction });
+                game.rating = ratings.reduce(
+                    (previous, current) => previous + (current.value / ratings.length), // count average
+                    0
+                );
+                await game.save({ transaction });
 
                 res.json(await RatingDetailDTO.create(rating));
             });

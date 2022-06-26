@@ -28,6 +28,10 @@ class Game extends Model {
     declare dataUrl: string;
     declare frameworkUrl: string;
     declare codeUrl: string;
+    /**
+     * Рейтинг игры.
+     */
+    declare rating: number;
     /** 
      * Флаг, который содержит значение `true` 
      * если игра опубликована, - `false` в ином случае.
@@ -74,7 +78,12 @@ Game.init({
     codeUrl: {
         type: DataTypes.STRING
     },
-    idPublicated: {
+    rating: {
+        type: DataTypes.FLOAT(8),
+        defaultValue: 0,
+        allowNull: false
+    },
+    isPublicated: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false

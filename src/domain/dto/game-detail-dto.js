@@ -14,7 +14,8 @@ class GameDetailDTO {
         this.frameworkUrl = game.frameworkUrl;
         this.codeUrl = game.codeUrl;
         this.createdAt = game.createdAt;
-        this.isUploaded = game.isUploaded;
+        this.rating = game.rating;
+        this.isPublicated = game.isPublicated;
     }
 
     static async create(game) {

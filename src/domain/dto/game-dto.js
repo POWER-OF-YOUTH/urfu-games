@@ -8,7 +8,8 @@ class GameDTO {
         this.author = game.author;
         this.participants = game.participants;
         this.createdAt = game.createdAt;
-        this.uploaded = game.uploaded;
+        this.rating = game.rating;
+        this.isPublicated = game.isPublicated;
     }
 
     static async create(game) {
