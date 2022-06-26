@@ -10,7 +10,7 @@ class CheckpointDTO {
     } 
 
     static async create(checkpoint) {
-        return CheckpointDTO(
+        return new CheckpointDTO(
             checkpoint,
             await checkpoint.getCompetence()
         );
