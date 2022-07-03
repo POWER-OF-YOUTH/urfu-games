@@ -1,4 +1,6 @@
-const APIURL = "http://10.0.0.1:3004";
+import * as globals from "../globals";
+
+const APIURL = globals.API_URI;
 
 function getDefaultRequestInit() {
     return {
