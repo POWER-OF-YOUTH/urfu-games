@@ -13,6 +13,7 @@ import Game from "../domain/models/game";
 import { AccessError, LogicError } from "../utils/errors";
 import Rating from "../domain/models/rating";
 import sequelize from "../sequelize";
+import * as globals from "../globals";
 
 const ratingsRouter = express.Router();
 
@@ -57,7 +58,7 @@ ratingsRouter.post("/games/:gameId/ratings/",
 
                 await transaction.commit();
 
-                res.setHeader("Location", `${API_URI}/ratings/${rating.id}`);
+                res.setHeader("Location", `${globals.API_URI}/ratings/${rating.id}`);
                 res.json(await RatingDetailDTO.create(rating));
             }
             catch (err) {
