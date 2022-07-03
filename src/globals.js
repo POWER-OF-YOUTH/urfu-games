@@ -3,7 +3,7 @@
  */
 
 /** API URI. */
-export const API_URI = "http://10.0.0.1:3004";
+export const API_URI = "https://api.urfugames.ru";
 /** Токен пользователя. */
 export const ACCESS_TOKEN = localStorage.getItem("access_token");
 /** Идентификатор счетчика Яндекс.Метрики. */
