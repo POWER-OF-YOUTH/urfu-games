@@ -14,6 +14,7 @@ function SignInPage({ history }) {
     const handleFormSubmit = async (values) => {
         await auth.signIn(values);
     };
+    const handleFormChange = () => auth.clearErrors();
 
     useEffect(() => {
         auth.clearErrors();
@@ -25,7 +26,7 @@ function SignInPage({ history }) {
             else history.push("/games");
         }
     }, [auth.authenticated]);
-    const alert = auth.errors.length > 0 && (
+    const renderAlert = () => auth.errors.length > 0 && (
         <Alert className={styles.alert} severity="error">
             {auth.errors[0].message}
         </Alert>
@@ -36,14 +37,17 @@ function SignInPage({ history }) {
                 <title>Вход</title>
             </Helmet>
             <div className={styles.wrapper}>
-                <SignInForm onSubmit={handleFormSubmit} />
-                {alert}
+                <SignInForm onSubmit={handleFormSubmit} onChange={handleFormChange} />
+                {renderAlert()}
             </div>
         </>
     );
 }
 
-function SignInForm({ onSubmit, onChange }) {
+function SignInForm({
+    onSubmit = (f) => f,
+    onChange = (f) => f
+}) {
     const [values, setValues] = useState({
         login: "",
         password: "",
@@ -52,8 +56,9 @@ function SignInForm({ onSubmit, onChange }) {
     const handleFieldChange = (evt) => {
         setValues({ ...values, [evt.target.name]: evt.target.value });
     };
-
     const handleSubmit = () => onSubmit(values);
+
+    useEffect(() => onChange({...values}), [values]);
 
     return (
         <div className={styles.signInForm}>

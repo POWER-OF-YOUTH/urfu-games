@@ -16,10 +16,11 @@ import {
 } from "../components/comments";
 import { Game } from "../models/game";
 import { useStore } from "../hooks";
+import * as globals from "../globals";
 
 import styles from "./GamePage.module.css";
 
-function GamePage() {
+function GamePage({ history }) {
     const params = useParams(); // { gameId: string }
 
     const { auth } = useStore();
@@ -30,8 +31,13 @@ function GamePage() {
     const handleRatingChange = (evt, value) => game.rate(value);
     const handlePlayButtonClick = () => {
         if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
-            window.ym(86784357, "reachGoal", "play_button_click");
+            window.ym(globals.YM_ID, "reachGoal", "play_button_click");
         }
+    };
+    const handleDeleteButtonClick = () => {
+        game.delete()
+            .then(() => history.push("/"))
+            .catch((err) => console.error(err));
     };
 
     useEffect(() => {
@@ -50,6 +56,9 @@ function GamePage() {
                 <>
                     <div className={styles.wrapper}>
                         <Block className={styles.paper}>
+                            {auth.user.isAdmin() && (
+                                <button onClick={handleDeleteButtonClick}>Удалить</button>
+                            )}
                             <div className={styles.contentWrapper}>
                                 <div className={styles.content}>
                                     <div className={styles.topBlock}>

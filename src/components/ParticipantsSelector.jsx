@@ -30,8 +30,8 @@ function ParticipantsSelector({
         const result = [];
 
         for (const participant of participants) {
-            if ((auth.user !== null && participant.login !== auth.user.login) 
-            || (selectedParticipants.find((p) => p.login === participant.login) === undefined))
+            if ((participant.login !== auth.user.login) 
+            && (selectedParticipants.find((p) => p.login === participant.login) === undefined))
                 result.push(participant);
         }
 

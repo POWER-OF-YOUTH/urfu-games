@@ -5,23 +5,18 @@ import classNames from "classnames";
 import PageLayout from "../../layouts/PageLayout";
 import PageTitle from "../../components/PageTitle";
 import GamePublishForm from "./GamePublishForm";
-import { APIURL, getDefaultRequestInit } from "../../helpers/apiConfig";
+import * as gamesAPI from "../../utils/api/gamesAPI";
 
 import styles from "./GamePublishPage.module.css";
 
 function GamePublishPage({ history }) {
-    const handleSubmit = async (values) => {
-        values.participants = values.participants.map((p) => p.id);
-        values.competencies = values.competencies.map((c) => c.id);
+    const handleSubmit = async (data) => {
+        data.participants = data.participants.map((p) => p.id);
+        data.competencies = data.competencies.map((c) => c.id);
 
-        const response = await fetch(`${APIURL}/games`, {
-            method: "POST",
-            ...getDefaultRequestInit(),
-            body: JSON.stringify(values)
-        });
+        await gamesAPI.addGame(data);
 
-        if (response.ok)
-            history.push("/");
+        history.push("/");
     };
 
     return (
