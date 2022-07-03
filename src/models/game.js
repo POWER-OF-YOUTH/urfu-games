@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { values } from "mobx";
 import { 
     types, 
     flow,
@@ -10,7 +11,7 @@ import { DateTime } from "./custom";
 import { User } from "./user";
 import { Competence } from "./competence";
 import { CommentsStore } from "./comment";
-import { values } from "mobx";
+import * as globals from "../globals";
 
 const Game = types
     .model({
@@ -59,14 +60,12 @@ const Game = types
                 
                 const gameResponse = yield gamesAPI.getGame(self.id);
 
-                if (gameResponse.ok) {
-                    const gameJSON = yield gameResponse.json();
+                const gameJSON = gameResponse.data;
 
-                    self.rating = gameJSON.rating; 
-                }
+                self.rating = gameJSON.rating; 
 
                 if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
-                    window.ym(86784357, "reachGoal", "rate_game"); 
+                    window.ym(globals.YM_ID, "reachGoal", "rate_game"); 
                 }
             }
         }),
@@ -76,18 +75,14 @@ const Game = types
         load: flow(function* (gameId) {
             const gameResponse = yield gamesAPI.getGame(gameId);
 
-            if (gameResponse.ok) {
-                applySnapshot(self, yield gameResponse.json());
-                self.loaded = true;
-            }
-            else
-                throw new Error("Failed to load the game.");
+            applySnapshot(self, gameResponse.data);
+            self.loaded = true;
         }),
         loadComments: flow(function* () {
             yield self.comments.load(self.id);
         }),
         save: flow(function* () {
-            const updateGameResponse = yield gamesAPI.updateGame(
+            yield gamesAPI.updateGame(
                 self.id, 
                 {
                     name: self.name,
@@ -98,9 +93,6 @@ const Game = types
                     loaderUrl: self.loaderUrl,
                 }
             );
-
-            if (!updateGameResponse.ok)
-                throw new Error("Failed to update game.");
         })
     }));
 
@@ -120,14 +112,12 @@ const GamesStore = types
         load: flow(function* (start = 0, count = 10) {
             const response = yield gamesAPI.getGames(start, count); 
 
-            if (response.ok) {
-                const json = yield response.json();
+            const json = response.data;
 
-                const games = {};
-                json.forEach(g => games[g.id] = g);
+            const games = {};
+            json.forEach(g => games[g.id] = g);
 
-                self.games = games;
-            }
+            self.games = games;
         }),
         delete(id) { 
             self.games.delete(id);

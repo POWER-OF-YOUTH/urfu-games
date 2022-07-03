@@ -17,6 +17,7 @@ function GamesPage() {
     const games = useLocalObservable(() => GamesStore.create());
     const competencies = useLocalObservable(() => CompetenciesStore.create());
 
+
     useEffect(() => {
         games.load().catch(err => console.error(err));
         competencies.load().catch(err => console.error(err));

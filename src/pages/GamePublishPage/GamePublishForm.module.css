@@ -1,0 +1,47 @@
+.gamePublishForm__wrapper {
+    display: grid;
+    grid-gap: 30px;
+}
+
+@media (min-width: 1000px) {
+    .gamePublishForm__wrapper {
+        grid-template-columns: 3fr 2fr;
+    }
+}
+
+.gamePublishForm__column {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 30px;
+}
+
+.gamePublishForm__field {
+    display: flex;
+    gap: 10px;
+    flex-flow: column nowrap;
+}
+
+@media (min-width: 1000px) {
+    .gamePublishForm__field_checkpoints {
+        grid-column: 1 / span 2;
+    }
+}
+
+.gamePublishForm__label {
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+}
+
+.gamePublishForm__caption {
+    text-align: justify;
+    color: grey;
+}
+
+.publishButtonContainer {
+    margin-top: 30px;
+}
+
+.publishButton {
+    width: 100%;
+}
+

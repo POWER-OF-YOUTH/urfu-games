@@ -1,0 +1,58 @@
+.competenciesSelector {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px;
+    height: 100%;
+}
+
+.competenciesSelector__selectedParticipants {
+    overflow-y: auto;
+}
+
+.searchContainer {
+    display: flex;
+    width: 100%;
+    flex-flow: row nowrap;
+    gap: 10px;
+}
+
+.search {
+    width: 100%;
+}
+
+.selectedCompetencies__headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.selectedCompetencies__header {
+    display: block;
+    margin: 10px 0;
+    color: grey;
+    white-space: nowrap;
+}
+
+.selectedCompetencies__list {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    gap: 5px;
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.competence {
+    column-gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.competence__deleteButtonContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}

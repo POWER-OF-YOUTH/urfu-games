@@ -1,0 +1,78 @@
+.participantsSelector {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px;
+    height: 100%;
+}
+
+.participantsSelector__selectedParticipants {
+    overflow-y: auto;
+}
+
+.selectedParticipants__headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5px;
+}
+
+.selectedParticipants__header {
+    display: block;
+    margin: 10px 0;
+    color: grey;
+}
+
+.selectedParticipants__list {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.selectedParticipants__participant {
+    border-bottom: 1px solid var(--grey-01);
+}
+
+.selectedParticipants__participant:hover {
+    background-color: var(--grey-01);
+}
+
+.participant {
+    column-gap: 10px;
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr 50px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.participant__avatarContainer {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.participant__avatar {
+    border-radius: 50%;
+    display: block;
+    height: 100%;
+}
+
+.participant__loginContainer {
+    align-items: center;
+    display: flex;
+}
+
+.participant__roleContainer {
+    align-items: center;
+    display: flex;
+}
+
+.participant__deleteButtonContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+

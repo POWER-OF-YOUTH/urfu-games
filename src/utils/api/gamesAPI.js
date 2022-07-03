@@ -1,99 +1,30 @@
-import * as apiConfig from "../../helpers/apiConfig";
+import axios from "../../axios";
 
-/**
- * @param {{ 
- *     name: string, 
- *     description?: string, 
- *     participants?: Array<string>, 
- *     competencies?: Array<string> 
- * }} data
- */
 export async function addGame(data) {
-    const url = apiConfig.APIURL + "/games";
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "POST",
-        body: JSON.stringify(data)
-        
-    });
-
-    return response;
+    return axios.post("/games", data);
 }
 
 export async function getGame(gameId) {
-    const url = apiConfig.APIURL + `/games/${gameId}`;
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "GET"
-    });
-
-    return response;
+    return axios.get(`/games/${gameId}`);
 }
 
-/**
- * @param {number} start
- * @param {number} count
- */
 export async function getGames(start = 0, count = 10) {
-    const url = new URL(apiConfig.APIURL + "/games");
-    url.search = new URLSearchParams({ start, count }).toString();
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "GET"
+    return axios.get("/games", {
+        params: {
+            start,
+            count
+        }
     });
-
-    return response;
 }
 
-/**
- * @param {{ 
- *     name: string, 
- *     description?: string, 
- *     participants?: Array<string>, 
- *     competencies?: Array<string> 
- * }} data
- */
 export async function updateGame(gameId, data) {
-    const url = apiConfig.APIURL + `/games/${gameId}`;
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "PUT",
-        body: JSON.stringify(data)
-    });
-
-    return response;
+    return axios.put(`/games/${gameId}`, data);
 }
 
-/**
- * @param {string} gameId
- */
 export async function deleteGame(gameId) {
-    const url = apiConfig.APIURL + `/games/${gameId}`;
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "DELETE",
-    });
-
-    return response;
+    return axios.delete(`/games/${gameId}`);
 }
 
-/*
- * @param {string} gameId
- * @param {number} value
- */
 export async function rateGame(gameId, value) {
-    const url = new URL(apiConfig.APIURL + `/games/${gameId}/ratings`);
-
-    const response = await fetch(url, {
-        ...apiConfig.getDefaultRequestInit(),
-        method: "PUT",
-        body: JSON.stringify({ value })
-    });
-
-    return response;
+    return axios.post(`/games/${gameId}/ratings`, { value });
 }

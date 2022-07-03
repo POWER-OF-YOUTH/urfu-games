@@ -10,4 +10,9 @@
     --block-padding: 10px;
     --block-spacing: 10px;
     --block-border-radius: 5px;
+    --main-font-family: "Roboto", "Arial", sans-serif;
+    --page-width: 1000px;
+    --page-padding: 60px;
+    /* Colors */
+    --grey-01: #F2F2F2;
 }

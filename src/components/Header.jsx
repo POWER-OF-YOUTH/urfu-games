@@ -66,37 +66,34 @@ function Header({ variant = "standard" }) {
             <div className={styles.spacer}>
                 <header>
                     <Logo />
-                    {!auth.isLoading ? 
-                        auth.authenticated ?
-                            showUser ? <User user={auth.user} onClick={handleUserClick} /> : <></> 
-                            : 
-                            showAuthButtons ?
-                                <div className={styles.authButtonsContainer}>
-                                    <NavLink 
-                                        className={styles.signInLink} 
-                                        to={{
-                                            pathname: "/signin", 
-                                            state: { redirectTo: location.pathname }
-                                        }}
-                                    >
-                                        <SignInButton variant="contained" size="small">
-                                            Войти
-                                        </SignInButton>
-                                    </NavLink>
-                                    <NavLink 
-                                        className={styles.signUpLink} 
-                                        to={{
-                                            pathname: "/signup", 
-                                            state: { redirectTo: location.pathname }
-                                        }}
-                                    >
-                                        Зарегистрироваться
-                                    </NavLink>
-                                </div>
-                                :
-                                <></>
-                        :
-                        <></>
+                    {auth.authenticated ? (
+                        showUser && <User user={auth.user} onClick={handleUserClick} /> 
+                    ) : (
+                        showAuthButtons && (
+                            <div className={styles.authButtonsContainer}>
+                                <NavLink 
+                                    className={styles.signInLink} 
+                                    to={{
+                                        pathname: "/signin", 
+                                        state: { redirectTo: location.pathname }
+                                    }}
+                                >
+                                    <SignInButton variant="contained" size="small">
+                                        Войти
+                                    </SignInButton>
+                                </NavLink>
+                                <NavLink 
+                                    className={styles.signUpLink} 
+                                    to={{
+                                        pathname: "/signup", 
+                                        state: { redirectTo: location.pathname }
+                                    }}
+                                >
+                                    Зарегистрироваться
+                                </NavLink>
+                            </div>
+                        )
+                    )
                     }
                     <Popper 
                         open={isMenuOpen}

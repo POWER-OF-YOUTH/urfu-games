@@ -1,12 +1,13 @@
 {
   "name": "urfu-games-client",
-  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.0",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
     "eslint": "^7.11.0",
     "flickity": "^2.2.2",
@@ -45,8 +46,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "dotenv": "^10.0.0"
   }
 }

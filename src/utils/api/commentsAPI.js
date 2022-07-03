@@ -3,82 +3,56 @@ import * as apiConfig from "../../helpers/apiConfig";
 export async function getComments(gameId) {
     let url = apiConfig.APIURL + `/games/${gameId}/comments`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "GET"
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "GET"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
-
+    return response;
 }
 
-export async function getComment(gameId, commentId) {
-    const url = apiConfig.APIURL + `/games/${gameId}/comments/${commentId}`;
+export async function getComment(commentId) {
+    const url = apiConfig.APIURL + `/comments/${commentId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "GET"
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "GET"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 export async function addComment(gameId, text) {
     const url = apiConfig.APIURL + `/games/${gameId}/comments`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "POST",
-            body: JSON.stringify({ text })
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "POST",
+        body: JSON.stringify({ text })
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
-export async function updateComment(gameId, commentId, text) {
-    const url = apiConfig.APIURL + `/games/${gameId}/comments/${commentId}`;
+export async function updateComment(commentId, text) {
+    const url = apiConfig.APIURL + `/comments/${commentId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "PUT",
-            body: JSON.stringify({ text })
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "PUT",
+        body: JSON.stringify({ text })
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
-export async function deleteComment(gameId, commentId) {
-    const url = apiConfig.APIURL + `/games/${gameId}/comments/${commentId}`;
+export async function deleteComment(commentId) {
+    const url = apiConfig.APIURL + `/comments/${commentId}`;
 
-    try {
-        const response = await fetch(url, { 
-            ...apiConfig.getDefaultRequestInit(),
-            method: "DELETE"
-        });
+    const response = await fetch(url, { 
+        ...apiConfig.getDefaultRequestInit(),
+        method: "DELETE"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }

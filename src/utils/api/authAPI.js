@@ -37,17 +37,12 @@ async function signIn(data) {
 async function check() {
     const url = apiConfig.APIURL + "/auth/check";
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "POST"
-        });
+    const response = await fetch(url, {
+        ...apiConfig.getDefaultRequestInit(),
+        method: "POST"
+    });
 
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return response;
 }
 
 const authAPI = {
