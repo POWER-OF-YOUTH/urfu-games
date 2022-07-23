@@ -17,7 +17,7 @@ import * as globals from "./globals";
 
 const history = createBrowserHistory();
 
-if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV === "production") {
     history.listen((location) => {
         window.ym(globals.YM_ID, "hit", location.pathname);
     });
@@ -37,8 +37,8 @@ function App() {
 
     return (
         <Router history={history}>
-            <MainLayout>
-                {initialized && (
+            {initialized && (
+                <MainLayout>
                     <Switch>
                         <Route exact path="/" component={MainPage} />
                         <Route exact path="/signin">
@@ -55,8 +55,8 @@ function App() {
                         <Route exact path="/games/:gameId/play" component={PlayPage} />
                         <Route exact path="/404" component={NotFoundPage} />
                     </Switch>
-                )}
-            </MainLayout>
+                </MainLayout>
+            )}
         </Router>
     );
 }
