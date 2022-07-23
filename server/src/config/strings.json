@@ -1,0 +1,31 @@
+{
+    "errors": 
+    {
+        "validation":
+        {
+            "loginMustBeString": "Login must be a string.",
+            "loginMustNotBeEmpty": "Login mustn't be empty.",
+            "loginNotMatchPattern": "Login does not match the specified pattern: ",
+            "emailInvalid": "Email invalid.",
+            "passwordMustBeString": "Password must be a string.",
+            "passwordNotMatchPattern": "Password does not match the specified pattern: ",
+            "passwordTooShort": "Password is too short.",
+            "passwordTooLong": "Password is too long."
+        },
+        "logic":
+        {
+            "userWithLoginNotExists": "The user with the specified login does not exist.",
+            "userWithIdNotExists": "The user with the specified id does not exists.",
+            "userWithLoginAlreadyExists": "The user with the specified login already exists.",
+            "userWithEmailAlreadyExists": "The user with the specified email already exists.",
+            "competenceWithIdAlreadyExists": "The competence with the specified id already exists.",
+            "competenceWithIdNotExist": "The competence with the specified id does not exist.",
+            "competenceWithNameAlreadyExists": "The competence with the specified name already exists."
+        },
+        "access":
+        {
+            "passwordIncorrect": "Password is incorrect.",
+            "notAuthorized": "You need to authorize to access the specified resource"
+        }
+    }
+}

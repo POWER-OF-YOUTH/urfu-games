@@ -1,0 +1,9 @@
+{
+    "plugins": ["plugins/markdown"],
+    "recurseDepth": 10,
+    "sourceType": "module",
+    "source": {
+        "exclude": ["node_modules", ".git", "dist"],
+        "include": ["src"]
+    }
+}
