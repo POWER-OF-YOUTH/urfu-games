@@ -4,6 +4,9 @@ services:
     ports:
       - 443:433
       - 80:80
+    environment:
+      - API_URI=${API_URI}
+      - FILES_URI=${FILES_URI}
     depends_on:
       - client
       - server
@@ -13,9 +16,9 @@ services:
       - /var/www:/var/www
 
   client:
-    build: ./client
+    build: .client
     environment:
-      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - API_URI=${API_URI}
       - YM_ID=${YM_ID:-0}
     depends_on:
       - server
@@ -23,25 +26,30 @@ services:
       - files
     volumes:
       - /var/www/urfugames.ru/html:/home/build
+    profiles:
+      - all
 
-  server:
+  api-service:
     build: ./server
     environment:
-      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - API_URI=${API_URI}
       - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/main
     depends_on:
       postgres:
         condition: service_healthy
 
-  files:
+  files-service:
     build: ./files
+    environment:
+      - API_URI=${API_URI}
+      - FILES_URI=${FILES_URI}
     volumes:
       - /var/www/files.urfugames.ru:/home/data
 
-  progress:
+  progress-service:
     build: ./progress
     environment:
-      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - API_URI=${API_URI}
       - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/progress
     depends_on:
       postgres:

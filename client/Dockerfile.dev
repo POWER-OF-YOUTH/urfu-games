@@ -9,7 +9,7 @@ ENV PORT=3000
 ENV YM_ID=0
 
 RUN yarn install
-RUN yarn build
 
 VOLUME ["/home/build"]
 
+ENTRYPOINT ["yarn", "start"]

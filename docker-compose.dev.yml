@@ -1,0 +1,10 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
