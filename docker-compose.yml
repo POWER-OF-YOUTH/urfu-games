@@ -9,9 +9,9 @@ services:
       - FILES_URI=${FILES_URI}
     depends_on:
       - client
-      - server
-      - progress
-      - files
+      - api-service
+      - progress-service
+      - files-service
     volumes:
       - /var/www:/var/www
 
@@ -21,9 +21,9 @@ services:
       - API_URI=${API_URI}
       - YM_ID=${YM_ID:-0}
     depends_on:
-      - server
-      - progress
-      - files
+      - api-service
+      - progress-service
+      - files-service
     volumes:
       - /var/www/urfugames.ru/html:/home/build
     profiles:
