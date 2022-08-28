@@ -1,0 +1,56 @@
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 443:433
+      - 80:80
+    depends_on:
+      - client
+      - server
+      - progress
+      - files
+
+  client:
+    build: ./client
+    environment:
+      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - YM_ID=${YM_ID:-0}
+    depends_on:
+      - server
+      - progress
+      - files
+    volumes:
+      - /var/www/urfugames.ru:/home/build
+
+  server:
+    build: ./server
+    environment:
+      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/main
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  files:
+    build: ./files
+    volumes:
+      - /var/www/files.urfugames.ru:/home/data
+
+  progress:
+    build: ./progress
+    environment:
+      - API_URI=${API_URI:-https://api.urfugames.ru}
+      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/progress
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    build: ./postgres
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

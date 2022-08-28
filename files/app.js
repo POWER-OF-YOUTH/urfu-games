@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/upload/",
     upload.single("file"),
     (req, res) => {
-        res.send(`${globals.FILES_URL}/${req.locals.filename}`);
+        res.send(`${globals.FILES_URI}/${req.locals.filename}`);
     }
 );
 

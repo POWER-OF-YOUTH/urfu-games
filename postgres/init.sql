@@ -1,0 +1,2 @@
+CREATE DATABASE main;
+CREATE DATABASE progress;

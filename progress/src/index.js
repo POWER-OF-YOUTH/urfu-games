@@ -16,5 +16,8 @@ import sequelize from "./sequelize.js";
         () => console.log(`Server is running on ${hostname}:${port}.`)
     );
 }()
-    .catch(() => process.exit(1))
+    .catch((err) => {
+        console.error(err);
+        process.exit(1);
+    })
 );
