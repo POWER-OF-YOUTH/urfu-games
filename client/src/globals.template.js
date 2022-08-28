@@ -3,7 +3,7 @@
  */
 
 /** API URI. */
-export const API_URI = process.env.API_URI;
+export const API_URI = __API_URI__;
 /** Токен пользователя. */
 export const ACCESS_TOKEN = localStorage.getItem("access_token");
 /** Идентификатор счетчика Яндекс.Метрики. */

@@ -16,9 +16,9 @@ services:
       - /var/www:/var/www
 
   client:
-    build: .client
+    build: ./client
     environment:
-      - API_URI=${API_URI}
+      - API_URI=http://urfugames.ru
       - YM_ID=${YM_ID:-0}
     depends_on:
       - api-service

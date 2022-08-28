@@ -1,12 +1,15 @@
 FROM node:16
 
-WORKDIR /home
-COPY . /home
-
-ENV API_URI=https://api.urfugames.ru
+ARG API_URI
+ENV API_URI=${API_URI}
 ENV PORT=3000
 # Идентификатор счетчика Яндекс.Метрики.
 ENV YM_ID=0
+
+WORKDIR /home
+COPY . /home
+RUN sed "s|__API_URI__|\"${API_URI}\"|" src/globals.template.js > src/globals.js \
+    && rm src/globals.template.js
 
 RUN yarn install
 
