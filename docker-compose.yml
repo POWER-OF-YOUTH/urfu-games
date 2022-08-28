@@ -9,6 +9,8 @@ services:
       - server
       - progress
       - files
+    volumes:
+      - /var/www:/var/www
 
   client:
     build: ./client
@@ -20,7 +22,7 @@ services:
       - progress
       - files
     volumes:
-      - /var/www/urfugames.ru:/home/build
+      - /var/www/urfugames.ru/html:/home/build
 
   server:
     build: ./server
