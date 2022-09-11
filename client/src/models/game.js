@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { values } from "mobx";
-import { 
-    types, 
+import {
+    types,
     flow,
     applySnapshot
 } from "mobx-state-tree";

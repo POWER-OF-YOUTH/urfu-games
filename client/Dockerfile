@@ -1,16 +1,17 @@
 FROM node:16
 
-WORKDIR /home
-COPY . /home
-
 ARG API_URI
-ENV API_URI=${API_URI:-https://api.urfugames.ru}
+ENV API_URI=${API_URI}
 ENV PORT=3000
-# Идентификатор счетчика Яндекс.Метрики.
 ENV YM_ID=0
 
+WORKDIR /root
+COPY . .
+
 RUN yarn install
-RUN yarn build
 
-VOLUME ["/home/build"]
+VOLUME ["/root"]
 
+EXPOSE ${PORT}
+
+ENTRYPOINT ["yarn", "start"]

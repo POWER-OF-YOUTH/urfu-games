@@ -1,13 +1,17 @@
+/*
+ * @file Определение связи между пользователем и чекпоинтом.
+ */
+
 import { Model, DataTypes } from "sequelize";
 
-import User from "./user";
 import Checkpoint from "./checkpoint";
+import User from "./user";
 import sequelize from "../../sequelize";
 
 class UserCheckpoints extends Model { }
 
 UserCheckpoints.init({
-    userId: { 
+    userId: {
         type: DataTypes.UUID,
         references: {
             model: User,

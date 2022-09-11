@@ -13,6 +13,7 @@ import GamePublishPage from "./pages/GamePublishPage";
 import { NotFoundPage } from "./pages/error";
 import { MainLayout } from "./layouts";
 import useStore from "./hooks/useStore";
+
 import * as globals from "./globals";
 
 const history = createBrowserHistory();
@@ -25,7 +26,7 @@ if (process.env.NODE_ENV === "production") {
 
 function App() {
     const store = useStore();
-    
+
     /** Состояние, сообщающее о том, ициализировано ли приложение. */
     const [initialized, setInitialized] = useState(false);
 

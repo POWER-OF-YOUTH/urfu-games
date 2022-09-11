@@ -1,12 +1,11 @@
 /**
- * @file Содержит глобальные переменные необходимые для работы сервера.
+ * @file Глобальные переменные необходимые для работы сервера.
  */
 
 /**
  * Функция, которая вызывает исключение, если переменная
  * окружения с именем `name` не определена.
- *
- * @param name - имя переменной окружения.
+ * @param name имя переменной окружения.
  */
 function checkEnvVariableDefined(name) {
     if (process.env[name] === undefined)
@@ -19,8 +18,8 @@ checkEnvVariableDefined("ADMIN_PASSWORD");
 checkEnvVariableDefined("DATABASE_URI");
 
 /** API URI. */
-export const API_URI = "https://api.urfugames.ru";
-/** Адрес к которому будет прикреплен сервер. */
+export const API_URI = process.env.API_URI;
+/** Адрес, к которому будет прикреплен сервер. */
 export const HOSTNAME = process.env.HOSTNAME ?? "localhost";
 /** Порт, который будет использоваться сервером. */
 export const PORT = Number(process.env.PORT ?? 3000);

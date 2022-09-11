@@ -1,61 +1,34 @@
 services:
-  nginx:
-    build: ./nginx
-    ports:
-      - 443:433
-      - 80:80
-    environment:
-      - API_URI=${API_URI}
-      - FILES_URI=${FILES_URI}
-    depends_on:
-      - client
-      - api-service
-      - progress-service
-      - files-service
-    volumes:
-      - /var/www:/var/www
-
-  client:
+  frontend:
+    container_name: frontend-urfu-games
     build: ./client
     environment:
-      - API_URI=http://urfugames.ru
-      - YM_ID=${YM_ID:-0}
-    depends_on:
-      - api-service
-      - progress-service
-      - files-service
+      - HOST=${FRONTEND_HOSTNAME} # `FRONTEND_HOSTNAME` can be undefined
+      - PORT=${FRONTEND_PORT}
+      - API_URI=${API_URI}
     volumes:
-      - /var/www/urfugames.ru/html:/home/build
-    profiles:
-      - all
+      - ${PWD}/client/src:/root/src # code volume
+    depends_on:
+      - api
+    network_mode: host
 
-  api-service:
+  api:
+    container_name: api-urfu-games
     build: ./server
     environment:
       - API_URI=${API_URI}
-      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/main
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  files-service:
-    build: ./files
-    environment:
-      - API_URI=${API_URI}
-      - FILES_URI=${FILES_URI}
+      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/main
+      - PORT=${API_PORT}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin1234}
     volumes:
-      - /var/www/files.urfugames.ru:/home/data
-
-  progress-service:
-    build: ./progress
-    environment:
-      - API_URI=${API_URI}
-      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres/progress
+      - ${PWD}/server/src:/root/src # code volume
     depends_on:
       postgres:
         condition: service_healthy
+    network_mode: host
 
   postgres:
+    container_name: postgres-urfu-games
     build: ./postgres
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -64,3 +37,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    network_mode: host

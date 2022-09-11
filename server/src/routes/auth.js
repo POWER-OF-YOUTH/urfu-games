@@ -1,79 +1,41 @@
 /**
- * @file Содержит маршруты для регистрации/аутентификации.
+ * @file Маршруты для регистрации/аутентификации пользователей.
  */
 
 import strings from "../config/strings.json";
 
-import crypto from "crypto";
 import express from "express";
-import jwt from "jsonwebtoken";
 import { asyncMiddleware } from "middleware-async";
 import { body } from "express-validator";
 
-import User from "../domain/models/user";
+import * as globals from "../globals";
 import UserDTO from "../domain/dto/user-dto";
+import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
 import { AccessError, LogicError } from "../utils/errors";
-import { Op } from "sequelize";
-import sequelize from "../sequelize";
-import * as globals from "../globals";
+import {
+    User,
+    createUser,
+    encryptPassword,
+    generateJWT
+} from "../domain/models/user";
 
 const authRouter = express.Router();
-
-/** Выполняет хеширование пароля. */
-function encryptPassword(password, salt) {
-    return crypto.createHmac("sha1", salt).update(password).digest("hex");
-}
-
-/** 
- * Генерирует JWT токен, который содержит поле `id` в качестве полезной нагрузки.
- * @param {string} id - идентификатор пользователя
- */
-function generateJWT(id) {
-    return jwt.sign(
-        { id }, 
-        process.env.JWT_SECRET, 
-        { expiresIn: "1d" }
-    );
-}
 
 /** Регистрирует пользователя в системе. */
 authRouter.post("/auth/signup",
     asyncMiddleware(
+        /**
+         * @param {{
+         *     body: { email: string, login: string, password: string }
+         * }} req
+         */
         async (req, res) => {
-            const transaction = await sequelize.transaction();
+            const user = await createUser(req.body);
 
-            try {
-                let user = await User.findOne({
-                    transaction,
-                    where: {
-                        [Op.or]: [{ login: req.body.login }, { email: req.body.email }]
-                    }
-                });
-                if (user !== null) {
-                    throw new LogicError(
-                        "Пользователь с указанным `login` или `email` уже существует."
-                    );
-                }
-
-                const password = encryptPassword(req.body.password, process.env.USER_PWD_SALT);
-                user = await User.create({
-                    login: req.body.login,
-                    email: req.body.email,
-                    password
-                }, { transaction });
-
-                await transaction.commit();
-
-                res.setHeader("Location", `${globals.API_URI}/users/${user.id}`);
-                res.json(await UserDTO.create(user));
-            }
-            catch (err) {
-                await transaction.rollback();
-
-                throw err;
-            }
+            res.setHeader("Location", `${globals.API_URI}/users/${user.id}`);
+            res.json(await UserDTO.create(user));
         }
     )
 );
@@ -103,9 +65,7 @@ authRouter.post("/auth/signin",
                 const user = await User.findOne({
                     transaction,
                     where: { login: req.body.login },
-                    rejectOnEmpty: new LogicError(
-                        strings.errors.logic.userWithLoginNotExists
-                    ) 
+                    rejectOnEmpty: new LogicError(strings.errors.logic.userWithLoginNotExists)
                 });
 
                 const password = encryptPassword(req.body.password, process.env.USER_PWD_SALT);
@@ -125,9 +85,9 @@ authRouter.post("/auth/check",
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
                 const user = await User.findByPk(
-                    req.user.id, 
-                    { 
-                        transaction, 
+                    req.user.id,
+                    {
+                        transaction,
                         rejectOnEmpty: new LogicError(strings.errors.logic.userWithIdNotExists)
                     }
                 );

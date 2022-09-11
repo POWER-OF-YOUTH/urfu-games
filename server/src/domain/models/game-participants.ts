@@ -12,7 +12,7 @@ enum ParticipantRole {
 }
 
 GameParticipants.init({
-    gameId: { 
+    gameId: {
         type: DataTypes.UUID,
         references: {
             model: Game,

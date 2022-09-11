@@ -8,13 +8,13 @@ import express from "express";
 import { asyncMiddleware } from "middleware-async";
 import { body, query } from "express-validator";
 
-import CommentDetailDTO from "../domain/dto/comment-detail-dto";
-import validateRequest from "../validators/validate-request";
-import verifyToken from "../validators/verify-token";
+import * as globals from "../globals";
 import Comment from "../domain/models/comment";
+import CommentDetailDTO from "../domain/dto/comment-detail-dto";
 import Game from "../domain/models/game";
 import sequelize from "../sequelize";
-import * as globals from "../globals";
+import validateRequest from "../validators/validate-request";
+import verifyToken from "../validators/verify-token";
 
 const commentsRouter = express.Router();
 
@@ -48,20 +48,16 @@ commentsRouter.post("/games/:gameId/comments/",
 );
 
 /** Возвращает информацию о комментарии `commentId`. */
-commentsRouter.get("/comments/:commentId",
+commentsRouter.get("/games/:gameId/comments/:commentId",
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const comment = await Comment.findOne({
-                    transaction,
-                    where: {
-                        id: req.params.commentId
-                    },
-                    rejectOnEmpty: true,
-                });
-
-                res.json(await CommentDetailDTO.create(comment));
+            const game = await Game.findByPk(req.params.gameId, { rejectOnEmpty: true });
+            const comment = await game.getComment({
+                where: { id: req.params.commentId },
+                rejectOnEmpty: true
             });
+
+            res.json(await CommentDetailDTO.create(comment));
         }
     )
 );
@@ -80,26 +76,24 @@ commentsRouter.get("/games/:gameId/comments/",
     ),
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const game = await Game.findByPk(
-                    req.params.gameId,
-                    { transaction, rejectOnEmpty: true }
-                );
-                const comments = await game.getComments({
-                    offset: req.query.start,
-                    limit: req.query.count
-                }, { transaction });
+            const game = await Game.findByPk(
+                req.params.gameId,
+                { transaction, rejectOnEmpty: true }
+            );
+            const comments = await game.getComments({
+                offset: req.query.start,
+                limit: req.query.count
+            }, { transaction });
 
-                res.json(await Promise.all(
-                    comments.map((c) => CommentDetailDTO.create(c))
-                ));
-            });
+            res.json(await Promise.all(
+                comments.map((c) => CommentDetailDTO.create(c))
+            ));
         }
     )
 );
 
 /** Обновляет комментарий `commentId`. */
-commentsRouter.put("/comments/:commentId",
+commentsRouter.put("/games/:gameId/comments/:commentId",
     verifyToken,
     validateRequest(
         body("text")
@@ -110,29 +104,27 @@ commentsRouter.put("/comments/:commentId",
     ),
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const comment = await Comment.findOne({
-                    transaction,
-                    where: {
-                        id: req.params.commentId
-                    },
-                    rejectOnEmpty: true
-                });
-
-                if (comment.authorId !== req.user.id)
-                    throw new AccessError();
-
-                comment.text = req.body.text;
-                await comment.save({ transaction });
-
-                res.json(await CommentDetailDTO.create(comment));
+            const comment = await Comment.findOne({
+                transaction,
+                where: {
+                    id: req.params.commentId
+                },
+                rejectOnEmpty: true
             });
+
+            if (comment.authorId !== req.user.id)
+                throw new AccessError();
+
+            comment.text = req.body.text;
+            await comment.save({ transaction });
+
+            res.json(await CommentDetailDTO.create(comment));
         }
     )
 );
 
 /** Удаляет комментарий `commentId`. */
-commentsRouter.delete("/comments/:commentId",
+commentsRouter.delete("/games/:gameId/comments/:commentId",
     verifyToken,
     asyncMiddleware(async (req, res) => {
         await sequelize.transaction(async (transaction) => {

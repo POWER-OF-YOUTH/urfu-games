@@ -1,21 +1,21 @@
 FROM node:16
 
-WORKDIR /home
-COPY . /home
+WORKDIR /root
+COPY . .
 
 ENV API_URI=https://api.urfugames.ru
+ENV HOSTNAME=localhost
+ENV DATABASE_URI=postgres://postgres:default@postgres
 ENV PORT=3000
-ENV ADMIN_LOGIN=admin
-ENV ADMIN_EMAIL=admin@urfugames.ru
 ENV ADMIN_PASSWORD=admin
 ENV JWT_SECRET=jwt_secret
 ENV USER_PWD_SALT=salt
-ENV DATABASE_URI=postgres://postgres:default@postgres
+ENV NODE_ENV=development
 
 RUN yarn install
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
-VOLUME ["/home/files"]
+VOLUME ["/root"]
 
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "dev"]

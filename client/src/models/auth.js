@@ -4,6 +4,7 @@ import { types, flow } from "mobx-state-tree";
 import authAPI from "../utils/api/authAPI";
 import { User } from "./user";
 import { APIError } from "./custom";
+
 import * as globals from "../globals";
 
 function validateSignUpData(data) {
@@ -37,24 +38,24 @@ const AuthStore = types
         signUp: flow(function* (data) {
             if (!self.authenticated) {
                 self.errors.clear();
-        
+
                 const validationErrors = validateSignUpData(data);
                 if (validationErrors.length > 0)
-                    self.errors = validationErrors; 
+                    self.errors = validationErrors;
                 else {
-                    const response = yield authAPI.signUp(data); 
+                    const response = yield authAPI.signUp(data);
                     const json = yield response.json();
 
                     if (response.ok) {
                         if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
                             window.ym(globals.YM_ID, "reachGoal", "signup");
-                        }       
+                        }
                     }
-                    else 
+                    else
                         self.errors = json.errors;
                 }
             }
-        }),       
+        }),
         signIn: flow(function* (data) {
             if (!self.authenticated) {
                 const response = yield authAPI.signIn(data);
@@ -71,7 +72,7 @@ const AuthStore = types
 
                     if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
                         window.ym(globals.YM_ID, "reachGoal", "signin");
-                    }       
+                    }
                 }
                 else
                     self.errors = json.errors;

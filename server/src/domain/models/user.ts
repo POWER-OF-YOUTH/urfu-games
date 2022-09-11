@@ -2,23 +2,32 @@
  * @file Определение модели пользователя.
  */
 
-import { Model, DataTypes } from "sequelize";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import { Model, DataTypes, Op } from "sequelize";
 
-import Comment from "./comment";
 import Checkpoint from "./checkpoint";
-import sequelize from "../../sequelize";
+import Comment from "./comment";
 import Rating from "./rating";
 import UserCheckpoints from "./user-checkpoints";
+import UserProgress from "./user-progress";
+import sequelize from "../../sequelize";
+import { LogicError } from "../../utils/errors";
 
 const DEFAULT_USER_AVATAR = "https://i.ibb.co/C9VKrMC/default-avatar.png";
 
+/** Роли пользователя. */
 enum Role {
     User,
     Admin
 }
 
-/** Модель пользователя. */
-class User extends Model { 
+/**
+ * Модель пользователя.
+ * @attention Удаление пользователя вызывает удаление связанных с ним
+ * комментариев, оценок игр и проч.
+ */
+class User extends Model {
     declare id: string;
     /** Имя. */
     declare name: string;
@@ -30,12 +39,13 @@ class User extends Model {
     declare login: string;
     /** Адрес электронной почты. */
     declare email: string;
-    /** Пароль. */ 
+    /** Пароль. */
     declare password: string;
-    /** Роль пользователя (User, Admin и т.д). */ 
+    /** Роль (User, Admin и т.д). */
     declare role: Role;
     /** Ссылка на аватар. */
     declare avatar: string;
+    /** Дата создания аккаунта. */
     declare createdAt: Date;
 }
 
@@ -95,6 +105,7 @@ User.init({
     }
 }, { sequelize, modelName: "User" });
 
+// Связи с другими сущностями {
 User.hasMany(Comment, {
     foreignKey: "authorId",
     onDelete: "CASCADE",
@@ -107,16 +118,16 @@ Comment.belongsTo(User, {
     as: "author"
 });
 
-User.hasMany(Rating, { 
+User.hasMany(Rating, {
     foreignKey: "authorId",
     onDelete: "CASCADE",
-    as: { 
+    as: {
         singular: "rating",
         plural: "ratings"
-    } 
+    }
 });
-Rating.belongsTo(User, { 
-    as: "author" 
+Rating.belongsTo(User, {
+    as: "author"
 });
 
 User.belongsToMany(Checkpoint, {
@@ -136,7 +147,87 @@ Checkpoint.belongsToMany(User, {
         singular: "user",
         plural: "users"
     }
-})
+});
+
+User.hasMany(UserProgress, {
+    foreignKey: "userId",
+    onDelete: "CASCADE",
+    as: {
+        singular: "progress",
+        plural: "progresses"
+    }
+});
+UserProgress.belongsTo(User, {
+    as: "user"
+});
+// } Связи с другими сущностями
+
+// Сложные сценарии и вспомогательные функции {
+type UserData = {
+    login: string,
+    email: string,
+    password: string
+}
+/**
+ * Создаёт пользователя.
+ * @param userData Данные пользователя.
+ * @returns Объект пользователя.
+ */
+async function createUser({ login, email, password }: UserData): Promise<User> {
+    const transaction = await sequelize.transaction();
+
+    try {
+        let user = await User.findOne({
+            transaction,
+            where: { [Op.or]: [{ login }, { email }] }
+        });
+        if (user !== null) {
+            throw new LogicError(
+                "Пользователь с указанным 'login' или 'email' уже существует."
+            );
+        }
+
+        password = encryptPassword(password, process.env.USER_PWD_SALT);
+        user = await User.create({ login, email, password }, { transaction });
+
+        await transaction.commit();
+
+        return user;
+    }
+    catch (err) {
+        await transaction.rollback();
+        throw err;
+    }
+}
+/**
+ * Выполняет хеширование пароля пользователя.
+ * @param password Пароль пользователя.
+ * @param salt Соль.
+ * @returns Хеш пароля пользователя.
+ */
+function encryptPassword(password: string, salt: string): string {
+    return crypto.createHmac("sha1", salt).update(password).digest("hex");
+}
+
+/**
+ * Генерирует JWT, который содержит поле `id` в качестве полезной нагрузки.
+ * @param id Идентификатор пользователя.
+ * @returns Json Web Token.
+ */
+function generateJWT(id: string): string {
+    return jwt.sign(
+        { id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
+}
+// } Сложные сценарии и вспомогательные функции
 
 export default User;
-export { User, Role };
+export {
+    User,
+    Role,
+    createUser,
+    encryptPassword,
+    generateJWT
+};

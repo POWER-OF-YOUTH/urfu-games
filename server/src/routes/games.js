@@ -1,17 +1,26 @@
 /**
- * @file Содержит маршруты для работы с играми.
+ * @file Маршруты для работы с играми.
  */
 
 import express from "express";
+import { Op } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
 import { body, query } from "express-validator";
 
-import Game from "../domain/models/game";
+import * as globals from "../globals.js";
+import User from "../domain/models/user";
+import Competence from "../domain/models/competence";
 import GameDetailDTO from "../domain/dto/game-detail-dto";
 import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";
-import * as globals from "../globals.js";
+import {
+    Game,
+    createGame,
+    deleteGame,
+    updateGame
+} from "../domain/models/game";
+import { ParticipantRole } from "../domain/models/game-participants";
 
 const gamesRouter = express.Router();
 
@@ -34,14 +43,16 @@ gamesRouter.post("/games/",
         body("participants")
             .default([])
             .isArray(),
-        body("participants.*")
+        body("participants.*.id")
             .isUUID(),
+        body("participants.*.role")
+            .isIn([ParticipantRole.Participant]),
         body("competencies")
-            .isArray({ min: 1 }),
+            .isArray(),
         body("competencies.*")
             .isUUID(),
         body("checkpoints")
-            .isArray({ min: 1 }),
+            .isArray(),
         body("checkpoints.*.name")
             .isString()
             .notEmpty(),
@@ -62,50 +73,42 @@ gamesRouter.post("/games/",
     ),
     asyncMiddleware(
         async (req, res) => {
-            const transaction = await sequelize.transaction();
+            const initiator = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            const author = initiator;
+            const participantsIds = req.body.participants.map((p) => p.id);
+            const participants = await User.findAll({
+                where: {
+                    id: {
+                        [Op.in]: participantsIds
+                    }
+                }
+            });
+            const competencies = [];
+            const competenciesMap = new Map();
+            await Competence.findAll({
+                where: {
+                    id: {
+                        [Op.in]: req.body.competencies
+                    }
+                }
+            }).forEach((c) => {
+                competencies.push(c);
+                competenciesMap.set(c.id, c)
+            });
+            req.body.checkpoints = req.body.checkpoints.forEach(
+                (c) => c.competence = competenciesMap[c.competence] // replace competence id to competence object
+            );
 
-            try {
-                const game = await Game.create({
-                    name: req.body.name,
-                    description: req.body.description,
-                    image: req.body.image,
-                    loaderUrl: req.body.loaderUrl,
-                    dataUrl: req.body.dataUrl,
-                    frameworkUrl: req.body.frameworkUrl,
-                    codeUrl: req.body.codeUrl
-                }, { transaction });
-                await game.setCompetencies(
-                    req.body.competencies,
-                    { transaction }
-                );
-                await Promise.all(
-                    req.body.checkpoints.map((c) =>
-                        game.createCheckpoint(c, { transaction })
-                    )
-                );
-                await Promise.all(
-                    req.body.participants.map((p) =>
-                        game.addParticipant(
-                            p, 
-                            { 
-                                transaction, 
-                                through: { role: 0 } // 0 - participant role
-                            }
-                        )
-                    )
-                );
-                await game.addParticipant(req.user.id, { transaction, through: { role: 1 }}); // 1 - author role
+            const game = await createGame(
+                initiator,
+                author,
+                participants,
+                competencies,
+                req.body
+            );
 
-                await transaction.commit();
-
-                res.setHeader("Location", `${globals.API_URI}/games/${game.id}`);
-                res.json(await GameDetailDTO.create(game));
-            } 
-            catch (err) {
-                await transaction.rollback();
-
-                throw err;
-            }
+            res.setHeader("Location", `${globals.API_URI}/games/${game.id}`);
+            res.json(await GameDetailDTO.create(game));
         }
     )
 );
@@ -116,7 +119,7 @@ gamesRouter.get("/games/:gameId",
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
                 const game = await Game.findByPk(
-                    req.params.gameId, 
+                    req.params.gameId,
                     { transaction, rejectOnEmpty: true }
                 );
 
@@ -140,23 +143,18 @@ gamesRouter.get("/games/",
     ),
     asyncMiddleware(
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const games = await Game.findAll({
-                    transaction,
-                    offset: req.query.start, 
-                    limit: req.query.count
-                });
+            const games = await Game.findAll({
+                offset: req.query.start,
+                limit: req.query.count
+            });
 
-                res.json(await Promise.all(
-                    games.map(g => GameDetailDTO.create(g))
-                ));
-            });       
+            res.json(await Promise.all(games.map(g => GameDetailDTO.create(g))));
         }
     )
 );
 
 /** Обновляет информацию об игре `gameId`. */
-gamesRouter.put("/games/:gameId", 
+gamesRouter.put("/games/:gameId",
     verifyToken,
     validateRequest(
         body("name")
@@ -177,11 +175,11 @@ gamesRouter.put("/games/:gameId",
         body("participants.*")
             .isUUID(),
         body("competencies")
-            .isArray({ min: 1 }),
+            .isArray(),
         body("competencies.*")
             .isUUID(),
         body("checkpoints")
-            .isArray({ min: 1 }),
+            .isArray(),
         body("checkpoints.*.name")
             .isString()
             .notEmpty(),
@@ -200,77 +198,105 @@ gamesRouter.put("/games/:gameId",
         body("codeUrl")
             .isURL()
     ),
-    asyncMiddleware( // TODO:
+    asyncMiddleware(
+        /**
+         * @param {{
+         *     params: { gameId: string },
+         *     body: any,
+         *     user: { id: string, role: number }
+         * }} req
+         */
         async (req, res) => {
-            const transaction = await sequelize.transaction();
+            const initiator = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            const game = await Game.findByPk(req.params.gameId, { rejectOnEmpty: true });
+            const participantsIds = req.body.participants.map((p) => p.id);
+            const participants = await User.findAll({
+                where: {
+                    id: {
+                        [Op.in]: participantsIds
+                    }
+                }
+            });
+            const competencies = [];
+            const competenciesMap = new Map();
+            await Competence.findAll({
+                where: {
+                    id: {
+                        [Op.in]: req.body.competencies
+                    }
+                }
+            }).forEach((c) => {
+                competencies.push(c);
+                competenciesMap.set(c.id, c)
+            });
+            req.body.checkpoints = req.body.checkpoints.forEach(
+                (c) => c.competence = competenciesMap[c.competence] // replace competence id to competence object
+            );
 
-            try {
-                const game = await Game.findByPk(
-                    req.params.gameId, 
-                    { transaction, rejectOnEmpty: true }
-                );
-                await game.setCompetencies(
-                    req.body.competencies,
-                    { transaction }
-                );
-                await game.removeCheckpoints({ transaction })
-                await Promise.all(
-                    req.body.checkpoints.map((c) =>
-                        game.createCheckpoint(c, { transaction })
-                    )
-                );
-                await game.removeParticipants({ transaction });
-                await Promise.all(
-                    req.body.participants.map((p) =>
-                        game.addParticipant(
-                            p, 
-                            { 
-                                transaction, 
-                                through: { role: 0 } // 0 - participant role
-                            }
-                        )
-                    )
-                );
-                await game.addParticipant(req.user.id, { transaction, through: { role: 1 }}); // 1 - author role
+            await updateGame(initiator, game, participants, competencies, req.body);
 
-                await transaction.commit();
-
-                res.json(await GameDetailDTO.create(game));
-            }
-            catch (err) {
-                await transaction.rollback();
-
-                throw err;
-            }
+            res.setHeader("Location", `${globals.API_URI}/games/${game.id}`);
+            res.json(await GameDetailDTO.create(game));
         }
     )
 );
 
-/** 
- * Удаляет игру с идентификатором `gameId` 
- * и связанные с ней данные (оценки, комментарии и т.д.). 
+/**
+ * Удаляет игру с идентификатором `gameId`
+ * и связанные с ней данные (оценки, комментарии и т.д.).
  */
 gamesRouter.delete("/games/:gameId",
     verifyToken,
     asyncMiddleware(
+        /**
+         * @param {{
+         *     params: { gameId: string },
+         *     user: { id: string, role: number }
+         * }} req
+         */
         async (req, res) => {
-            await sequelize.transaction(async (transaction) => {
-                const game = await Game.findByPk(
-                    req.params.gameId, 
-                    { transaction, rejectOnEmpty: true }
-                );
+            const initiator = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            const game = await Game.findByPk(
+                req.params.gameId,
+                { rejectOnEmpty: true }
+            );
 
-                /* TODO:
-                if (game.author !== req.user.id && req.user.role !== Role.Admin) 
-                    return next(new AccessError());
-                */
+            await deleteGame(initiator, game);
 
-                await game.destroy({ transaction });
+            res.json(await GameDetailDTO.create(game));
+        }
+    )
+);
 
-                res.json(await GameDetailDTO.create(game));
+gamesRouter.get("/users/:userId/games/",
+    validateRequest(
+        query("start")
+            .default(0)
+            .isInt({ gt: -1 })
+            .toInt(),
+        query("count")
+            .default(10)
+            .isInt({ gt: 0, lt: 100 })
+            .toInt()
+    ),
+    asyncMiddleware(
+        /**
+         * @param {{
+         *     user: { id: string, role: number },
+         *     query: { start: number, count: number }
+         * }} req
+        */
+        async (req, res) => {
+            const user = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            const games = await user.getGames({
+                offset: req.query.start,
+                limit: req.query.limit
             });
+
+            res.json(await Promise.all(games.map((g) => GameDetailDTO.create(g))));
         }
     )
 );
 
 export default gamesRouter;
+

@@ -11,6 +11,8 @@ import Game from "../domain/models/game";
 import User from "../domain/models/user";
 import sequelize from "../sequelize";
 import verifyToken from "../validators/verify-token";
+import { ParticipantRole } from "../domain/models/game-participants";
+import { AccessError } from "../utils/errors";
 
 const checkpointsRouter = express.Router();
 
@@ -20,7 +22,7 @@ checkpointsRouter.get("/games/:gameId/checkpoints",
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
                 const game = await Game.findByPk(
-                    req.params.gameId, 
+                    req.params.gameId,
                     { transaction, rejectOnEmpty: true }
                 );
                 const checkpoints = await game.getCheckpoints({ transaction });
@@ -56,6 +58,21 @@ checkpointsRouter.put("/checkpoints/:checkpointId",
     )
 );
 
+/**
+ * Удалаяет чекпоинт `checkpoint`.
+ * @param {User} initiator Инициатор удаления.
+ * @param {Checkpoint} checkpoint Удаляемый чекпоинт.
+ */
+async function deleteCheckpoint(initiator, checkpoint) {
+    const game = await checkpoint.getGame();
+    const author = await game.getParticipant({ where: { role: ParticipantRole.Author }});
+    if (initiator.role === Role.Admin || initiator.id === author.id) {
+        await checkpoint.destroy();
+    }
+
+    throw new AccessError("Только администратор может удалить чекпоинт для чужой игры.");
+}
+
 /** Удаляет чекпоинт `checkpointId`. */
 checkpointsRouter.delete("/checkpoints/:checkpointId",
     verifyToken,
@@ -67,7 +84,7 @@ checkpointsRouter.delete("/checkpoints/:checkpointId",
                     { transaction, rejectOnEmpty: true }
                 );
 
-                await checkpoint.destroy({ transaction });
+                await deleteCheckpoint(checkpoint);
 
                 res.json(await CheckpointDTO.create(checkpoint));
             });
@@ -94,35 +111,42 @@ checkpointsRouter.get("/users/:userId/checkpoints",
     )
 );
 
+/**
+ * Активирует чекпоинт для пользователя `user`.
+ * @param {User} initiator Инициатор активации чекпоинта.
+ * @param {User} user Пользователь, для которого необходимо активировать чекпоинт.
+ * @param {Checkpoint} checkpoint Чекпоинт.
+ */
+async function activateCheckpoint(initiator, user, checkpoint)
+{
+    if (initiator.role === Role.Admin || initiator.id === user.id)
+    {
+        await user.addCheckpoint(checkpoint);
+    }
+}
+
 /** Активирует чекпоинт `checkpointId` для пользователя `userId`. */
 checkpointsRouter.put("/users/:userId/checkpoints/:checkpointId",
+    verifyToken,
     asyncMiddleware(
         async (req, res) => {
-            const transaction = await sequelize.transaction();
+            const initiator = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            const user = await User.findByPk(
+                req.params.userId,
+                { transaction, rejectOnEmpty: true }
+            );
+            const checkpoint = await Checkpoint.findByPk(
+                req.params.checkpointId,
+                { transaction, rejectOnEmpty: true }
+            );
 
-            try {
-                const user = await User.findByPk(
-                    req.params.userId,
-                    { transaction, rejectOnEmpty: true }
-                );
-                const checkpoint = await Checkpoint.findByPk(
-                    req.params.checkpointId,
-                    { transaction, rejectOnEmpty: true }
-                );
+            await activateCheckpoint(initiator, user, checkpoint);
 
-                await user.addCheckpoint(checkpoint, { transaction });
-
-                await transaction.commit();
-
-                res.json(await CheckpointDTO.create(checkpoint));
-            }
-            catch (err) {
-                await transaction.rollback();
-
-                throw err;
-            }
+            res.json(await CheckpointDTO.create(checkpoint));
         }
     )
 );
 
 export default checkpointsRouter;
+export { checkpointsRouter, deleteCheckpoint, activateCheckpoint };
+

@@ -8,11 +8,13 @@ import sequelize from "../../sequelize";
 
 /** Модель чекпоинта. */
 class Checkpoint extends Model {
+    /** Уникальный идентификатор чекпоинта. */
     declare id: string;
     /** Название чекпоинта. */
     declare name: string;
     /** Описание чекпоинта. */
     declare description: string;
+    declare createdAt: Date;
 }
 
 Checkpoint.init({
