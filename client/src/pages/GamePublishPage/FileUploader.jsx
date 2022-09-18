@@ -1,3 +1,7 @@
+/**
+ * @file Кнопка для загрузки файлов игры.
+ */
+
 import React, { useState } from "react";
 import classNames from "classnames";
 import { styled, Button } from "@mui/material";
@@ -6,18 +10,17 @@ import FileUploaderBase from "../../components/FileUploaderBase";
 
 import styles from "./FileUploader.module.css";
 
-function FileUploader({ 
-    className, 
+function FileUploader({
+    className,
     onFileSelect = (f) => f,
     onFileLoad = (f) => f,
-    ...props 
+    ...props
 }) {
     const [file, setFile] = useState(null);
     const [loaded, setLoaded] = useState(false);
 
     const handleFileSelect = (evt) => {
         setLoaded(false);
-
         setFile(evt.target.files[0]);
 
         onFileSelect(evt);
@@ -35,27 +38,28 @@ function FileUploader({
             return file.name;
         return "Выберите файл";
     };
+
     return (
-        <FileUploaderBase 
+        <FileUploaderBase
             className={classNames(className, styles.fileUploader)}
             accept="zip/*"
             onFileSelect={handleFileSelect}
             onFileLoad={handleFileLoad}
             {...props}
         >
-            <FileUploaderButton 
-                className={classNames(styles.fileUploader__button)} 
+            <FileUploaderButton
+                className={classNames(styles.fileUploader__button)}
                 variant="outlined"
                 component="span"
                 sx={{
-                    // Применям данные стили, когда файл загрузился
+                    // Применяем стили, когда файл загрузился
                     ...((file !== null && loaded) && {
                         borderColor: "green",
                         color: "green",
                         "&:hover": {
                             borderColor: "lightgreen"
                         }
-                    }) 
+                    })
                 }}
                 disabled={file !== null && !loaded}
             >

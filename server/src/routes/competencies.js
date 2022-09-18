@@ -71,8 +71,6 @@ competenciesRouter.post("/competencies/",
                     req.user.id,
                     { transaction, rejectOnEmpty: true }
                 );
-                if (user.role !== Role.Admin)
-                    throw new AccessError();
 
                 const competence = await Competence.create({
                     name: req.body.name,

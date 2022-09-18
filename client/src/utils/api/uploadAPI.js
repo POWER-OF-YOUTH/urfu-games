@@ -1,13 +1,10 @@
-import * as apiConfig from "../../helpers/apiConfig";
+import * as globals from "../../globals";
+import axios from "../../axios";
 
 export async function upload(file) {
-    const url = new URL("https://api.urfugames.ru/upload");
     const data = new FormData();
     data.append("file", file);
 
-    return fetch(url, {
-        method: "POST",
-        body: data,
-    });
+    return axios.post("/upload", data, { baseURL: globals.FILES_URI });
 }
 

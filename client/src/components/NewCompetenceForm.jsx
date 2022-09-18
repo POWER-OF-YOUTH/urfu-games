@@ -58,7 +58,7 @@ function NewCompetenceForm({
 
     return (
         <>
-            <form
+            <div
                 className={classNames(className, styles.newCompetenceForm)}
                 onSubmit={handleSubmit}
                 {...props}
@@ -78,8 +78,8 @@ function NewCompetenceForm({
                     rows={8}
                     required
                 />
-                <button type="submit">Создать</button>
-            </form>
+                <button type="submit" onClick={handleSubmit}>Создать</button>
+            </div>
             <Snackbar
                 open={successSnackbarOpen}
                 autoHideDuration={snackbarHideDuration}

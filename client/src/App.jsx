@@ -17,6 +17,7 @@ import useStore from "./hooks/useStore";
 import * as globals from "./globals";
 
 const history = createBrowserHistory();
+const asdf = 222;
 
 if (process.env.NODE_ENV === "production") {
     history.listen((location) => {

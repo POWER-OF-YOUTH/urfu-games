@@ -35,49 +35,6 @@ const AuthStore = types
         checked: false
     })
     .actions(self => ({
-        signUp: flow(function* (data) {
-            if (!self.authenticated) {
-                self.errors.clear();
-
-                const validationErrors = validateSignUpData(data);
-                if (validationErrors.length > 0)
-                    self.errors = validationErrors;
-                else {
-                    const response = yield authAPI.signUp(data);
-                    const json = yield response.json();
-
-                    if (response.ok) {
-                        if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
-                            window.ym(globals.YM_ID, "reachGoal", "signup");
-                        }
-                    }
-                    else
-                        self.errors = json.errors;
-                }
-            }
-        }),
-        signIn: flow(function* (data) {
-            if (!self.authenticated) {
-                const response = yield authAPI.signIn(data);
-                const json = yield response.json();
-
-                if (response.ok) {
-                    self.errors.clear();
-
-                    self.token = json.access_token;
-
-                    localStorage.setItem("access_token", json.access_token);
-
-                    yield self.check();
-
-                    if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
-                        window.ym(globals.YM_ID, "reachGoal", "signin");
-                    }
-                }
-                else
-                    self.errors = json.errors;
-            }
-        }),
         check: flow(function* () {
             self.token = localStorage.getItem("access_token");
 
@@ -101,9 +58,52 @@ const AuthStore = types
 
             self.checked = true;
         }),
+        signUp: flow(function* (data) {
+            if (!self.authenticated) {
+                self.errors.clear();
+
+                const validationErrors = validateSignUpData(data);
+                if (validationErrors.length > 0)
+                    self.errors = validationErrors;
+                else {
+                    const response = yield authAPI.signUp(data);
+                    const json = yield response.json();
+
+                    if (response.ok) {
+                        if (process.env.NODE_ENV === "production") {
+                            window.ym(globals.YM_ID, "reachGoal", "signup");
+                        }
+                    }
+                    else
+                        self.errors = json.errors;
+                }
+            }
+        }),
+        signIn: flow(function* (data) {
+            if (!self.authenticated) {
+                const response = yield authAPI.signIn(data);
+                const json = yield response.json();
+
+                if (response.ok) {
+                    self.errors.clear();
+
+                    self.token = json.access_token;
+
+                    localStorage.setItem("access_token", json.access_token);
+
+                    yield self.check();
+
+                    if (process.env.NODE_ENV === "production") {
+                        window.ym(globals.YM_ID, "reachGoal", "signin");
+                    }
+                }
+                else
+                    self.errors = json.errors;
+            }
+        }),
         logout() {
             localStorage.removeItem("access_token");
-            
+
             self.authenticated = false;
         },
         clearErrors() {

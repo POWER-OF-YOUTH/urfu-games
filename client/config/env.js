@@ -49,6 +49,7 @@ function getClientEnvironment(publicUrl) {
       {
         NODE_ENV: process.env.NODE_ENV || 'development',
         API_URI: process.env.API_URI,
+        FILES_URI: process.env.FILES_URI,
         PUBLIC_URL: publicUrl,
         WDS_SOCKET_HOST: process.env.WDS_SOCKET_HOST,
         WDS_SOCKET_PATH: process.env.WDS_SOCKET_PATH,
