@@ -13,7 +13,8 @@ services:
       - ./frontend:/root
     depends_on:
       - api
-    network_mode: host
+    ports:
+      - 80:80
 
   # API сервис.
   api:
@@ -22,14 +23,15 @@ services:
     environment:
       - PORT=${API_PORT}
       - API_URI=${API_URI}
-      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/main
+      - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/main
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin1234}
     volumes:
       - ./api:/root
     depends_on:
       postgres:
         condition: service_healthy
-    network_mode: host
+    ports:
+      - 3000:3000
 
   # Сервис для загрузки файлов.
   files:
@@ -41,7 +43,8 @@ services:
       - FILES_URI=${FILES_URI}
     volumes:
       - ./files:/root
-    network_mode: host
+    ports:
+      - 3001:3001
 
   # База данных PostgreSQL.
   postgres:
@@ -54,5 +57,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    network_mode: host
 

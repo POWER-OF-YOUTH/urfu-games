@@ -4,7 +4,6 @@ WORKDIR /root
 COPY . .
 
 ENV API_URI=https://api.urfugames.ru
-ENV HOSTNAME=localhost
 ENV DATABASE_URI=postgres://postgres:default@postgres
 ENV PORT=3000
 ENV ADMIN_PASSWORD=admin

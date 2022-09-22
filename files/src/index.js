@@ -8,7 +8,6 @@ import * as globals from "./globals.js";
     const port = globals.PORT;
     app.listen(
         port,
-        hostname,
         () => console.log(`Server is running on ${hostname}:${port}.`)
     );
 }());
