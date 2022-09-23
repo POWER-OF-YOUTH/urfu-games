@@ -18,6 +18,9 @@ const upload = multer({ storage });
 
 app.use(cors())
 app.use(express.urlencoded({ extended: true }));
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev")); // Логгер запросов.
+}
 
 app.post("/upload/",
     upload.single("file"),
@@ -31,8 +34,8 @@ app.get("/files/:filename",
     }
 );
 
-app.use((req, res) => res.send("But nobody came."));
-
 app.use((err, req, res, next) => res.send("Internal error."));
+
+app.use((req, res) => res.send("But nobody came."));
 
 export default app;

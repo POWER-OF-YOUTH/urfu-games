@@ -6,9 +6,9 @@ services:
     container_name: urfu-games-frontend
     build: ./frontend
     environment:
-      - PORT=${FRONTEND_PORT}
       - API_URI=${API_URI}
       - FILES_URI=${FILES_URI}
+      - PORT=${FRONTEND_PORT}
     volumes:
       - ./frontend:/root
     depends_on:
@@ -21,30 +21,31 @@ services:
     container_name: urfu-games-api
     build: ./api
     environment:
-      - PORT=${API_PORT}
       - API_URI=${API_URI}
+      - FILES_URI=${FILES_URI}
       - DATABASE_URI=postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/main
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin1234}
+      - PORT=${API_PORT}
     volumes:
       - ./api:/root
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - 3000:3000
+      - ${API_PORT}:${API_PORT}
 
   # Сервис для загрузки файлов.
   files:
     container_name: urfu-games-files
     build: ./files
     environment:
-      - PORT=${FILES_PORT}
       - API_URI=${API_URI}
       - FILES_URI=${FILES_URI}
+      - PORT=${FILES_PORT}
     volumes:
       - ./files:/root
     ports:
-      - 3001:3001
+      - ${FILES_PORT}:${FILES_PORT}
 
   # База данных PostgreSQL.
   postgres:

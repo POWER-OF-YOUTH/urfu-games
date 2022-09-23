@@ -20,7 +20,7 @@ checkEnvVariableDefined("DATABASE_URI");
 /** API URI. */
 export const API_URI = process.env.API_URI;
 /** Адрес, к которому будет прикреплен сервер. */
-export const HOSTNAME = process.env.HOSTNAME;
+export const HOSTNAME = process.env.HOSTNAME ?? "0.0.0.0";
 /** Порт, который будет использоваться сервером. */
 export const PORT = Number(process.env.PORT ?? 3000);
 /** Логин администратора. */

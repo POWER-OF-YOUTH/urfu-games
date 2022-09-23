@@ -28,8 +28,10 @@ import { encryptPassword } from "./routes/auth";
         console.log("Done.");
     }
 
-    app.listen(globals.PORT, () => {
-        console.log(`Server is running on ${globals.HOSTNAME}:${globals.PORT}.`);
-    });
+    app.listen(
+        globals.PORT,
+        globals.HOSTNAME,
+        () => console.log(`Server is running on ${globals.HOSTNAME}:${globals.PORT}.`)
+    );
 }());
 

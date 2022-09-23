@@ -3,8 +3,9 @@ FROM node:16
 WORKDIR /root
 COPY . .
 
-ENV API_URI=https://api.urfugames.ru
-ENV DATABASE_URI=postgres://postgres:default@postgres
+ENV API_URI=http://define_outside
+ENV FILES_URI=http://define_outside
+ENV DATABASE_URI=http://posgtres:password@define_outside:5432/db_name
 ENV PORT=3000
 ENV ADMIN_PASSWORD=admin
 ENV JWT_SECRET=jwt_secret

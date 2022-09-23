@@ -3,11 +3,11 @@ FROM node:16
 WORKDIR /root
 COPY . .
 
-ENV HOSTNAME=localhost
+ENV API_URI=http://define_outside
+ENV FILES_URI=http://define_outside
 ENV PORT=3000
-ENV API_URI=https://api.urfugames.ru
-ENV FILES_URI=https://files.urfugames.ru
 ENV FILES_UPLOADING_DIR=/root/data
+ENV NODE_ENV=development
 
 RUN yarn install
 
