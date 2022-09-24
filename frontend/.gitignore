@@ -8,7 +8,6 @@ coverage/
 
 # production
 build/
-src/globals.js
 
 # misc
 .DS_Store
