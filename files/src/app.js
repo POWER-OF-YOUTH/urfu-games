@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
-import cors from "cors"
+import cors from "cors";
+import morgan from "morgan";
 import { v4 as uuid } from "uuid";
 
 import * as globals from "./globals.js";
