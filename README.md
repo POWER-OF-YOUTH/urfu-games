@@ -13,15 +13,50 @@
 
 ## Запуск проекта
 
-### Linux/Windows
+Перед запуском проекта на любой операционной системе необходимо установить пакеты для компонентов `frontend`, `api` и `files` с помощью команды `npm install` или `yarn install` в соответствующих директориях.
 
-Чтобы запустить development версию проекта выполните скрипт `up-all.py`:
+Пример:
+```bash
+$ cd frontend
+$ yarn install
+```
+
+или
 
 ```bash
-# python3 up-all.py {frontend-port} {api-service-port} {files-service-port}
+$ cd frontend
+$ npm install
+```
+
+### Linux/Windows
+
+Чтобы запустить development версию проекта установите [Python](https://www.python.org/) и [Docker](https://www.docker.com/), после чего выполните скрипт `up-all.py` в корневой директории проекта:
+
+Linux:
+
+```bash
+sudo python3 up-all.py {frontend-port} {api-service-port} {files-service-port}
+```
+
+Windows:
+
+```ps
+python up-all.py {frontend-port} {api-service-port} {files-service-port}
 ```
 
 Где
 - frontend-port - порт веб-клиента;
 - api-service-port - порт API сервиса;
 - files-service-port - порт файловой службы.
+
+Пример:
+
+```bash
+sudo python3 up-all.py 80 3000 3001
+```
+
+Скрипт `up-all.py` автоматически создаст контейнеры для каждого сервиса и сгенерирует файл `.env` с переменными окружения необходимыми для работы этих контейнеров. В дальнейшем проект можно запускать с помощью команды `docker compose up` при условии, что файл `.env` существует.
+
+### Автоматическое обновление
+
+Директории служб `frontend`, `api` и `files` монтируются внутрь контейнеров с помощью механизма [Docker Volume](https://docs.docker.com/storage/volumes/), поэтому изменение исходного кода какой-либо службы на вашем компьютере приведёт к её автоматическому обновлению внутри контейнера.
