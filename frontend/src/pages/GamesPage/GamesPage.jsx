@@ -3,12 +3,12 @@ import Flickity from "react-flickity-component";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
 
-import Block from "../components/Block";
-import GameCard from "../components/GameCard";
-import Competence from "../components/Competence";
-import CompetenciesList from "../components/CompetenciesList";
-import { GamesStore } from "../models/game";
-import { CompetenciesStore } from "../models/competence";
+import Block from "../../components/Block";
+import GameCard from "../../components/GameCard";
+import Competence from "../../components/Competence";
+import CompetenciesList from "../../components/CompetenciesList";
+import { GamesStore } from "../../models/game";
+import { CompetenciesStore } from "../../models/competence";
 
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";

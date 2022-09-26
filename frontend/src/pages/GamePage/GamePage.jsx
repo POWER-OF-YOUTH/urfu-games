@@ -8,15 +8,15 @@ import {
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 
-import Block from "../components/Block";
-import Competence from "../components/Competence";
+import Block from "../../components/Block";
+import Competence from "../../components/Competence";
 import {
     CommentForm,
     CommentsListView
-} from "../components/comments";
-import { Game } from "../models/game";
-import { useStore } from "../hooks";
-import * as globals from "../globals";
+} from "../../components/comments";
+import { Game } from "../../models/game";
+import { useStore } from "../../hooks";
+import * as globals from "../../globals";
 
 import styles from "./GamePage.module.css";
 

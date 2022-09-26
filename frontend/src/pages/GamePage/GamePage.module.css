@@ -12,7 +12,8 @@
     --wrapper-max-width: 1000px;
 }
 
-@import "../styles/variables.css";
+@import "../../styles/variables.css";
+
 
 .wrapper {
     display: flex;
@@ -43,6 +44,7 @@
 }
 
 .cover {
+    
 }
 
 .cover img {

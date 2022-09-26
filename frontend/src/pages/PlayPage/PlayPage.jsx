@@ -5,10 +5,10 @@ import { Helmet } from "react-helmet";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams, NavLink } from "react-router-dom";
 
-import * as progressAPI from "../utils/api/progressAPI";
-import Block from "../components/Block";
-import { Game } from "../models/game";
-import { useStore } from "../hooks";
+import * as progressAPI from "../../utils/api/progressAPI";
+import Block from "../../components/Block";
+import { Game } from "../../models/game";
+import { useStore } from "../../hooks";
 
 import styles from "./PlayPage.module.css";
 
