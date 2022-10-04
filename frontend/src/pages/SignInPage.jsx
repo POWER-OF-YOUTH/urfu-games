@@ -13,6 +13,11 @@ function SignInPage({ history }) {
 
     const handleFormSubmit = async (values) => {
         await auth.signIn(values);
+        
+        if (auth.errors.length === 0)
+            history.goBack();
+        else
+            console.log(auth.errors);    
     };
     const handleFormChange = () => auth.clearErrors();
 
