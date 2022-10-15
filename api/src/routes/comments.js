@@ -1,7 +1,5 @@
 /**
  * @file Содержит маршруты для работы с комментариями к играм.
- * TODO:
- * 1. Обновить пути
  */
 
 import express from "express";
@@ -78,12 +76,12 @@ commentsRouter.get("/games/:gameId/comments/",
         async (req, res) => {
             const game = await Game.findByPk(
                 req.params.gameId,
-                { transaction, rejectOnEmpty: true }
+                { rejectOnEmpty: true }
             );
             const comments = await game.getComments({
                 offset: req.query.start,
                 limit: req.query.count
-            }, { transaction });
+            });
 
             res.json(await Promise.all(
                 comments.map((c) => CommentDetailDTO.create(c))
@@ -105,7 +103,6 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
     asyncMiddleware(
         async (req, res) => {
             const comment = await Comment.findOne({
-                transaction,
                 where: {
                     id: req.params.commentId
                 },
@@ -116,7 +113,7 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
                 throw new AccessError();
 
             comment.text = req.body.text;
-            await comment.save({ transaction });
+            await comment.save();
 
             res.json(await CommentDetailDTO.create(comment));
         }
@@ -127,22 +124,19 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
 commentsRouter.delete("/games/:gameId/comments/:commentId",
     verifyToken,
     asyncMiddleware(async (req, res) => {
-        await sequelize.transaction(async (transaction) => {
-            const comment = await Comment.findOne({
-                transaction,
-                where: {
-                    id: req.params.commentId
-                },
-                rejectOnEmpty: true
-            });
-
-            if (comment.authorId !== req.user.id && req.user.role !== Role.Admin)
-                throw new AccessError();
-
-            await comment.destroy({ transaction });
-
-            res.json(await CommentDetailDTO.create(comment));
+        const comment = await Comment.findOne({
+            where: {
+                id: req.params.commentId
+            },
+            rejectOnEmpty: true
         });
+
+        if (comment.authorId !== req.user.id && req.user.role !== Role.Admin)
+            throw new AccessError();
+
+        await comment.destroy();
+
+        res.json(await CommentDetailDTO.create(comment));
     })
 );
 
