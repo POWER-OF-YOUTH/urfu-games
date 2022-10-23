@@ -13,7 +13,10 @@ import {
     UnexpectedError,
     ValidationError
 } from "./utils/errors";
-import { ValidationError as SequelizeValidationError } from "sequelize";
+import {
+    ValidationError as SequelizeValidationError,
+    EmptyResultError as SequelizeEmptyResultError
+} from "sequelize";
 import mainRouter from "./routes";
 
 /** Главное приложение. */
@@ -34,28 +37,71 @@ app.use("/", mainRouter);
  */
 app.use(<TError>(err: TError, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof SequelizeValidationError) {
-        res.status(422).json({ errors: [{
-            ...new ValidationError(err.errors[0].path, "", err.errors[0].message),
-            instance: req.originalUrl,
-            type: "validation"
-        }]});
+        res.status(422).json({
+            errors: [
+                {
+                    detail: err.errors[0].message,
+                    instance: req.originalUrl,
+                    location: "",
+                    param: err.errors[0].path,
+                    type: "validation"
+                }
+            ]
+        });
+    }
+    else if (err instanceof SequelizeEmptyResultError) {
+        res.status(404).json({
+            errors: [
+                {
+                    detail: "Ресурс не найден.",
+                    instance: req.originalUrl,
+                    type: "logic"
+                }
+            ]
+        });
     }
     else if (err instanceof ValidationError) {
-        res.status(422).json({ errors: [{
-            ...err,
-            instance: req.originalUrl,
-            type: "validation"
-        }]});
+        res.status(err.status).json({
+            errors: [{
+                detail: err.detail,
+                instance: req.originalUrl,
+                location: err.location,
+                param: err.param,
+                type: "validation"
+            }]
+        });
     }
     else if (err instanceof LogicError)
-        res.status(404).json({ errors: [{ ...err, instance: req.originalUrl, type: "logic" }]});
+        res.status(err.status).json({
+            errors: [
+                {
+                    detail: err.detail,
+                    instance: req.originalUrl,
+                    type: "logic"
+                }
+            ]
+        });
     else if (err instanceof AccessError)
-        res.status(403).json({ errors: [{ ...err, instance: req.originalUrl, type: "access" }]});
+        res.status(err.status).json({
+            errors: [
+                {
+                    detail: err.detail,
+                    instance: req.originalUrl,
+                    type: "access"
+                }
+            ]
+        });
     else {
         console.error(err);
 
         res.status(500).json({
-            errors: [{ ...new UnexpectedError(), instance: req.originalUrl, type: "unexpected"}]
+            errors: [
+                {
+                    detail: "Непредвиденная ошибка.",
+                    instance: req.originalUrl,
+                    type: "unexpected"
+                }
+            ]
         });
     }
 });

@@ -13,7 +13,7 @@ enum ParticipantRole {
 
 GameParticipants.init({
     gameId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: Game,
             key: "id"
@@ -21,7 +21,7 @@ GameParticipants.init({
         allowNull: false
     },
     userId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: User,
             key: "id"

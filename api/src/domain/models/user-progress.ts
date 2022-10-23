@@ -30,7 +30,7 @@ class UserProgress extends Model {
 
 UserProgress.init({
     id: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },

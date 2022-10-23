@@ -5,12 +5,13 @@
 import express from "express";
 import { Op } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 
 import * as globals from "../globals.js";
-import User from "../domain/models/user";
 import Competence from "../domain/models/competence";
 import GameDetailDTO from "../domain/dto/game-detail-dto";
+import LogicError from "../utils/errors/logic_error";
+import User from "../domain/models/user";
 import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
 import verifyToken from "../validators/verify-token";

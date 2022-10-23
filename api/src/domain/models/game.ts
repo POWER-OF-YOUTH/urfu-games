@@ -49,9 +49,8 @@ class Game extends Model {
 
 Game.init({
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+        type: DataTypes.STRING,
+        defaultValue: DataTypes.UUIDV4, primaryKey: true
     },
     image: {
         type: DataTypes.STRING,
