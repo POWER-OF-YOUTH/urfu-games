@@ -25,6 +25,27 @@ const authRouter = express.Router();
 
 /** Регистрирует пользователя в системе. */
 authRouter.post("/auth/signup",
+    validateRequest(
+        body("login")
+            .isString()
+            .withMessage(strings.errors.validation.loginMustBeString)
+            .trim()
+            .notEmpty()
+            .withMessage(strings.errors.validation.loginMustNotBeEmpty)
+            .matches("^[0-9A-Za-z]+$")
+            .withMessage(strings.errors.validation.loginNotMatchPattern + "^[0-9A-Za-z]+$."),
+        body("email")
+            .isEmail()
+            .withMessage(strings.errors.validation.emailInvalid)
+            .normalizeEmail(),
+        body("password")
+            .isString()
+            .withMessage(strings.errors.validation.passwordMustBeString)
+            .matches("[0-9a-zA-Z_\\-@#%., ]+")
+            .withMessage(strings.errors.validation.passwordNotMatchPattern + "[0-9a-zA-Z_\\-@#%., ]+.")
+            .isLength({ min: 6 })
+            .withMessage(strings.errors.validation.passwordTooShort)
+    ),
     asyncMiddleware(
         /**
          * @param {{

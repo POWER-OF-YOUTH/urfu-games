@@ -12,14 +12,14 @@ class UserCheckpoints extends Model { }
 
 UserCheckpoints.init({
     userId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: User,
             key: "id"
         }
     },
     checkpointId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: Checkpoint,
             key: "id"

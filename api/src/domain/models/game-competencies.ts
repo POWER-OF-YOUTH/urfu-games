@@ -8,7 +8,7 @@ class GameCompetencies extends Model { }
 
 GameCompetencies.init({
     gameId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: Game,
             key: "id"
@@ -16,7 +16,7 @@ GameCompetencies.init({
         allowNull: false
     },
     competenceId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         references: {
             model: Competence,
             key: "id"

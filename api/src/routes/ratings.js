@@ -29,13 +29,10 @@ ratingsRouter.post("/games/:gameId/ratings/",
             const transaction = await sequelize.transaction();
 
             try {
-                const game = await Game.findOne({
-                    transaction,
-                    where: {
-                        id: req.params.gameId
-                    },
-                    rejectOnEmpty: true
-                });
+                const game = await Game.findByPk(
+                    req.params.gameId,
+                    { transaction, rejectOnEmpty: true }
+                );
 
                 let rating = await Rating.findOne({
                     transaction,
@@ -76,7 +73,7 @@ ratingsRouter.get("/ratings/:ratingId",
         async (req, res) => {
             const rating = await Rating.findByPk(
                 req.params.ratingId,
-                { rejectOnEmpty: new LogicError("Оценка не найдена.") }
+                { rejectOnEmpty: true }
             );
 
             res.json(await RatingDetailDTO.create(rating));
@@ -99,13 +96,10 @@ ratingsRouter.get("/games/:gameId/ratings/",
     asyncMiddleware(
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
-                const game = await Game.findOne({
-                    transaction,
-                    where: {
-                        id: req.params.gameId
-                    },
-                    rejectOnEmpty: true
-                });
+                const game = await Game.findByPk(
+                    req.params.gameId,
+                    { transaction, rejectOnEmpty: true }
+                );
 
                 const ratings = await game.getRatings({
                     offset: req.body.start,
@@ -131,12 +125,12 @@ ratingsRouter.delete("/games/:gameId/ratings/",
                     { transaction, rejectOnEmpty: true }
                 );
                 const rating = await Rating.findOne({
-                    transaction,
                     where: {
                         authorId: req.user.id,
                         gameId: req.params.gameId
                     },
-                    rejectOnEmpty: new LogicError("Вы не оценивали игру.")
+                    transaction,
+                    rejectOnEmpty: true
                 });
 
                 await rating.destroy({ transaction });
@@ -163,10 +157,7 @@ ratingsRouter.delete("/ratings/:ratingId",
             await sequelize.transaction(async (transaction) => {
                 const rating = await Rating.findByPk(
                     req.params.ratingId,
-                    { 
-                        transaction,
-                        rejectOnEmpty: new LogicError("Оценка не найдена.")
-                    }
+                    { transaction, rejectOnEmpty: true }
                 );
                 if (rating.authorId !== req.user.id)
                     throw new AccessError("Вы не выставляли эту оценку.");

@@ -45,7 +45,7 @@ usersRouter.get("/users/",
 );
 
 /** Возвращает информацию о пользователе `userId`. */
-usersRouter.get("/users/:userId", 
+usersRouter.get("/users/:userId",
     asyncMiddleware(
         async (req, res) => {
             await sequelize.transaction(async (transaction) => {
