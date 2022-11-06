@@ -3,7 +3,7 @@
 ## Порядок внесения изменений в исходный код
 
 1. выбрать задачу в разделе [Issues](https://github.com/POWER-OF-YOUTH/urfu-games/issues) репозитория [urfu-games](https://github.com/POWER-OF-YOUTH/urfu-games);
-2. подписаться на задачу, выбрав себя в правой панели *Assignes*;
+2. подписаться на задачу, выбрав себя в правой панели *Assignees*;
 3. создать ветку;
 4. выполнить задачу;
 5. создать *pull request* для вашей ветки;
