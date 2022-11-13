@@ -8,7 +8,7 @@ const User = types
         id: types.identifier,
         login: "",
         email: "",
-        role: "",
+        role: 0,
         name: types.maybeNull(types.string),
         surname: types.maybeNull(types.string),
         patronymic: types.maybeNull(types.string),
