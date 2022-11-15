@@ -109,7 +109,7 @@ function Header({ variant = "standard" }) {
                                 <div className={styles.menuListContainer}>
                                     <ClickAwayListener onClickAway={handleMenuClose}>
                                         <MenuList>
-                                            <MenuItem component = {Link} to = {"users/"+auth.user.id}>
+                                            <MenuItem component = {Link} to = {"/users/" + auth.user.id}>
                                                 <ListItemIcon>
                                                     <UserProfileIcon/>
                                                 </ListItemIcon>
