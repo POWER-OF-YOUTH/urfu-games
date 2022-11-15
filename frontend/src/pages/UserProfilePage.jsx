@@ -11,7 +11,7 @@ function UserProfilePage() {
 
     const user = useLocalObservable(() => User.create({ id: userId }));
 
-    useEffect(() => user.load(userId).catch(err => console.error(err)));
+    useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
 
     return (
         <>
