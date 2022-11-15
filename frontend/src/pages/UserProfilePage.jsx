@@ -19,16 +19,14 @@ function UserProfilePage() {
             <Helmet><title>{user.loaded ? "Профиль: " + user.login : "Загрузка"}</title></Helmet>
             {
                 user.loaded && (
-                    <>
-                        <PageLayout>
-                            <img src={user.avatar} className={styles.avatarImage} />
-                            <div>Email: {user.email}</div>
-                            <div>Login: {user.login}</div>
-                            <div>Name: {user.name == null ? "Не указано" : user.name}</div>
-                            <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
-                            <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
-                        </PageLayout>
-                    </>
+                    <PageLayout>
+                        <img src={user.avatar} className={styles.avatarImage} />
+                        <div>Email: {user.email}</div>
+                        <div>Login: {user.login}</div>
+                        <div>Name: {user.name == null ? "Не указано" : user.name}</div>
+                        <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
+                        <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
+                    </PageLayout>
                 )
             }
 
