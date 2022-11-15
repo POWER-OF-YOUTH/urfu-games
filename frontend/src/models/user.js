@@ -6,14 +6,16 @@ import { DateTime } from "./custom";
 const User = types
     .model({
         id: types.identifier,
-        login: types.string,
-        email: types.string,
-        role: types.number,
+        login: "",
+        email: "",
+        role: 0,
         name: types.maybeNull(types.string),
         surname: types.maybeNull(types.string),
         patronymic: types.maybeNull(types.string),
-        avatar: "",
-        createdAt: DateTime,
+        avatar: types.maybeNull(types.string),
+        createdAt: types.maybeNull(DateTime),
+
+        loaded: false,
     })
     .views(self => ({
         isAdmin() {
@@ -29,7 +31,13 @@ const User = types
 
                 applySnapshot(self, json);
             }
-        })
+        }),
+        load: flow(function* (userId){
+            const userResponse = yield usersAPI.getUser(userId);
+
+            applySnapshot(self, userResponse.data);
+            self.loaded = true;
+        }),
     }));
 
 const UsersStore = types
@@ -47,7 +55,10 @@ const UsersStore = types
                     const json = yield response.json();
 
                     let users = {};
-                    json.forEach((u) => users[u.id] = u);
+                    json.forEach((u) => {
+                        users[u.id] = u;
+                        u.loaded = true;
+                    });
 
                     applySnapshot(self.users, users);
                 }

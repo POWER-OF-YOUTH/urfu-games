@@ -14,6 +14,7 @@ import {
     Logout as LogoutIcon,
     ArrowDropDown as ArrowDropDownIcon,
     Settings as SettingsIcon,
+    AccountCircle as UserProfileIcon,
 } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 
@@ -108,6 +109,12 @@ function Header({ variant = "standard" }) {
                                 <div className={styles.menuListContainer}>
                                     <ClickAwayListener onClickAway={handleMenuClose}>
                                         <MenuList>
+                                            <MenuItem component={Link} to={"/users/" + auth.user.id}>
+                                                <ListItemIcon>
+                                                    <UserProfileIcon/>
+                                                </ListItemIcon>
+                                                <span className={styles.userProfileText}>Профиль</span>
+                                            </MenuItem>
                                             <MenuItem>
                                                 <ListItemIcon>
                                                     <SettingsIcon />

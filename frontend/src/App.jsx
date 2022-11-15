@@ -10,6 +10,7 @@ import GamesPage from "./pages/GamesPage";
 import GamePage from "./pages/GamePage";
 import PlayPage from "./pages/PlayPage";
 import GamePublishPage from "./pages/GamePublishPage";
+import UserProfilePage from "./pages/UserProfilePage";
 import { NotFoundPage } from "./pages/error";
 import { MainLayout } from "./layouts";
 import useStore from "./hooks/useStore";
@@ -55,6 +56,7 @@ function App() {
                         </Route>
                         <Route exact path="/games/:gameId" component={GamePage} />
                         <Route exact path="/games/:gameId/play" component={PlayPage} />
+                        <Route exact path="/users/:userId" component={UserProfilePage} />
                         <Route exact path="/404" component={NotFoundPage} />
                     </Switch>
                 </MainLayout>
