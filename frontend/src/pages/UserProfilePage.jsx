@@ -4,6 +4,7 @@ import { Observer, observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { User } from "../models/user";
 import styles from "./UserProfilePage.module.css";
+import PageLayout from "../layouts/PageLayout";
 
 function UserProfilePage() {
 
@@ -19,12 +20,14 @@ function UserProfilePage() {
             {
                 user.loaded && (
                     <>
-                        <img src={user.avatar} className={styles.avatarImage} />
-                        <div>Email: {user.email}</div>
-                        <div>Login: {user.login}</div>
-                        <div>Name: {user.name == null ? "Не указано" : user.name}</div>
-                        <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
-                        <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
+                        <PageLayout>
+                            <img src={user.avatar} className={styles.avatarImage} />
+                            <div>Email: {user.email}</div>
+                            <div>Login: {user.login}</div>
+                            <div>Name: {user.name == null ? "Не указано" : user.name}</div>
+                            <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
+                            <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
+                        </PageLayout>
                     </>
                 )
             }
