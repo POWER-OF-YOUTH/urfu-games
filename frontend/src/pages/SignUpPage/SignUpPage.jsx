@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import { Button, Typography, TextField, Alert } from "@mui/material";
 import { observer } from "mobx-react-lite";
 
-import { useStore } from "../hooks";
+import { useStore } from "../../hooks";
 
 import styles from "./SignUpPage.module.css";
 
