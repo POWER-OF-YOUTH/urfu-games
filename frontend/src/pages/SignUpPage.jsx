@@ -13,13 +13,12 @@ function SignUpPage({ history }) {
 
     const handleFormSubmit = async (values) => {
         await auth.signUp(values);
-        await auth.signIn(values);
+        await auth.signIn({ login: values.login, password: values.password });
 
         if (auth.errors.length === 0) {
+            console.log(auth.errors);
             history.goBack();
-            console.log(1);
-        }
-        // history.push("/signin", history.location.state);
+        }        
         else console.log(auth.errors);
     };
     const handleFormChange = () => auth.clearErrors();
