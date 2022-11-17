@@ -4,11 +4,11 @@ import { createBrowserHistory } from "history";
 import { observer } from "mobx-react-lite";
 
 import MainPage from "./pages/MainPage";
-import SignInPage from "./pages/SignInPage/SignInPage";
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import GamesPage from "./pages/GamesPage/GamesPage";
-import GamePage from "./pages/GamePage/GamePage";
-import PlayPage from "./pages/PlayPage/PlayPage";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
+import GamesPage from "./pages/GamesPage";
+import GamePage from "./pages/GamePage";
+import PlayPage from "./pages/PlayPage";
 import GamePublishPage from "./pages/GamePublishPage";
 import { NotFoundPage } from "./pages/error";
 import { MainLayout } from "./layouts";
