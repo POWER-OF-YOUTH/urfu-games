@@ -19,7 +19,6 @@ import { useStore } from "../hooks";
 import * as globals from "../globals";
 
 import styles from "./GamePage.module.css";
-import { responsiveProperty } from "@mui/material/styles/cssUtils";
 
 function GamePage({ history }) {
     const params = useParams(); // { gameId: string }
@@ -41,12 +40,13 @@ function GamePage({ history }) {
             .catch((err) => console.error(err));
     };
 
-    useEffect(() => {
-        console.log('catch check');
-        game.load(params.gameId).catch(err => {
-            console.log('12');
+    useEffect(() => {   
+        game.load(params.gameId).catch(err => {            
             if (err.response.status == 404) history.push("/404");
-            else history.push('/');
+            else {
+                console.error(err);
+                history.push('/');
+            }
         });
     }, []);
     useEffect(() => {
