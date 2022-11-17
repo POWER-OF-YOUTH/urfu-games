@@ -5,7 +5,6 @@
     --carouselCard-width: 500px;
 }
 
-@import "../styles/variables.css";
 
 .pageGrid {
     display: grid;
