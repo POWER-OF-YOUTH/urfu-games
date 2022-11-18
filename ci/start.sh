@@ -2,6 +2,8 @@
 
 # Запуск сервисов.
 
+set -eo pipefail
+
 FRONTEND_URI="https://urfugames.ru"
 API_URI="https://api.urfugames.ru"
 FILES_URI="https://files.urfugames.ru"

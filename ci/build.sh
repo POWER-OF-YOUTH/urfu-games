@@ -8,7 +8,7 @@ fi
 
 CI_DIR="$(pwd)"
 PROJECT_DIR=".."
-BUILD_DIR="$PROJECT_DIR/build"
+BUILD_DIR="$CI_DIR/build"
 API_IMAGE_NAME="urfu-games-api"
 FILES_IMAGE_NAME="urfu-games-files"
 POSTGRES_IMAGE_NAME="urfu-games-postgres"
@@ -51,6 +51,3 @@ mkdir -p $BUILD_DIR/etc/nginx
 cp -r $PROJECT_DIR/nginx/nginx.conf $BUILD_DIR/etc/nginx/
 echo "Done."
 
-echo "Copying deploy script..."
-cp $CI_DIR/deploy.sh $BUILD_DIR/
-echo "Done."

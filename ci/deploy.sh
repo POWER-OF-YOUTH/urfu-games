@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -xeo pipefail
+set -eo pipefail
 
-cp -r var etc /
-docker image load -i urfu-games-api.tar
-docker image load -i urfu-games-files.tar
-docker image load -i urfu-games-postgres.tar
+cp -r build/var build/etc /
+docker image load -i build/urfu-games-api.tar
+docker image load -i build/urfu-games-files.tar
+docker image load -i build/urfu-games-postgres.tar
