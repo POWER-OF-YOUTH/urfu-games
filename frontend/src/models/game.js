@@ -109,8 +109,8 @@ const GamesStore = types
         }
     }))
     .actions(self => ({
-        load: flow(function* (start = 0, count = 10) {
-            const response = yield gamesAPI.getGames(start, count); 
+        load: flow(function* (start = 0, count = 10, isPublicated=true) {
+            const response = yield gamesAPI.getGames(start, count, isPublicated); 
 
             const json = response.data;
 

@@ -3,7 +3,7 @@
  */
 
 import express from "express";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
 import { body, param, query } from "express-validator";
 
@@ -140,13 +140,20 @@ gamesRouter.get("/games/",
         query("count")
             .default(10)
             .isInt({ gt: 0, lt: 100 })
-            .toInt()
+            .toInt(),
+        query("isPublicated")
+            .default(false)
+            .toBoolean()
     ),
     asyncMiddleware(
         async (req, res) => {
             const games = await Game.findAll({
                 offset: req.query.start,
-                limit: req.query.count
+                limit: req.query.count,
+                where:
+                {
+                    "isPublicated": req.query.isPublicated
+                        }
             });
 
             res.json(await Promise.all(games.map(g => GameDetailDTO.create(g))));

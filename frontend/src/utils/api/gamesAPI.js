@@ -8,15 +8,14 @@ export async function getGame(gameId) {
     return axios.get(`/games/${gameId}`);
 }
 
-export async function getGames(start = 0, count = 10) {
+export async function getGames(start=0, count=10, isPublicated) {
     return axios.get("/games", {
-        params: {
-            start,
-            count
+        params:
+        {
+            start, count, isPublicated
         }
     });
 }
-
 export async function updateGame(gameId, data) {
     return axios.put(`/games/${gameId}`, data);
 }
