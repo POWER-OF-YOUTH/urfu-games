@@ -96,11 +96,11 @@ function Header({ variant = "standard" }) {
                         )
                     )
                     }
-                    <Popper 
+                    <Popper
                         open={isMenuOpen}
                         anchorEl={menuAnchorElement}
-                        onClose={handleMenuClose} 
-                        MenuListProps={{"aria-labelledby": "basic-button"}}
+                        onClose={handleMenuClose}
+                        menulistprops={{"aria-labelledby": "basic-button"}}
                         placement="bottom-end"
                         transition
                     >
