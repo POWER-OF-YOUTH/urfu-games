@@ -18,7 +18,7 @@ reset() {
 }
 
 start_postgres() {
-    local data_directory=${1:-"/var/lib/postgresql/data"}
+    local data_directory=$1
     local local_port=$2
 
     docker container run                            \
@@ -49,11 +49,13 @@ start_api() {
 }
 
 start_files() {
-    local local_port=$1
+    local data_directory=$1
+    local local_port=$2
 
     docker container run              \
         --env FILES_URI=$FILES_URI    \
         -p 127.0.0.1:$local_port:3000 \
+        -v $data_directory:/root/data \
         --restart always              \
         -d                            \
         --network urfu-games-network  \
@@ -68,6 +70,6 @@ start_nginx() {
 reset
 start_postgres "/var/lib/postgresql/data" 5432
 start_api 3000
-start_files 3001
+start_files "/var/www/files.urfugames.ru" 3001
 start_nginx
 
