@@ -5,7 +5,7 @@
 import strings from "../config/strings.json";
 
 import { Request, Response, NextFunction } from "express";
-import expressJWT, { UnauthorizedError } from "express-jwt";
+import { expressjwt, UnauthorizedError } from "express-jwt";
 
 import { AccessError } from "../utils/errors";
 
@@ -14,7 +14,7 @@ import { AccessError } from "../utils/errors";
  * помещают данные из токена в `req.user`.
  */
 const verifyToken = [
-    expressJWT({
+    expressjwt({
         secret: <string> process.env.JWT_SECRET,
         algorithms: ["HS256"]
     }),
