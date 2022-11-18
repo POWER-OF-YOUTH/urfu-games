@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { v4 as uuid } from "uuid";
 
 import * as globals from "./globals.js";
+import verifyToken from "./verifyToken.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.post("/upload/",
+    verifyToken,
     upload.single("file"),
     (req, res) => {
         res.send(`${globals.FILES_URI}/files/${req.locals.filename}`);
@@ -35,7 +37,7 @@ app.get("/files/:filename",
     }
 );
 
-app.use((err, req, res, next) => res.send("Internal error."));
+app.use((err, req, res, next) => res.send(err.statusCode ? err.statusCode : 500, JSON.stringify(err)));
 
 app.use((req, res) => res.send("But nobody came."));
 
