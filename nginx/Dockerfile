@@ -1,8 +1,0 @@
-FROM nginx:latest
-
-VOLUME ["/var/www"]
-
-EXPOSE 443
-EXPOSE 80
-
-COPY nginx.conf /etc/nginx/nginx.conf
