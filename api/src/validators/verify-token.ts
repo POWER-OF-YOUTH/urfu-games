@@ -16,7 +16,8 @@ import { AccessError } from "../utils/errors";
 const verifyToken = [
     expressjwt({
         secret: <string> process.env.JWT_SECRET,
-        algorithms: ["HS256"]
+        algorithms: ["HS256"],
+        requestProperty: "user"
     }),
     (err: any, req: Request, res: Response, next: NextFunction) => {
         if (err instanceof UnauthorizedError) {
