@@ -8,11 +8,12 @@ export async function getGame(gameId) {
     return axios.get(`/games/${gameId}`);
 }
 
-export async function getGames(start=0, count=10, isPublicated) {
+export async function getGames(start = 0, count = 10, isPublicated) {
     return axios.get("/games", {
-        params:
-        {
-            start, count, isPublicated
+        params:{
+            start,
+            count,
+            isPublicated
         }
     });
 }

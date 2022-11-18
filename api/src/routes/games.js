@@ -3,7 +3,7 @@
  */
 
 import express from "express";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import { asyncMiddleware } from "middleware-async";
 import { body, param, query } from "express-validator";
 
@@ -142,7 +142,7 @@ gamesRouter.get("/games/",
             .isInt({ gt: 0, lt: 100 })
             .toInt(),
         query("isPublicated")
-            .default(false)
+            .default(true)
             .toBoolean()
     ),
     asyncMiddleware(
@@ -152,8 +152,8 @@ gamesRouter.get("/games/",
                 limit: req.query.count,
                 where:
                 {
-                    "isPublicated": req.query.isPublicated
-                        }
+                    isPublicated: req.query.isPublicated
+                }
             });
 
             res.json(await Promise.all(games.map(g => GameDetailDTO.create(g))));
