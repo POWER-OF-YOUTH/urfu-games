@@ -1,19 +1,22 @@
-FROM node:16
+FROM node:16 AS prod
+
+ENV NODE_ENV=production
 
 WORKDIR /root
-COPY . .
+COPY . /root
 
-ENV API_URI=http://define_outside
-ENV FILES_URI=http://define_outside
-ENV PORT=3000
+RUN yarn install --prod
+
+CMD ["yarn", "start"]
+
+FROM prod AS dev
+
 ENV FILES_UPLOADING_DIR=/root/data
 ENV NODE_ENV=development
 
 RUN yarn install
 
-EXPOSE ${PORT}
-
 VOLUME ["/root"]
 VOLUME ["${FILES_UPLOADING_DIR}"]
 
-ENTRYPOINT ["yarn", "dev"]
+CMD ["yarn", "dev"]

@@ -2,6 +2,8 @@
  * @file Подключение к базе данных и запуск приложения.
  */
 
+import "dotenv/config";
+
 import * as globals from "./globals";
 import app from "./app";
 import sequelize from "./sequelize";

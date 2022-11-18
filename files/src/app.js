@@ -17,7 +17,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.use(cors())
+if (process.env.NODE_ENV == "development") {
+    app.use(cors())
+}
 app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev")); // Логгер запросов.
