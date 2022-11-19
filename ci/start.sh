@@ -2,8 +2,6 @@
 
 # Запуск сервисов.
 
-set -eo pipefail
-
 if [[ -z $ADMIN_PASSWORD ]]; then
     echo "The ADMIN_PASSWORD environment variable is required but was not specified."
     exit 1
