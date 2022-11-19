@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Cборка production версии проекта.
+
 set -eo pipefail
 
 if [[ $1 == "-v" ]]; then

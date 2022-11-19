@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Запуск production версии проекта.
+
 set -eo pipefail
 
 cp -r build/var build/etc /

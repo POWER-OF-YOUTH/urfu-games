@@ -4,14 +4,27 @@
 
 set -eo pipefail
 
+if [[ -z $ADMIN_PASSWORD ]]; then
+    echo "The ADMIN_PASSWORD environment variable is required but was not specified."
+    exit 1
+fi
+if [[ -z $POSTGRES_PASSWORD ]]; then
+    echo "The POSTGRES_PASSWORD environment variable is required but was not specified."
+    exit 1
+fi
+if [[ -z $JWT_SECRET ]]; then
+    echo "The JWT_SECRET environment variable is required but was not specified."
+    exit 1
+fi
+if [[ -z $USER_PWD_SALT ]]; then
+    echo "The USER_PWD_SALT environment variable is required but was not specified."
+    exit 1
+fi
+
 FRONTEND_URI="https://urfugames.ru"
 API_URI="https://api.urfugames.ru"
 FILES_URI="https://files.urfugames.ru"
 DATABASE_URI="postgres://postgres:$POSTGRES_PASSWORD@postgres:5432/main"
-#ADMIN_PASSWORD
-#POSTGRES_PASSWORD
-#JWT_SECRET
-#USER_PWD_SALT
 YM_ID=${YM_ID:-0}
 
 reset() {
