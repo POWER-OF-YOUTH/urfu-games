@@ -19,7 +19,8 @@ function SignUpPage({ history }) {
             console.log(auth.errors);
             history.goBack();
         }        
-        else console.log(auth.errors);
+        else
+            console.error(auth.errors);
     };
     const handleFormChange = () => auth.clearErrors();
 
