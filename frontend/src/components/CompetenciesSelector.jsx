@@ -17,7 +17,7 @@ import styles from "./CompetenciesSelector.module.css";
 
 function CompetenciesSelector({
     className,
-    onChange = (f) => f, ///< Вызвается, когда изменяется список выбранных компетенций.
+    onChange = (f) => f,
     required,
     ...props
 }) {
@@ -26,10 +26,6 @@ function CompetenciesSelector({
 
     const selectElement = useRef(null);
 
-    /**
-     * Передается в компонент `CompetenciesSearch`. Используется для того, чтобы
-     * убрать из результата поиска те компетенции, которые уже были выбраны.
-     */
     const filterUnselectedParticipants = (competencies) => {
         const result = [];
 

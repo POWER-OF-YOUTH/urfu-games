@@ -5,20 +5,10 @@ import classNames from "classnames";
 import PageLayout from "../../layouts/PageLayout";
 import PageTitle from "../../components/PageTitle";
 import GamePublishForm from "./GamePublishForm";
-import * as gamesAPI from "../../utils/api/gamesAPI";
 
 import styles from "./GamePublishPage.module.css";
 
-function GamePublishPage({ history }) {
-    const handleSubmit = async (data) => {
-        data.participants = data.participants.map((p) => p.id);
-        data.competencies = data.competencies.map((c) => c.id);
-
-        await gamesAPI.addGame(data);
-
-        history.push("/");
-    };
-
+function GamePublishPage() {
     return (
         <>
             <Helmet>
@@ -26,7 +16,7 @@ function GamePublishPage({ history }) {
             </Helmet>
             <PageLayout>
                 <PageTitle className={classNames(styles.title)}>Публикация игры</PageTitle>
-                <GamePublishForm onSubmit={handleSubmit} />
+                <GamePublishForm />
             </PageLayout>
         </>
     );
