@@ -19,6 +19,8 @@ checkEnvVariableDefined("DATABASE_URI");
 
 /** API URI. */
 export const API_URI = process.env.API_URI;
+/** FILES URI. */
+export const FILES_URI = process.env.FILES_URI;
 /** Адрес, к которому будет прикреплен сервер. */
 export const HOSTNAME = process.env.HOSTNAME ?? "0.0.0.0";
 /** Порт, который будет использоваться сервером. */

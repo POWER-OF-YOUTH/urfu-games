@@ -40,7 +40,7 @@ gamesRouter.post("/games/",
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
-            .isURL(),
+            .matches(`^${globals.FILES_URI}.+$`),
         body("participants")
             .default([])
             .isArray(),
@@ -64,13 +64,13 @@ gamesRouter.post("/games/",
             .default("")
             .isString(),
         body("loaderUrl")
-            .isURL(),
+            .matches(`^${globals.FILES_URI}.+$`),
         body("dataUrl")
-            .isURL(),
+            .matches(`^${globals.FILES_URI}.+$`),
         body("frameworkUrl")
-            .isURL(),
+            .matches(`^${globals.FILES_URI}.+$`),
         body("codeUrl")
-            .isURL()
+            .matches(`^${globals.FILES_URI}.+$`),
     ),
     asyncMiddleware(
         async (req, res) => {
