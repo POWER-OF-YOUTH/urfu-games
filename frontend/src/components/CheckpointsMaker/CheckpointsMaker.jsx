@@ -2,10 +2,9 @@
  * @file Компонент предназначенный для создания чекпоинтов.
  */
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
-import { v4 as uuid } from "uuid";
 
 import styles from "./CheckpointsMaker.module.css";
 
