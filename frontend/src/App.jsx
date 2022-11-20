@@ -34,8 +34,8 @@ function App() {
 
     useEffect(() => {
         store.initialize()
-            .then(() => setInitialized(true))
-            .catch((err) => console.error(err));
+            .catch((err) => console.error(err))
+            .finally(() => setInitialized(true));
     }, []);
 
     return (
