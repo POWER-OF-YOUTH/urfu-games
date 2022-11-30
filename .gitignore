@@ -1,3 +1,4 @@
 .env
 .config
 yarn-error.log
+*.lock

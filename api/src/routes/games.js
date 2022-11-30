@@ -195,8 +195,8 @@ gamesRouter.put("/games/:gameId",
             .optional()
             .isUUID(),
         body("checkpoints.*.description")
-            .isString()
-            .notEmpty(),
+            .default("")
+            .isString(),
         body("loaderUrl")
             .isURL(),
         body("dataUrl")
@@ -227,17 +227,17 @@ gamesRouter.put("/games/:gameId",
             });
             const competencies = [];
             const competenciesMap = new Map();
-            await Competence.findAll({
+            (await Competence.findAll({
                 where: {
                     id: {
                         [Op.in]: req.body.competencies
                     }
                 }
-            }).forEach((c) => {
+            })).forEach((c) => {
                 competencies.push(c);
                 competenciesMap.set(c.id, c)
             });
-            req.body.checkpoints = req.body.checkpoints.forEach(
+            req.body.checkpoints.forEach(
                 (c) => c.competence = competenciesMap[c.competence] // replace competence id to competence object
             );
 

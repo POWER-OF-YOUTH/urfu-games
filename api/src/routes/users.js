@@ -25,6 +25,9 @@ usersRouter.get("/users/",
         query("count")
             .default(10)
             .isInt({ gt: 0, lt: 100 })
+            .toInt(),
+        query("role")
+            .default(0)
             .toInt()
     ),
     asyncMiddleware(
@@ -33,7 +36,11 @@ usersRouter.get("/users/",
                 const users = await User.findAll({
                     transaction,
                     offset: req.query.start,
-                    limit: req.query.count
+                    limit: req.query.count,
+                    where:
+                    {
+                        role: req.query.role
+                    }
                 });
 
                 res.json(await Promise.all(
