@@ -227,13 +227,13 @@ gamesRouter.put("/games/:gameId",
             });
             const competencies = [];
             const competenciesMap = new Map();
-            await Competence.findAll({
+            (await Competence.findAll({
                 where: {
                     id: {
                         [Op.in]: req.body.competencies
                     }
                 }
-            }).forEach((c) => {
+            })).forEach((c) => {
                 competencies.push(c);
                 competenciesMap.set(c.id, c)
             });
