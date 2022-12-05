@@ -49,9 +49,10 @@ start_api() {
     local local_port=$1
 
     docker container run                     \
-        --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
+        --env API_URI=$API_URI               \
         --env FILES_URI=$FILES_URI           \
         --env DATABASE_URI=$DATABASE_URI     \
+        --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
         --env JWT_SECRET=$JWT_SECRET         \
         --env USER_PWD_SALT=$USER_PWD_SALT   \
         -p 127.0.0.1:$local_port:3000        \
