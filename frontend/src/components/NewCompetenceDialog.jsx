@@ -16,7 +16,7 @@ function NewCompetenceDialog({onClose, ...props}) {
         <Dialog {...props}>
             <DialogTitle>Создание компетенции</DialogTitle>
             <DialogContent>
-                <NewCompetenceForm  />
+                <NewCompetenceForm />
                 <DialogActions>
                     <Button onClick={handleClose}>Готово</Button>
                 </DialogActions>

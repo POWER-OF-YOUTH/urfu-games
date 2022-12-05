@@ -16,9 +16,9 @@ import styles from "./ParticipantsSelector.module.css";
 /**
  * Компонент для выбора пользователей, участвовавших в разработке игры.
  */
-function ParticipantsSelector({ 
-    className, 
-    onChange = (f) => f, 
+function ParticipantsSelector({
+    className,
+    onChange = (f) => f,
     required,
     ...props
 }) {
@@ -30,7 +30,7 @@ function ParticipantsSelector({
         const result = [];
 
         for (const participant of participants) {
-            if ((participant.login !== auth.user.login) 
+            if ((participant.login !== auth.user.login)
             && (selectedParticipants.find((p) => p.login === participant.login) === undefined))
                 result.push(participant);
         }
@@ -38,9 +38,9 @@ function ParticipantsSelector({
         return result;
     };
 
-    const handleParticipantSelect = (participant) => { 
+    const handleParticipantSelect = (participant) => {
         if (participant !== null) {
-            setSelectedParticipants([...selectedParticipants, participant]);
+            setSelectedParticipants([...selectedParticipants, { ...participant, role: 1 }]);
         }
     };
     const handleParticipantDelete = (participantIndex) => {
@@ -58,29 +58,29 @@ function ParticipantsSelector({
 
     return (
         <div className={classNames(className, styles.participantsSelector)} {...props}>
-            <UsersSearch 
-                onSelect={handleParticipantSelect} 
-                filterOptions={filterUnselectedParticipants} 
+            <UsersSearch
+                onSelect={handleParticipantSelect}
+                filterOptions={filterUnselectedParticipants}
             />
-            <select 
+            <select
                 style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
                 ref={selectElement}
                 required={required && selectedParticipants.length === 0 && auth.user === null}
             />
             <SelectedParticipants className={classNames(styles.participantsSelector__selectedParticipants)}>
                 {auth.user && (
-                    <Participant 
-                        user={auth.user} 
+                    <Participant
+                        user={auth.user}
                         role="Автор"
                     />
                 )}
                 {selectedParticipants.map((p, index) => (
-                    <Participant 
+                    <Participant
                         key={p.id}
-                        user={p} 
+                        user={p}
                         role="Участник"
                         onDelete={() => handleParticipantDelete(index)} 
-                        enableDelete 
+                        enableDelete
                     />
                 ))}
             </SelectedParticipants>
@@ -89,7 +89,7 @@ function ParticipantsSelector({
 }
 
 /* 
- * Компонент `SelectedParticipants` - контейнер, в котором 
+ * Компонент `SelectedParticipants` - контейнер, в котором
  * будут отображаться выбранные участники.
  */
 function SelectedParticipants({ className, children, ...props }) { // TODO:
@@ -106,18 +106,18 @@ function SelectedParticipants({ className, children, ...props }) { // TODO:
     );
 }
 
-/* 
- * `Participant` используется для отображения информации об участнике. 
+/*
+ * `Participant` используется для отображения информации об участнике.
  * Его следует передавать передавать в `SelectedParticipants`.
  */
 function Participant(
-    { 
-        className, 
-        user, 
+    {
+        className,
+        user,
         role = "Участник",
         onDelete = (f) => f,
         enableDelete = false, // Если указано значение false, то крестик отображаться не будет.
-        ...props 
+        ...props
     }
 ) {
     return (
@@ -126,10 +126,10 @@ function Participant(
             {...props}
         >
             <div className={classNames(styles.participant__avatarContainer)}>
-                <img 
-                    className={classNames(styles.participant__avatar)} 
-                    src={user.avatar} 
-                    alt={`Аватар пользователя ${user.login}`} 
+                <img
+                    className={classNames(styles.participant__avatar)}
+                    src={user.avatar}
+                    alt={`Аватар пользователя ${user.login}`}
                 />
             </div>
             <div className={classNames(styles.participant__loginContainer)}>

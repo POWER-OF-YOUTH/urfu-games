@@ -50,6 +50,7 @@ start_api() {
 
     docker container run                     \
         --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
+        --env FILES_URI=$FILES_URI           \
         --env DATABASE_URI=$DATABASE_URI     \
         --env JWT_SECRET=$JWT_SECRET         \
         --env USER_PWD_SALT=$USER_PWD_SALT   \

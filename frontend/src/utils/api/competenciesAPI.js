@@ -1,24 +1,12 @@
+import axios from "../../axios";
 import * as apiConfig from "../../helpers/apiConfig";
 
 /**
  * @param {string} name
  * @param {string} description
  */
-export async function createCompetence(name, description) {
-    const url = new URL(apiConfig.APIURL + "/competencies");
-
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "POST",
-            body: JSON.stringify({ name, description })
-        });
-
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+export function createCompetence(name, description) {
+    return axios.post("/competencies", { name, description });
 }
 
 /**
@@ -63,7 +51,7 @@ export async function getCompetence(competenceId) {
 
 /**
  * @param {string} competenceId
- * @param {{ name?: string, description?: string }} name
+ * @param {{ name?: string, description?: string }} data
  */
 export async function updateCompetence(competenceId, data) {
     const url = new URL(apiConfig.APIURL + `/competencies/${competenceId}`);
