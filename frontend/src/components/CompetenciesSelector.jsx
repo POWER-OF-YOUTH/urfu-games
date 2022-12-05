@@ -56,7 +56,7 @@ function CompetenciesSelector({
     }, [selectedCompetencies]);
 
     return (
-        <div className={styles.competenciesSelector}>
+        <div className={styles.competenciesSelector} {...props}>
             <div className={styles.searchContainer}>
                 <CompetenciesSearch
                     className={styles.search}
@@ -73,7 +73,7 @@ function CompetenciesSelector({
                     </NewCompetenceButton>
                 </div>
             </div>
-            <select 
+            <select
                 style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
                 ref={selectElement}
                 required={required && selectedCompetencies.length == 0}
