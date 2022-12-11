@@ -4,12 +4,12 @@
 
 set -eo pipefail
 
-if [[ $1 == "-v" ]]; then
+if [[ $1 == "-v" ]]; then # verbose mode
     set -x
 fi
 
-CI_DIR="$(pwd)"
-PROJECT_DIR=".."
+CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$CI_DIR/.."
 BUILD_DIR="$CI_DIR/build"
 API_IMAGE_NAME="urfu-games-api"
 FILES_IMAGE_NAME="urfu-games-files"
