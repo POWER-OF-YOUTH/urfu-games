@@ -4,7 +4,10 @@
 
 set -eo pipefail
 
-cp -r build/var build/etc /
-docker image load -i build/urfu-games-api.tar
-docker image load -i build/urfu-games-files.tar
-docker image load -i build/urfu-games-postgres.tar
+CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILD_DIR="$CI_DIR/build"
+
+cp -r $BUILD_DIR/var $BUILD_DIR/etc /
+docker image load -i $BUILD_DIR/urfu-games-api.tar
+docker image load -i $BUILD_DIR/urfu-games-files.tar
+docker image load -i $BUILD_DIR/urfu-games-postgres.tar
