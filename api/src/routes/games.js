@@ -36,11 +36,10 @@ gamesRouter.post("/games/",
             .matches("^[0-9A-Za-z ]+$")
             .withMessage("Название игры не соответсвует шаблону: ^[0-9A-Za-z ]+$"),
         body("description")
-            .optional()
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
-            .matches(`^${globals.FILES_URI}.+$`),
+            .isURL(),
         body("participants")
             .default([])
             .isArray(),
@@ -64,13 +63,13 @@ gamesRouter.post("/games/",
             .default("")
             .isString(),
         body("loaderUrl")
-            .matches(`^${globals.FILES_URI}.+$`),
+            .isURL(),
         body("dataUrl")
-            .matches(`^${globals.FILES_URI}.+$`),
+            .isURL(),
         body("frameworkUrl")
-            .matches(`^${globals.FILES_URI}.+$`),
+            .isURL(),
         body("codeUrl")
-            .matches(`^${globals.FILES_URI}.+$`),
+            .isURL()
     ),
     asyncMiddleware(
         async (req, res) => {
@@ -172,13 +171,11 @@ gamesRouter.put("/games/:gameId",
             .matches("^[0-9A-Za-z ]+$")
             .withMessage("Название игры не соответсвует шаблону: ^[0-9A-Za-z ]+$"),
         body("description")
-            .optional()
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
             .isURL(),
         body("participants")
-            .default([])
             .isArray(),
         body("participants.*")
             .isUUID(),
@@ -237,7 +234,7 @@ gamesRouter.put("/games/:gameId",
                 competencies.push(c);
                 competenciesMap.set(c.id, c)
             });
-            req.body.checkpoints = req.body.checkpoints.forEach(
+            req.body.checkpoints.forEach(
                 (c) => c.competence = competenciesMap[c.competence] // replace competence id to competence object
             );
 
