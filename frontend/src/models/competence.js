@@ -57,7 +57,36 @@ const CompetenciesStore = types
 
                 self.competencies = competencies;
             }
-        })
+        }),
+        seed: function () {
+            self.competencies = {
+                "0": {
+                    id: "0",
+                    name: "Логистика",
+                    description: "Не одной факторией единой"
+                },
+                "1": {
+                    id: "1",
+                    name: "Теория вероятности",
+                    description: "Какова вероятность того, что это прочитают"
+                },
+                "2": {
+                    id: "2",
+                    name: "Английский язык",
+                    description: "На английском знаю только sprechen sie deutsch"
+                },
+                "3": {
+                    id: "3",
+                    name: "Высшая математика",
+                    description: "А где низшая?"
+                },
+                "4": {
+                    id: "4",
+                    name: "Квантовая механика",
+                    description: "А может и не механика"
+                }
+            };
+        }
     }));
 
 export { Competence, CompetenciesStore };
