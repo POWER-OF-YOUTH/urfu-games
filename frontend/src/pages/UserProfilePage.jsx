@@ -6,6 +6,7 @@ import { User } from "../models/user";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
 import Competence from "../components/Competence";
+import CompetenciesList from "../components/CompetenciesList";
 import { CompetenciesStore } from "../models/competence";
 
 function UserProfilePage() {
@@ -30,9 +31,9 @@ function UserProfilePage() {
                         <div>Name: {user.name == null ? "Не указано" : user.name}</div>
                         <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
                         <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
-                        <div>
-                            {competencies.array().map(competence => (<Competence key={competence.id} competence={competence} enablePopup={true}></Competence>))}
-                        </div>
+                        <CompetenciesList>
+                            {competencies.array().map(competence => <Competence key={competence.id} competence={competence} enablePopup={true}></Competence>)}
+                        </CompetenciesList>
                     </PageLayout>
                 )
             }
