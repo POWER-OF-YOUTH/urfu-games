@@ -5,14 +5,18 @@ import { useParams } from "react-router-dom";
 import { User } from "../models/user";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
+import Competence from "../components/Competence";
+import { CompetenciesStore } from "../models/competence";
 
 function UserProfilePage() {
 
     const { userId } = useParams();
 
     const user = useLocalObservable(() => User.create({ id: userId }));
+    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
+    useEffect(() => { competencies.seed(); }, []);
 
     return (
         <>
@@ -26,6 +30,9 @@ function UserProfilePage() {
                         <div>Name: {user.name == null ? "Не указано" : user.name}</div>
                         <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
                         <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
+                        <div>
+                            {competencies.array().map(competence => (<Competence key={competence.id} competence={competence} enablePopup={true}></Competence>))}
+                        </div>
                     </PageLayout>
                 )
             }
