@@ -52,10 +52,6 @@ Game.init({
         type: DataTypes.STRING,
         defaultValue: DataTypes.UUIDV4, primaryKey: true
     },
-    authorId: {
-        type: DataTypes.STRING,
-        defaultValue: DataTypes.UUIDV4
-    },
     image: {
         type: DataTypes.STRING,
         allowNull: false
@@ -234,7 +230,6 @@ async function createGame(
     try {
         const game = await Game.create({
             name: gameData.name,
-            authorId : author.id,
             description: gameData.description,
             image: gameData.image,
             loaderUrl: gameData.loaderUrl,

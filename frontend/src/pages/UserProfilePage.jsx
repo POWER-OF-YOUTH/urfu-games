@@ -29,9 +29,11 @@ function UserProfilePage() {
                         <div>Name: {user.name == null ? "Не указано" : user.name}</div>
                         <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
                         <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
-                        {gamesStore.array().forEach(game =>
-                            (<GameCard className="" game={game}></GameCard>)
-                        )} 
+                        <div className={styles.gameCategory}>
+                            {gamesStore.array().map((game, i) =>
+                                (<GameCard key={i} game={game}></GameCard>)
+                            )}
+                        </div>
                     </PageLayout>
                 )
             }
