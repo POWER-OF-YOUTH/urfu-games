@@ -18,8 +18,10 @@
 .competenciesContainer {
     margin-top: 5px;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column;
     gap: 5px;
     width: 100%;
+    overflow-y: scroll;
+    max-height: 120px;
 }
 

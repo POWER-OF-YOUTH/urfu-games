@@ -25,15 +25,42 @@ function UserProfilePage() {
             {
                 user.loaded && (
                     <PageLayout>
-                        <img src={user.avatar} className={styles.avatarImage} />
-                        <div>Email: {user.email}</div>
-                        <div>Login: {user.login}</div>
-                        <div>Name: {user.name == null ? "Не указано" : user.name}</div>
-                        <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
-                        <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
-                        <CompetenciesList>
-                            {competencies.array().map(competence => <Competence key={competence.id} competence={competence} enablePopup={true}></Competence>)}
-                        </CompetenciesList>
+                        <div className={styles.personInfoLabel}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td className={styles.avatarContainer}>
+                                            <div className={styles.avatar}>
+                                                <img src={user.avatar} className={styles.avatarImage} />
+                                            </div>
+                                        </td>
+                                        <td className={styles.infoContainer}>
+                                            <div className={styles.info}>
+                                                <div>Email: {user.email}</div>
+                                                <div>Login: {user.login}</div>
+                                                <div>ФИО: {user.surname == null ? "" : user.surname} {user.name == null ? "" : user.name} {user.patronymic == null ? "" : user.patronymic}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <table className={styles.createdAndCompetenceTable}>
+                            <tbody>
+                                <tr>
+                                    <td className={styles.cContainer}>
+
+                                    </td>
+                                    <td className={styles.cContainer}>
+                                        <CompetenciesList>
+                                            {competencies.array().map(competence => <Competence key={competence.id} competence={competence} enablePopup={true}></Competence>)}
+                                        </CompetenciesList>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </PageLayout>
                 )
             }
