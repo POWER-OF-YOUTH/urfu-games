@@ -292,12 +292,7 @@ gamesRouter.get("/users/:userId/games/",
          * }} req
         */
         async (req, res) => {
-            const user = await User.findByPk(req.user.id, { rejectOnEmpty: true });
-            const games = await user.getGames({
-                offset: req.query.start,
-                limit: req.query.limit
-            });
-
+            const games = await Game.findAll({where: { authorId: req.params.userId}});
             res.json(await Promise.all(games.map((g) => GameDetailDTO.create(g))));
         }
     )

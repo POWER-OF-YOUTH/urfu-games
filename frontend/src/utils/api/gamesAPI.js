@@ -28,3 +28,12 @@ export async function deleteGame(gameId) {
 export async function rateGame(gameId, value) {
     return axios.post(`/games/${gameId}/ratings`, { value });
 }
+
+export async function getUserGames(userId, start = 0, count = 10) {
+    return axios.get(`/users/${userId}/games/`, {
+        params:{
+            start,
+            count
+        }
+    });
+}

@@ -5,14 +5,17 @@ import { useParams } from "react-router-dom";
 import { User } from "../models/user";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
+import GameCard from "../components/GameCard";
+import { GamesStore } from "../models/game";
 
 function UserProfilePage() {
 
     const { userId } = useParams();
-
     const user = useLocalObservable(() => User.create({ id: userId }));
-
     useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
+    const gamesStore = useLocalObservable(() => GamesStore.create());
+    useEffect(() => { gamesStore.loadForUser(userId).catch(err => console.error(err)); }, []);
+
 
     return (
         <>
@@ -26,6 +29,9 @@ function UserProfilePage() {
                         <div>Name: {user.name == null ? "Не указано" : user.name}</div>
                         <div>Patronymic: {user.patronymic == null ? "Не указано" : user.patronymic}</div>
                         <div>Surname: {user.surname == null ? "Не указано" : user.surname}</div>
+                        {gamesStore.array().forEach(game =>
+                            (<GameCard className="" game={game}></GameCard>)
+                        )} 
                     </PageLayout>
                 )
             }
