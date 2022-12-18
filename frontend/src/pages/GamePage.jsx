@@ -40,8 +40,14 @@ function GamePage({ history }) {
             .catch((err) => console.error(err));
     };
 
-    useEffect(() => {
-        game.load(params.gameId).catch(err => console.error(err));
+    useEffect(() => {   
+        game.load(params.gameId).catch(err => {            
+            if (err.response.status == 404) history.push("/404");
+            else {
+                console.error(err);
+                history.push('/');
+            }
+        });
     }, []);
     useEffect(() => {
         if (game.loaded)
