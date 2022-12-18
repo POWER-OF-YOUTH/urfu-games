@@ -313,6 +313,14 @@ async function updateGame(
             participants,
             { transaction, through: { role: ParticipantRole.Participant }}
         );
+        // @ts-ignore
+        await game.addParticipant(
+            initiator.id,
+            {
+                transaction,
+                through: { role: ParticipantRole.Author }
+            }
+        );
         game.set({
             name: gameData.name,
             description: gameData.description,
@@ -323,7 +331,7 @@ async function updateGame(
             codeUrl: gameData.codeUrl,
             checkpointsCount: gameData.checkpoints.length
         });
-        await game.save();
+        await game.save({ transaction });
     });
 }
 

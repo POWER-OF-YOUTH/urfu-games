@@ -36,7 +36,6 @@ gamesRouter.post("/games/",
             .matches("^[0-9A-Za-z ]+$")
             .withMessage("Название игры не соответсвует шаблону: ^[0-9A-Za-z ]+$"),
         body("description")
-            .optional()
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
@@ -172,13 +171,11 @@ gamesRouter.put("/games/:gameId",
             .matches("^[0-9A-Za-z ]+$")
             .withMessage("Название игры не соответсвует шаблону: ^[0-9A-Za-z ]+$"),
         body("description")
-            .optional()
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
             .isURL(),
         body("participants")
-            .default([])
             .isArray(),
         body("participants.*")
             .isUUID(),
