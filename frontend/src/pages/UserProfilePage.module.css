@@ -39,3 +39,18 @@
 .createdAndCompetenceTable{
     width: 100%;
 }
+
+.cWrapper {
+    margin-top: 5px;
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 120px;
+}
+
+.cTitle {
+    margin: 0;
+    text-align: center;
+}
