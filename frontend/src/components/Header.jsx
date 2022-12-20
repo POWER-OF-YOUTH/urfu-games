@@ -157,7 +157,7 @@ function User({ user, onClick }) {
     const handleClick = (evt) => onClick(evt);
 
     const Login = styled("span")({
-        color: user.isAdmin() ? "red" : "white"
+        color: user.isAdmin() ? "red" : (user.isModerator() ? "green" : "white")
     });
 
     return (

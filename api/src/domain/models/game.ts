@@ -303,7 +303,7 @@ async function updateGame(
         // @ts-ignore
         await game.setCompetencies(competencies, { transaction });
         // @ts-ignore
-        //await game.removeCheckpoints();
+        await game.removeCheckpoints();
         await Promise.all(
             // @ts-ignore
             gameData.checkpoints.map((c) => game.createCheckpoint(c, { transaction }))
