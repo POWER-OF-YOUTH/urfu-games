@@ -74,9 +74,16 @@ function UserProfilePage() {
 
                         <table className={styles.createdAndCompetenceTable}>
                             <tbody>
-                                <tr>
+                                <tr className={styles.cRow}>
                                     <td className={styles.cContainer}>
-
+                                        <div className={styles.cTitle}>
+                                            <h2>Игры</h2>
+                                        </div>
+                                        <div className={styles.cWrapper}>
+                                            {gamesStore.array().map((game, i) =>
+                                                (<GameCard key={i} game={game}></GameCard>)
+                                            )}
+                                        </div>
                                     </td>
                                     <td className={styles.cContainer}>
                                         <div className={styles.cTitle}>
