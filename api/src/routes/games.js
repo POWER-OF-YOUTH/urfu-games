@@ -41,7 +41,6 @@ gamesRouter.post("/games/",
         body("image")
             .isURL(),
         body("participants")
-            .default([])
             .isArray(),
         body("participants.*.id")
             .isUUID(),
@@ -177,8 +176,10 @@ gamesRouter.put("/games/:gameId",
             .isURL(),
         body("participants")
             .isArray(),
-        body("participants.*")
+        body("participants.*.id")
             .isUUID(),
+        body("participants.*.role")
+            .isIn([ParticipantRole.Participant]),
         body("competencies")
             .isArray(),
         body("competencies.*")

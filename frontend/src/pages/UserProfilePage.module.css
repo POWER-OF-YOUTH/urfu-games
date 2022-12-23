@@ -3,6 +3,54 @@
     height: 50px;
 }
 
-.gameCategory{
-    margin-top: 50px;
+.personInfoLabel{
+    padding: 5px;
+}
+
+.avatarContainer{
+    width: 80px;
+    display: table-row;
+}
+
+.avatar{
+    padding: 10px;
+    background-color: lightgray;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.infoContainer{
+    width: 100%;
+}
+
+.info{
+    margin-left: 30px;
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cContainer{
+    width: 50%;
+    max-height: fit-content;
+    min-height: 60px;
+}
+
+.createdAndCompetenceTable{
+    width: 100%;
+}
+
+.cWrapper {
+    margin-top: 5px;
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 120px;
+}
+
+.cTitle {
+    margin: 0;
+    text-align: center;
 }
