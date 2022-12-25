@@ -1,20 +1,12 @@
 FROM node:16
 
-ARG API_URI
-ARG FILES_URI
-
-ENV API_URI=${API_URI}
-ENV FILES_URI=${FILES_URI}
-ENV PORT=3000
 ENV YM_ID=0
 
 WORKDIR /root
-COPY . .
-
-RUN yarn install
 
 VOLUME ["/root"]
 
-EXPOSE ${PORT}
+EXPOSE 3000
 
-ENTRYPOINT ["yarn", "start"]
+CMD ["yarn", "start"]
+

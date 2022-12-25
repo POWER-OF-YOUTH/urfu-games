@@ -2,7 +2,7 @@
  * @file Компонент предназначенный для создания чекпоинтов.
  */
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
 
@@ -15,7 +15,6 @@ function CheckpointsMaker({
     ...props
 }) {
     const [checkpoints, setCheckpoints] = useState([]);
-    const selectElement = useRef(null);
 
     const handleAddClick = () => {
         setCheckpoints([
@@ -29,36 +28,31 @@ function CheckpointsMaker({
     };
     const handleCheckpointChange = (index, data) => {
         checkpoints[index] = data;
-        setCheckpoints([ ...checkpoints ]);
+        setCheckpoints([...checkpoints]);
     };
     const handleCheckpointDelete = (index) => {
         checkpoints.splice(index, 1);
-        setCheckpoints([ ...checkpoints ]);
+        setCheckpoints([...checkpoints]);
     };
 
     useEffect(() => {
-        if (selectElement !== null) {
-            selectElement.current.values = checkpoints;
-            selectElement.current.onchange = onChange;
-            selectElement.current.dispatchEvent(new Event("change"));
-        }
+        onChange([...checkpoints]);
     }, [checkpoints]);
 
     return (
         <>
-            <select 
+            <select
                 style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
-                ref={selectElement}
                 required={checkpoints.length == 0}
             />
             <div className={classNames(styles.checkpointsMaker, className)} {...props}>
                 {checkpoints.map((c, i) => (
-                    <Checkpoint 
+                    <Checkpoint
                         key={i}
                         checkpoint={c}
-                        competencies={competencies} 
+                        competencies={competencies}
                         onChange={(data) => handleCheckpointChange(i, data)}
-                        onDelete={() => handleCheckpointDelete(i)}
+                        onDeleteClick={() => handleCheckpointDelete(i)}
                     />
                 ))}
                 <button onClick={handleAddClick}>Добавить</button>
@@ -71,22 +65,22 @@ function Checkpoint({
     checkpoint,
     competencies,
     onChange = (f) => f,
-    onDelete = (f) => f,
+    onDeleteClick = (f) => f,
     ...props
 }) {
     const [values, setValues] = useState({
         name: checkpoint.name,
         description: checkpoint.description,
-        competence: checkpoint.competence 
+        competence: checkpoint.competence
     });
 
     const handleChange = (evt) => {
-        setValues({ ...values, [evt.target.name]: evt.target.value });
+        setValues({...values, [evt.target.name]: evt.target.value});
     };
 
     useEffect(() => {
         if (!competencies.includes(values.competence))
-            setValues({ values, competence: null });
+            setValues({...values, competence: null});
     }, [competencies]);
     useEffect(() => onChange(values), [values]);
 
@@ -107,15 +101,15 @@ function Checkpoint({
             />
             <legend>
                 Компетенция:
-                {" "} 
-                <select name="competence" onChange={handleChange}>
+                {" "}
+                <select name="competence" onChange={(evt) => setValues({...values, competence: JSON.parse(evt.target.value)})}>
                     <option value={null}>Нет</option>
-                    {competencies.map((c) => 
-                        <option key={c.id} value={c.id}>{c.name}</option>
+                    {competencies.map((c) =>
+                        <option key={c.id} value={JSON.stringify(c)}>{c.name}</option>
                     )}
                 </select>
             </legend>
-            <button onClick={onDelete}>Удалить</button> 
+            <button onClick={onDeleteClick}>Удалить</button>
         </div>
     );
 }

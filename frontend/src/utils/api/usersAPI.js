@@ -1,34 +1,16 @@
-import * as apiConfig from "../../helpers/apiConfig";
+import axios from "../../axios";
 
 export async function getUsers(ids = []) {
-    let url = apiConfig.APIURL + "/api/users";
+    let url = "/users";
     url += "?" + ids.map(id => `id=${id}`).join("&");
 
-    try {
-        const response = await fetch(url, {
-            method: "GET"
-        });
-
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return axios.get(url);
 }
 
 export async function getUser(userId) {
-    const url = apiConfig.APIURL + `/api/users/${userId}`;
+    const url = `/users/${userId}`;
 
-    try {
-        const response = await fetch(url, {
-            method: "GET"
-        });
-
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return axios.get(url);
 }
 
 /**
@@ -36,18 +18,7 @@ export async function getUser(userId) {
  * @param {{ name?: string, surname?: string, patronymic?: string, email?: string }} data
  */
 export async function updateUser(userId, data = {}) {
-    const url = apiConfig.APIURL + `/api/users/${userId}`;
+    const url = `/users/${userId}`;
 
-    try {
-        const response = await fetch(url, {
-            ...apiConfig.getDefaultRequestInit(),
-            method: "PUT",
-            body: JSON.stringify(data),
-        });
-
-        return response;
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return axios.put(url, data);
 }

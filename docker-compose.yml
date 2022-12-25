@@ -9,12 +9,13 @@ services:
       - API_URI=${API_URI}
       - FILES_URI=${FILES_URI}
       - PORT=${FRONTEND_PORT}
+      - YM_ID=${YM_ID}
     volumes:
       - ./frontend:/root
     depends_on:
       - api
     ports:
-      - 80:80
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
 
   # API сервис.
   api:

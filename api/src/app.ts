@@ -2,6 +2,7 @@
  * @file Создание приложения и подключение промежуточных обработчиков.
  */
 
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
@@ -22,12 +23,15 @@ import mainRouter from "./routes";
 /** Главное приложение. */
 const app = express();
 
-app.use(cors());
+if (process.env.NODE_ENV == "development") {
+    app.use(cors());
+}
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev")); // Логгер запросов.
 }
+app.use(cookieParser());
 
 app.use("/", mainRouter);
 

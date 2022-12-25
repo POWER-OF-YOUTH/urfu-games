@@ -17,7 +17,7 @@ import styles from "./CompetenciesSelector.module.css";
 
 function CompetenciesSelector({
     className,
-    onChange = (f) => f, ///< Вызвается, когда изменяется список выбранных компетенций.
+    onChange = (f) => f,
     required,
     ...props
 }) {
@@ -26,10 +26,6 @@ function CompetenciesSelector({
 
     const selectElement = useRef(null);
 
-    /**
-     * Передается в компонент `CompetenciesSearch`. Используется для того, чтобы
-     * убрать из результата поиска те компетенции, которые уже были выбраны.
-     */
     const filterUnselectedParticipants = (competencies) => {
         const result = [];
 
@@ -60,7 +56,7 @@ function CompetenciesSelector({
     }, [selectedCompetencies]);
 
     return (
-        <div className={styles.competenciesSelector}>
+        <div className={styles.competenciesSelector} {...props}>
             <div className={styles.searchContainer}>
                 <CompetenciesSearch
                     className={styles.search}
@@ -77,7 +73,7 @@ function CompetenciesSelector({
                     </NewCompetenceButton>
                 </div>
             </div>
-            <select 
+            <select
                 style={{width: "1px", height: "1px", opacity: "0", position: "absolute"}}
                 ref={selectElement}
                 required={required && selectedCompetencies.length == 0}

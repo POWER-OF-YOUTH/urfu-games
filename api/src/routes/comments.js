@@ -91,7 +91,7 @@ commentsRouter.get("/games/:gameId/comments/",
 );
 
 /** Обновляет комментарий `commentId`. */
-commentsRouter.put("/games/:gameId/comments/:commentId",
+commentsRouter.put("/comments/:commentId",
     verifyToken,
     validateRequest(
         body("text")
@@ -121,7 +121,7 @@ commentsRouter.put("/games/:gameId/comments/:commentId",
 );
 
 /** Удаляет комментарий `commentId`. */
-commentsRouter.delete("/games/:gameId/comments/:commentId",
+commentsRouter.delete("/comments/:commentId",
     verifyToken,
     asyncMiddleware(async (req, res) => {
         const comment = await Comment.findOne({

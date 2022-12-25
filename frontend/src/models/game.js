@@ -109,8 +109,8 @@ const GamesStore = types
         }
     }))
     .actions(self => ({
-        load: flow(function* (start = 0, count = 10, isPublicated=true) {
-            const response = yield gamesAPI.getGames(start, count, isPublicated); 
+        load: flow(function* (start = 0, count = 10, isPublicated = true) {
+            const response = yield gamesAPI.getGames(start, count, isPublicated);
 
             const json = response.data;
 
@@ -119,7 +119,7 @@ const GamesStore = types
 
             self.games = games;
         }),
-        delete(id) { 
+        delete(id) {
             self.games.delete(id);
         }
     }));

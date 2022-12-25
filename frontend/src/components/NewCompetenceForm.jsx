@@ -1,8 +1,9 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import classNames from "classnames";
 import {
     Alert,
-    Snackbar
+    Snackbar,
+    TextField
 } from "@mui/material";
 
 import * as competenciesAPI from "../utils/api/competenciesAPI";
@@ -14,8 +15,6 @@ const initialValues = {
     description: ""
 };
 
-const snackbarHideDuration = 2000;
-
 function NewCompetenceForm({
     className,
     onSuccess = (f) => f,
@@ -23,79 +22,109 @@ function NewCompetenceForm({
     ...props
 }) {
     const [values, setValues] = useState(initialValues);
+    const [nameProps, setNameProps] = useState({});
+    const [descriptionProps, setDescriptionProps] = useState({});
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+    const [successSnackbarMessage, setSuccessSnackbarMessage] = useState("");
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
+
+    const showSuccessSnackbar = useCallback((message) => {
+        setSuccessSnackbarMessage(message);
+        setSuccessSnackbarOpen(true);
+    }, []);
+    const showErrorSnackbar = useCallback((message) => {
+        setErrorSnackbarMessage(message);
+        setErrorSnackbarOpen(true);
+    }, []);
+    const validateFields = useCallback(() => {
+        let result = true;
+
+        if (values.name.trim() === "") {
+            setNameProps({error: true, helperText: "Поле не должно быть пустым."});
+            result = false;
+        }
+        if (values.description.trim() === "") {
+            setDescriptionProps({error: true, helperText: "Поле не должно быть пустым."});
+            result = false;
+        }
+        return result;
+    }, [values]);
+    const resetFieldsProps = useCallback(() => {
+        setNameProps({});
+        setDescriptionProps({});
+    }, []);
 
     const handleChange = (evt) => {
+        resetFieldsProps();
         setValues({...values, [evt.target.name]: evt.target.value});
     };
     const handleSubmit = async (evt) => {
         evt.preventDefault();
 
-        const response = await competenciesAPI.createCompetence(
-            values.name,
-            values.description
-        );
-
-        if (response.ok) {
-            setSuccessSnackbarOpen(true);
-            onSuccess();
-            setValues(initialValues);
-        }
-        else {
-            setErrorSnackbarOpen(true);
-            onError();
+        if (validateFields()) {
+            try {
+                await competenciesAPI.createCompetence(values.name, values.description);
+                showSuccessSnackbar("Компетенция успешно добавлена.");
+            }
+            catch (err) {
+                showErrorSnackbar(err.response.data.errors[0].detail);
+            }
         }
     };
-    const handleSuccessSnackbarClose = (evt, reason) => {
+    const handleSuccessSnackbarClose = useCallback((evt, reason) => {
         if (reason !== "clickaway")
             setSuccessSnackbarOpen(false);
-    };
-    const handleErrorSnackbarClose = (evt, reason) => {
+    }, []);
+    const handleErrorSnackbarClose = useCallback((evt, reason) => {
         if (reason !== "clickaway")
             setErrorSnackbarOpen(false);
-    };
+    }, []);
 
     return (
         <>
             <div
                 className={classNames(className, styles.newCompetenceForm)}
-                onSubmit={handleSubmit}
                 {...props}
             >
-                <input
-                    name="name"
+                <TextField
                     placeholder="Название"
+                    name="name"
                     value={values.name}
                     onChange={handleChange}
+                    onFocus={resetFieldsProps}
                     required
+                    {...nameProps}
                 />
-                <textarea
+                <TextField
                     name="description"
                     placeholder="Описание"
                     value={values.description}
                     onChange={handleChange}
+                    onFocus={resetFieldsProps}
                     rows={8}
+                    multiline
                     required
+                    {...descriptionProps}
                 />
-                <button type="submit" onClick={handleSubmit}>Создать</button>
+                <button type="button" onClick={handleSubmit}>Создать</button>
             </div>
             <Snackbar
                 open={successSnackbarOpen}
-                autoHideDuration={snackbarHideDuration}
+                autoHideDuration={2000}
                 onClose={handleSuccessSnackbarClose}
             >
                 <Alert onClose={handleSuccessSnackbarClose} severity="success" variant="filled">
-                    Компетенция успешно добавлена.
+                    {successSnackbarMessage}
                 </Alert>
             </Snackbar>
             <Snackbar
                 open={errorSnackbarOpen}
-                autoHideDuration={snackbarHideDuration}
+                autoHideDuration={2000}
                 onClose={handleErrorSnackbarClose}
             >
                 <Alert onClose={handleSuccessSnackbarClose} severity="error" variant="filled">
-                    Произошла ошибка создании компетенции.
+                    {errorSnackbarMessage}
                 </Alert>
             </Snackbar>
         </>

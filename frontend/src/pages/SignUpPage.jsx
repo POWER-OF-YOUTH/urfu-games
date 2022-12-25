@@ -13,22 +13,26 @@ function SignUpPage({ history }) {
 
     const handleFormSubmit = async (values) => {
         await auth.signUp(values);
+        await auth.signIn({ login: values.login, password: values.password });
 
-        if (auth.errors.length === 0)
-            history.push("/signin", history.location.state);
-        else
+        if (auth.errors.length === 0) {
             console.log(auth.errors);
+            history.goBack();
+        }        
+        else
+            console.error(auth.errors);
     };
     const handleFormChange = () => auth.clearErrors();
 
     useEffect(() => {
         auth.clearErrors();
     }, []);
-    const renderAlert = () => auth.errors.length > 0 && (
-        <Alert className={styles.alert} severity="error">
-            {auth.errors[0].message}
-        </Alert>
-    );
+    const renderAlert = () =>
+        auth.errors.length > 0 && (
+            <Alert className={styles.alert} severity="error">
+                {auth.errors[0].message}
+            </Alert>
+        );
     return (
         <>
             <Helmet>
@@ -42,10 +46,7 @@ function SignUpPage({ history }) {
     );
 }
 
-function SignUpForm({
-    onSubmit = (f) => f,
-    onChange = (f) => f
-}) {
+function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
     const [values, setValues] = useState({
         login: "",
         email: "",
@@ -58,7 +59,7 @@ function SignUpForm({
     };
     const handleSubmit = () => onSubmit(values);
 
-    useEffect(() => onChange({...values}), [values]);
+    useEffect(() => onChange({ ...values }), [values]);
 
     return (
         <div className={styles.signUpForm}>

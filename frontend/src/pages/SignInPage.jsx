@@ -13,6 +13,8 @@ function SignInPage({ history }) {
 
     const handleFormSubmit = async (values) => {
         await auth.signIn(values);
+
+        if (auth.errors.length === 0) history.goBack();
     };
     const handleFormChange = () => auth.clearErrors();
 
@@ -26,11 +28,12 @@ function SignInPage({ history }) {
             else history.push("/games");
         }
     }, [auth.authenticated]);
-    const renderAlert = () => auth.errors.length > 0 && (
-        <Alert className={styles.alert} severity="error">
-            {auth.errors[0].message}
-        </Alert>
-    );
+    const renderAlert = () =>
+        auth.errors.length > 0 && (
+            <Alert className={styles.alert} severity="error">
+                {auth.errors[0].message}
+            </Alert>
+        );
     return (
         <>
             <Helmet>
@@ -44,10 +47,7 @@ function SignInPage({ history }) {
     );
 }
 
-function SignInForm({
-    onSubmit = (f) => f,
-    onChange = (f) => f
-}) {
+function SignInForm({ onSubmit = (f) => f, onChange = (f) => f }) {
     const [values, setValues] = useState({
         login: "",
         password: "",
@@ -58,7 +58,7 @@ function SignInForm({
     };
     const handleSubmit = () => onSubmit(values);
 
-    useEffect(() => onChange({...values}), [values]);
+    useEffect(() => onChange({ ...values }), [values]);
 
     return (
         <div className={styles.signInForm}>
