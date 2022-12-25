@@ -19,7 +19,8 @@ const DEFAULT_USER_AVATAR = "https://i.ibb.co/C9VKrMC/default-avatar.png";
 /** Роли пользователя. */
 enum Role {
     User,
-    Admin
+    Admin,
+    Moderator
 }
 
 /**

@@ -214,9 +214,9 @@ async function createGame(
     competencies: Array<Competence>,
     gameData: GameData
 ): Promise<Game> {
-    if (initiator.role !== Role.Admin && initiator.id !== author.id) {
+    if (initiator.role !== Role.Admin && initiator.id !== author.id && initiator.role !== Role.Moderator) {
         throw new AccessError(
-            "Только администратор может создать игру от имени другого пользователя"
+            "Только администратор или модератор может создать игру от имени другого пользователя"
         );
     }
     if (competencies.length === 0) {
@@ -273,7 +273,7 @@ async function createGame(
 }
 
 /**
- * Оновляет игру `game`.
+ * Обновляет игру `game`.
  * @param initiator Инициатор создания игры.
  * @param game Обновляемая игра.
  * @param participants Участники.
@@ -287,9 +287,9 @@ async function updateGame(
     competencies: Array<Competence>,
     gameData: GameData
 ): Promise<void> {
-    if (initiator.role !== Role.Admin && initiator.id !== game.authorId) {
+    if (initiator.role !== Role.Admin && initiator.id !== game.authorId && initiator.role !== Role.Moderator) {
         throw new AccessError(
-            "Только администратор может обновить игру другого пользователя."
+            "Только администратор или модератор может обновить игру другого пользователя."
         );
     }
     if (competencies.length === 0) {
@@ -321,7 +321,6 @@ async function updateGame(
                 through: { role: ParticipantRole.Author }
             }
         );
-
         game.set({
             name: gameData.name,
             description: gameData.description,
@@ -332,7 +331,6 @@ async function updateGame(
             codeUrl: gameData.codeUrl,
             checkpointsCount: gameData.checkpoints.length
         });
-
         await game.save({ transaction });
     });
 }
@@ -343,9 +341,9 @@ async function updateGame(
  * @param game Удаляемая игра.
  */
 async function deleteGame(initiator: User, game: Game): Promise<void> {
-    if (initiator.role !== Role.Admin && initiator.id !== game.authorId) {
+    if (initiator.role !== Role.Admin && initiator.id !== game.authorId && initiator.role !== Role.Moderator) {
         throw new LogicError(
-            "Только администратор может удалить игру другого пользователя."
+            "Только администратор или модератор может удалить игру другого пользователя."
         );
     }
 

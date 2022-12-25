@@ -193,8 +193,8 @@ gamesRouter.put("/games/:gameId",
             .optional()
             .isUUID(),
         body("checkpoints.*.description")
-            .isString()
-            .notEmpty(),
+            .default("")
+            .isString(),
         body("loaderUrl")
             .isURL(),
         body("dataUrl")

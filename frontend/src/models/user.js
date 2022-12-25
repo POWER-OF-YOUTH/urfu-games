@@ -20,6 +20,9 @@ const User = types
     .views(self => ({
         isAdmin() {
             return self.role === 1;
+        },
+        isModerator() {
+            return self.role === 2;
         }
     }))
     .actions(self => ({
