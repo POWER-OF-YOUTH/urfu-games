@@ -54,3 +54,9 @@
     margin: 0;
     text-align: center;
 }
+
+.deleteButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    color: red;
+}
