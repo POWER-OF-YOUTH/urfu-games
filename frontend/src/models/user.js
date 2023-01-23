@@ -35,12 +35,21 @@ const User = types
                 applySnapshot(self, json);
             }
         }),
-        load: flow(function* (userId){
+        load: flow(function* (userId) {
             const userResponse = yield usersAPI.getUser(userId);
 
             applySnapshot(self, userResponse.data);
             self.loaded = true;
         }),
+        delete: async function () {
+            return usersAPI.deleteUser(self.id).then(
+                response => response.ok,
+                err => {
+                    console.log(err);
+                    return false;
+                }
+            );
+        },
     }));
 
 const UsersStore = types

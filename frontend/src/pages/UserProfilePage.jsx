@@ -3,13 +3,16 @@ import { Helmet } from "react-helmet";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { User } from "../models/user";
+import { useStore } from "../hooks";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
 import Competence from "../components/Competence";
+import { Button } from "@mui/material";
 
-function UserProfilePage() {
+function UserProfilePage({ history }) {
 
     const { userId } = useParams();
+    const { auth } = useStore();
 
     const user = useLocalObservable(() => User.create({ id: userId }));
 
@@ -49,6 +52,16 @@ function UserProfilePage() {
                 user.loaded && (
                     <PageLayout>
                         <div className={styles.personInfoLabel}>
+                            {
+                                auth?.user.isAdmin() && (
+                                    <div className={styles.deleteButtonWrapper}>
+                                        <Button onClick={async () => {
+                                            if (await user.delete())
+                                                history.push("/");
+                                        }}>Удалить</Button>
+                                    </div>
+                                )
+                            }
                             <table>
                                 <tbody>
                                     <tr>
