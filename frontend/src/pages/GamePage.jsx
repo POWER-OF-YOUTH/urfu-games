@@ -27,7 +27,7 @@ function GamePage({ history }) {
 
     const game = useLocalObservable(() => Game.create());
 
-    const handleCommentFormSubmit = (text) => game.comment(text); 
+    const handleCommentFormSubmit = (text) => game.comment(text);
     const handleRatingChange = (evt, value) => game.rate(value);
     const handlePlayButtonClick = () => {
         if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
@@ -40,12 +40,12 @@ function GamePage({ history }) {
             .catch((err) => console.error(err));
     };
 
-    useEffect(() => {   
-        game.load(params.gameId).catch(err => {            
+    useEffect(() => {
+        game.load(params.gameId).catch(err => {
             if (err.response.status == 404) history.push("/404");
             else {
                 console.error(err);
-                history.push('/');
+                history.push("/");
             }
         });
     }, []);
@@ -62,7 +62,7 @@ function GamePage({ history }) {
                 <>
                     <div className={styles.wrapper}>
                         <Block className={styles.paper}>
-                            {auth.user.isAdmin() && (
+                            {auth.user && auth.user.isAdmin() && (
                                 <button onClick={handleDeleteButtonClick}>Удалить</button>
                             )}
                             <div className={styles.contentWrapper}>

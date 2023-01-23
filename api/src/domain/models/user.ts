@@ -19,7 +19,8 @@ const DEFAULT_USER_AVATAR = "https://i.ibb.co/C9VKrMC/default-avatar.png";
 /** Роли пользователя. */
 enum Role {
     User,
-    Admin
+    Admin,
+    Moderator
 }
 
 /**
@@ -221,6 +222,15 @@ function generateJWT(id: string): string {
         { expiresIn: "1d" }
     );
 }
+
+async function deleteUser(id: string) {
+    await sequelize.transaction(async (transaction) => {
+        const toDelete = await User.findByPk(id, { transaction, rejectOnEmpty: true });
+        await toDelete.destroy({ transaction });
+    }
+    );
+}
+
 // } Сложные сценарии и вспомогательные функции
 
 export default User;
@@ -229,5 +239,6 @@ export {
     Role,
     createUser,
     encryptPassword,
-    generateJWT
+    generateJWT,
+    deleteUser,
 };

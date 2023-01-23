@@ -56,7 +56,9 @@ function App() {
                         </Route>
                         <Route exact path="/games/:gameId" component={GamePage} />
                         <Route exact path="/games/:gameId/play" component={PlayPage} />
-                        <Route exact path="/users/:userId" component={UserProfilePage} />
+                        <Route exact path="/users/:userId">
+                            <UserProfilePage history={history} />
+                        </Route>
                         <Route exact path="/404" component={NotFoundPage} />
                     </Switch>
                 </MainLayout>

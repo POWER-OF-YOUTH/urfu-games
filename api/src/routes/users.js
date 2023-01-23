@@ -6,7 +6,7 @@ import express from "express";
 import { body, query } from "express-validator";
 import { asyncMiddleware } from "middleware-async";
 
-import User from "../domain/models/user";
+import User, { Role, deleteUser } from "../domain/models/user";
 import UserDTO from "../domain/dto/user-dto";
 import sequelize from "../sequelize";
 import validateRequest from "../validators/validate-request";
@@ -25,6 +25,9 @@ usersRouter.get("/users/",
         query("count")
             .default(10)
             .isInt({ gt: 0, lt: 100 })
+            .toInt(),
+        query("role")
+            .default(0)
             .toInt()
     ),
     asyncMiddleware(
@@ -33,7 +36,11 @@ usersRouter.get("/users/",
                 const users = await User.findAll({
                     transaction,
                     offset: req.query.start,
-                    limit: req.query.count
+                    limit: req.query.count,
+                    where:
+                    {
+                        role: req.query.role
+                    }
                 });
 
                 res.json(await Promise.all(
@@ -60,8 +67,8 @@ usersRouter.get("/users/:userId",
 );
 
 /** Обновляет данные пользователя `userId` */
-usersRouter.put("/users/:userId", 
-    verifyToken, 
+usersRouter.put("/users/:userId",
+    verifyToken,
     validateRequest(
         body("name")
             .optional()
@@ -92,6 +99,20 @@ usersRouter.put("/users/:userId",
 
                 res.json(await UserDTO.create(user));
             });
+        }
+    )
+);
+
+usersRouter.delete("/users/:userId",
+    verifyToken,
+    asyncMiddleware(
+        async (req, res) => {
+            const initiator = await User.findByPk(req.user.id, { rejectOnEmpty: true });
+            if (initiator.role !== Role.Admin)
+                throw new AccessError("Initiator should be admin", 403);
+
+            await deleteUser(req.params.userId);
+            res.status(200).send();
         }
     )
 );

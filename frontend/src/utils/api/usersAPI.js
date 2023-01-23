@@ -22,3 +22,9 @@ export async function updateUser(userId, data = {}) {
 
     return axios.put(url, data);
 }
+
+export async function deleteUser(userId) {
+    const url = `/users/${userId}`;
+
+    return axios.delete(url);
+}
