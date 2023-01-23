@@ -121,7 +121,14 @@ const GamesStore = types
         }),
         delete(id) {
             self.games.delete(id);
-        }
+        },
+        loadForUser: flow(function* (userId){
+            const response = yield gamesAPI.getUserGames(userId);
+            const games = {};
+            const json = response.data;
+            json.forEach(g => games[g.id] = g);
+            self.games = games;
+        })
     }));
 
 export { Game, GamesStore };

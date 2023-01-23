@@ -6,6 +6,8 @@ import { User } from "../models/user";
 import { useStore } from "../hooks";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
+import GameCard from "../components/GameCard";
+import { GamesStore } from "../models/game";
 import Competence from "../components/Competence";
 import { Button } from "@mui/material";
 
@@ -13,10 +15,12 @@ function UserProfilePage({ history }) {
 
     const { userId } = useParams();
     const { auth } = useStore();
-
+    
     const user = useLocalObservable(() => User.create({ id: userId }));
-
     useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
+    const gamesStore = useLocalObservable(() => GamesStore.create());
+    useEffect(() => { gamesStore.loadForUser(userId).catch(err => console.error(err)); }, []);
+
     const competencies = [
         {
             id: "0",
@@ -84,9 +88,16 @@ function UserProfilePage({ history }) {
 
                         <table className={styles.createdAndCompetenceTable}>
                             <tbody>
-                                <tr>
+                                <tr className={styles.cRow}>
                                     <td className={styles.cContainer}>
-
+                                        <div className={styles.cTitle}>
+                                            <h2>Игры</h2>
+                                        </div>
+                                        <div className={styles.cWrapper}>
+                                            {gamesStore.array().map((game, i) =>
+                                                (<GameCard key={i} game={game}></GameCard>)
+                                            )}
+                                        </div>
                                     </td>
                                     <td className={styles.cContainer}>
                                         <div className={styles.cTitle}>
