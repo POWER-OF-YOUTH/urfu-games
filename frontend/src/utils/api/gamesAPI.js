@@ -21,6 +21,10 @@ export async function updateGame(gameId, data) {
     return axios.put(`/games/${gameId}`, data);
 }
 
+export async function patchGame(gameId, data) {
+    return axios.patch(`/games/${gameId}`, data);
+}
+
 export async function deleteGame(gameId) {
     return axios.delete(`/games/${gameId}`);
 }

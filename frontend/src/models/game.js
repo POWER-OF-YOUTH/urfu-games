@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { values } from "mobx";
 import {
     types,
@@ -23,11 +22,11 @@ const Game = types
         rating: 0,
         author: types.maybeNull(User),
         participants: types.array(User),
-        codeUrl: "",
-        dataUrl: "",
-        frameworkUrl: "",
-        loaderUrl: "",
-        uploaded: false,
+        codeUrl: types.maybeNull(types.string),
+        dataUrl: types.maybeNull(types.string),
+        frameworkUrl: types.maybeNull(types.string),
+        loaderUrl: types.maybeNull(types.string),
+        isPublicated: false,
         createdAt: types.maybeNull(DateTime),
         comments: types.optional(CommentsStore, () => CommentsStore.create()),
         loaded: false
@@ -57,12 +56,12 @@ const Game = types
         rate: flow(function* (value) {
             if (value != null) {
                 yield gamesAPI.rateGame(self.id, value);
-                
+
                 const gameResponse = yield gamesAPI.getGame(self.id);
 
                 const gameJSON = gameResponse.data;
 
-                self.rating = gameJSON.rating; 
+                self.rating = gameJSON.rating;
 
                 if (process.env.NODE_ENV !== undefined && process.env.NODE_ENV !== "development") {
                     window.ym(globals.YM_ID, "reachGoal", "rate_game"); 
@@ -71,6 +70,9 @@ const Game = types
         }),
         delete: flow(function* () {
             yield gamesAPI.deleteGame(self.id);
+        }),
+        publish: flow(function* () {
+            yield gamesAPI.patchGame(self.id, { isPublicated: true });
         }),
         load: flow(function* (gameId) {
             const gameResponse = yield gamesAPI.getGame(gameId);

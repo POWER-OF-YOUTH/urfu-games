@@ -1,5 +1,5 @@
 import validator from "validator";
-import { types, flow } from "mobx-state-tree";
+import { types, flow, applySnapshot } from "mobx-state-tree";
 
 import authAPI from "../utils/api/authAPI";
 import { User } from "./user";
@@ -28,31 +28,43 @@ function validateSignUpData(data) {
 
 const AuthStore = types
     .model({
-        user: types.maybeNull(User),
-        token: types.maybeNull(types.string),
+        user: types.optional(User, {
+            id: "",
+            login: "",
+            email: "",
+            role: 0,
+            name: "",
+            surname: "",
+            patronymic: "",
+            avatar: "",
+            createdAt: Date.now(),
+            loaded: true
+        }),
         errors: types.array(APIError),
         authenticated: false,
         checked: false
     })
     .actions(self => ({
         check: flow(function* () {
-            self.token = localStorage.getItem("access_token");
+            if (document.cookie.includes("logged_in=true")) {
+                const user = localStorage.getItem();
+                if (user !== null)
+                    applySnapshot(self.user, JSON.parse(localStorage.getItem("user")));
+                self.authenticated = true;
+                self.checked = true;
+            }
 
-            if (self.token) {
-                const response = yield authAPI.check();
-                const json = yield response.json();
+            const response = yield authAPI.check();
+            const json = yield response.json();
 
-                if (response.ok) {
-                    self.errors.clear();
-
-                    self.user = json;
-
-                    self.authenticated = true;
-                }
-                else
-                    self.errors = json.errors;
+            if (response.ok) {
+                self.errors.clear();
+                self.user = json;
+                localStorage.setItem("user", JSON.stringify(response.body));
+                self.authenticated = true;
             }
             else {
+                self.errors = json.errors;
                 self.authenticated = false;
             }
 

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
+import PageTitle from "../components/PageTitle";
 import { Helmet } from "react-helmet";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
@@ -15,7 +16,7 @@ function UserProfilePage({ history }) {
 
     const { userId } = useParams();
     const { auth } = useStore();
-    
+
     const user = useLocalObservable(() => User.create({ id: userId }));
     useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
     const gamesStore = useLocalObservable(() => GamesStore.create());
@@ -49,15 +50,41 @@ function UserProfilePage({ history }) {
         }
     ];
 
+    const renderGames = useCallback((games) => (
+        <div className={styles.games}>
+            <h2>Загруженные игры</h2>
+            <div className={styles.games__list}>
+                {games.map((g, i) =>
+                    (<GameCard key={i} game={g} />)
+                )}
+            </div>
+        </div>
+    ), []);
+    const renderCompetencies = useCallback((competencies) => (
+        <div>
+            <h2>Компетенции</h2>
+            <div className={styles.cWrapper}>
+                {competencies.map((c) => (
+                    <Competence key={c.id} competence={c} enablePopup={true} />
+                ))}
+            </div>
+        </div>
+    ), []);
+
     return (
         <>
-            <Helmet><title>{user.loaded ? "Профиль: " + user.login : "Загрузка"}</title></Helmet>
+            <Helmet>
+                <title>
+                    {user.loaded ? `${user.login} | Профиль` : "Загрузка"}
+                </title>
+            </Helmet>
             {
                 user.loaded && (
                     <PageLayout>
+                        <PageTitle style={{margin: "20px 0"}}>{`Профиль пользователя ${user.login}`}</PageTitle>
                         <div className={styles.personInfoLabel}>
                             {
-                                auth?.user.isAdmin() && (
+                                1 === 0 && auth.user && auth.user.isAdmin() && (
                                     <div className={styles.deleteButtonWrapper}>
                                         <Button onClick={async () => {
                                             if (await user.delete())
@@ -86,30 +113,8 @@ function UserProfilePage({ history }) {
                             </table>
                         </div>
 
-                        <table className={styles.createdAndCompetenceTable}>
-                            <tbody>
-                                <tr className={styles.cRow}>
-                                    <td className={styles.cContainer}>
-                                        <div className={styles.cTitle}>
-                                            <h2>Игры</h2>
-                                        </div>
-                                        <div className={styles.cWrapper}>
-                                            {gamesStore.array().map((game, i) =>
-                                                (<GameCard key={i} game={game}></GameCard>)
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className={styles.cContainer}>
-                                        <div className={styles.cTitle}>
-                                            <h2>Компетенции</h2>
-                                        </div>
-                                        <div className={styles.cWrapper}>
-                                            {competencies.map(competence => <Competence key={competence.id} competence={competence} enablePopup={true}></Competence>)}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {gamesStore.array().length > 0 && renderGames(gamesStore.array())}
+                        {competencies.length > 0 && renderCompetencies(competencies)}
 
                     </PageLayout>
                 )

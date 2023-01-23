@@ -23,6 +23,7 @@ import mainRouter from "./routes";
 /** Главное приложение. */
 const app = express();
 
+app.use(cookieParser());
 if (process.env.NODE_ENV == "development") {
     app.use(cors());
 }
@@ -31,7 +32,6 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev")); // Логгер запросов.
 }
-app.use(cookieParser());
 
 app.use("/", mainRouter);
 

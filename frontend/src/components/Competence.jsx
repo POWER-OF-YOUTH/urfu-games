@@ -16,7 +16,7 @@ function Competence({ competence, enablePopup = false, size = "medium" }) {
 
     return (
         <>
-            <CompetenceContainer size={size} color="#665533" onClick={handleClick}>
+            <CompetenceContainer size={size} color="grey" onClick={handleClick}>
                 <CompetenceName>{competence.name}</CompetenceName>
             </CompetenceContainer>
 

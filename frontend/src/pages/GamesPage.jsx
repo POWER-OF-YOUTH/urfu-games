@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { Button } from "@mui/material";
+import styled from "@emotion/styled";
 import Flickity from "react-flickity-component";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
@@ -12,8 +15,10 @@ import { CompetenciesStore } from "../models/competence";
 
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
+import { useStore } from "../hooks";
 
 function GamesPage() {
+    const store = useStore();
     const games = useLocalObservable(() => GamesStore.create());
     const competencies = useLocalObservable(() => CompetenciesStore.create());
 
@@ -34,6 +39,16 @@ function GamesPage() {
                             <Competence key={i} competence={c} enablePopup />
                         ))}
                     </CompetenciesList>
+                    {store.auth.authenticated && (
+                        <NavLink to="/games/new">
+                            <AddGameButton variant="contained">Загрузить игру</AddGameButton>
+                        </NavLink>
+                    )}
+                    {store.auth.authenticated && store.auth.user.isModerator() && (
+                        <NavLink to="/games/unpublicated">
+                            <AddGameButton variant="contained">Неопубликованные игры</AddGameButton>
+                        </NavLink>
+                    )}
                 </div>
                 <Block className={styles.content}>
                     <div className={styles.gamesWrapper}>
@@ -44,7 +59,7 @@ function GamesPage() {
                             <GamesCardsCarousel>
                                 { games.array().map((game, i) => (
                                     <GameCard key={i} className={styles.carouselCard} game={game} />
-                                ))} 
+                                ))}
                             </GamesCardsCarousel>
                         </div>
                         <div className={styles.gamesSection}>
@@ -61,6 +76,10 @@ function GamesPage() {
         </>
     );
 }
+
+const AddGameButton = styled(Button)({
+    width: "100%"
+});
 
 function GamesCardsCarousel({ children }) {
     const flickityOptions = {

@@ -10,12 +10,12 @@ function CommentsListView({ store }) {
 
     return (
         <div className={styles.commentsContainer}>
-            {store.array().map((comment, i) => ( 
-                <CommentView 
-                    key={i} 
-                    comment={comment} 
+            {store.array().map((comment, i) => (
+                <CommentView
+                    key={i}
+                    comment={comment}
                     onDelete={handleCommentDelete}
-                /> 
+                />
             ))}
         </div>
     );

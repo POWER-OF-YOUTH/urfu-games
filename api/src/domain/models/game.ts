@@ -85,7 +85,7 @@ Game.init({
     },
     isPublicated: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true,
+        defaultValue: false,
         allowNull: false
     },
     checkpointsCount: {
@@ -222,9 +222,11 @@ async function createGame(
     if (competencies.length === 0) {
         throw new LogicError("Список компетенций не может быть пуст.");
     }
+    /*
     if (gameData.checkpoints.length === 0) {
         throw new LogicError("Список чекпоинтов не может быть пуст.");
     }
+    */
 
     const transaction = await sequelize.transaction();
     try {
@@ -240,10 +242,12 @@ async function createGame(
         }, { transaction });
         // @ts-ignore
         await game.setCompetencies(competencies, { transaction });
+        /*
         await Promise.all(
             // @ts-ignore
             gameData.checkpoints.map((c) => game.createCheckpoint(c, { transaction }))
         );
+        */
         await Promise.all(
             participants.map((p) =>
                 // @ts-ignore

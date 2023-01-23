@@ -11,7 +11,7 @@ import { User } from "./user";
 const RootStore = types
     .model({
         auth: types.optional(AuthStore, {}),
-        user: types.maybeNull(types.reference(User)),
+        // user: types.maybeNull(types.reference(User)),
     })
     .actions(self => ({
         /** Ицициализирует глобальное хранилище. */

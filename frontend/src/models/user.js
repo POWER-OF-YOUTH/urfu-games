@@ -22,7 +22,7 @@ const User = types
             return self.role === 1;
         },
         isModerator() {
-            return self.role === 2;
+            return self.role === 2 || self.role === 1;
         }
     }))
     .actions(self => ({

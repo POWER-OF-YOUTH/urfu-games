@@ -93,7 +93,11 @@ authRouter.post("/auth/signin",
                 if (password !== user.password)
                     throw new AccessError(strings.errors.access.passwordIncorrect);
 
-                res.json({ access_token: generateJWT(user.id) });
+                const token = generateJWT(user.id);
+                const maxAge = 604800000; // one week
+                res.cookie("access_token", token, { httpOnly: true, maxAge });
+                res.cookie("logged_in", true);
+                res.json({ access_token: token });
             });
         }
     )
@@ -117,6 +121,14 @@ authRouter.post("/auth/check",
             });
         }
     )
+);
+
+authRouter.post("/auth/logout",
+    (req, res) => {
+        res.clearCookie("access_token");
+        res.cookie("logged_in", false);
+        res.sendStatus(200);
+    }
 );
 
 export default authRouter;

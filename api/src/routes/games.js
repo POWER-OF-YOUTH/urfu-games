@@ -39,7 +39,7 @@ gamesRouter.post("/games/",
             .isString()
             .isLength({ min: 0, max: 500 }),
         body("image")
-            .isURL(),
+            .isString(),
         body("participants")
             .isArray(),
         body("participants.*.id")
@@ -62,13 +62,13 @@ gamesRouter.post("/games/",
             .default("")
             .isString(),
         body("loaderUrl")
-            .isURL(),
+            .isString(),
         body("dataUrl")
-            .isURL(),
+            .isString(),
         body("frameworkUrl")
-            .isURL(),
+            .isString(),
         body("codeUrl")
-            .isURL()
+            .isString()
     ),
     asyncMiddleware(
         async (req, res) => {
@@ -243,6 +243,24 @@ gamesRouter.put("/games/:gameId",
 
             res.setHeader("Location", `${globals.API_URI}/games/${game.id}`);
             res.json(await GameDetailDTO.create(game));
+        }
+    )
+);
+
+gamesRouter.patch("/games/:gameId",
+    verifyToken,
+    asyncMiddleware(
+        async (req, res) => {
+            const game = await Game.findByPk(
+                req.params.gameId,
+                { rejectOnEmpty: true }
+            );
+
+            game.set(req.body);
+
+            await game.save();
+
+            res.json({});
         }
     )
 );

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import styled from "@emotion/styled";
 import { TextField, Button } from "@mui/material";
+import { useHistory } from "react-router-dom";
 
 import CheckpointsMaker from "../../components/CheckpointsMaker";
 import CompetenciesSelector from "../../components/CompetenciesSelector";
@@ -20,7 +21,8 @@ import styles from "./GamePublishForm.module.css";
 /**
  * Форма для публикации игры.
  */
-function GamePublishForm({className, history, ...props}) {
+function GamePublishForm({className, ...props}) {
+    const history = useHistory();
     const [values, setValues] = useState({
         name: "",
         description: "",
@@ -44,7 +46,7 @@ function GamePublishForm({className, history, ...props}) {
 
         const data = {...values};
         data.competencies = data.competencies.map((c) => c.id);
-        data.checkpoints.forEach((c) => c.competence = c.competence.id);
+        data.checkpoints.forEach((c) => c.competence = c.competence != null ? c.competence.id : undefined);
 
         await gamesAPI.addGame(data);
 
@@ -143,14 +145,18 @@ function GamePublishForm({className, history, ...props}) {
                     </GamePublishFormField>
                 </div>
 
-                <GamePublishFormField className={styles.gamePublishForm__field_checkpoints} label="Чекпоинты">
-                    <CheckpointsMaker
-                        className={classNames(styles.checkpointsMaker)}
-                        name="checkpoints"
-                        competencies={values.competencies}
-                        onChange={(checkpoints) => setValues({...values, checkpoints })}
-                    />
-                </GamePublishFormField>
+                {
+                /*
+                    <GamePublishFormField className={styles.gamePublishForm__field_checkpoints} label="Чекпоинты">
+                        <CheckpointsMaker
+                            className={classNames(styles.checkpointsMaker)}
+                            name="checkpoints"
+                            competencies={values.competencies}
+                            onChange={(checkpoints) => setValues({...values, checkpoints })}
+                        />
+                    </GamePublishFormField>
+                */
+                }
             </div>
 
             <div className={classNames(styles.publishButtonContainer)}>

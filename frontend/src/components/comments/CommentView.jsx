@@ -1,7 +1,9 @@
 import React, {
     useState,
-    useRef
+    useRef,
+    useCallback
 } from "react";
+import { NavLink } from "react-router-dom";
 import {
     IconButton,
     Menu,
@@ -57,11 +59,11 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
     };
 
     // render blocks
-    const author = (
-        <span className={styles.author}>
-            {comment.author.login}
-        </span>
-    );
+    const renderAuthor = useCallback((author) => (
+        <NavLink className={styles.author} to={`/users/${author.id}`}>
+            {author.login}
+        </NavLink>
+    ), []);
     const avatarBlock = (
         <div>
             <div className={styles.avatarFrame}>
@@ -76,10 +78,10 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
     );
     const menuBlock = (
         <div>
-            <IconButton 
-                className={styles.moreButton} 
-                size="small" 
-                id="basic-button" 
+            <IconButton
+                className={styles.moreButton}
+                size="small"
+                id="basic-button"
                 aria-controls="basic-menu"
                 aria-haspopup="true"
                 aria-expanded={isMenuOpen ? "true" : undefined}
@@ -87,22 +89,21 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
             >
                 <MoreHorizIcon className={styles.moreIcon}/>
             </IconButton>
-            <Menu 
+            <Menu
                 id="basic-menu"
                 anchorEl={menuAnchorElement}
                 open={isMenuOpen}
-                onClose={handleMenuClose} 
+                onClose={handleMenuClose}
                 MenuListProps={{"aria-labelledby": "basic-button"}}
             >
-                { auth.authenticated && auth.user.id == comment.author.id 
+                { auth.authenticated && auth.user.id == comment.author.id
                     ? <MenuItem onClick={handleChangeButtonClick}>Изменить</MenuItem>
                     : <></>
                 }
-                { auth.authenticated && (auth.user.id == comment.author.id || auth.user.isAdmin()) 
-                    ? <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem> 
+                { auth.authenticated && (auth.user.id == comment.author.id || auth.user.isAdmin())
+                    ? <MenuItem onClick={handleDeleteButtonClick}>Удалить</MenuItem>
                     : <></>
                 }
-                                
             </Menu>
         </div>
     );
@@ -110,7 +111,7 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
         <div className={styles.containerNormalMode}>
             {avatarBlock}
             <div className= {styles.commentBody}>
-                {author}
+                {renderAuthor(comment.author)}
                 {dateBlock}
                 <div className={styles.textContainer}>
                     <span className={styles.text}>
@@ -125,7 +126,7 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
         <div className={styles.containerEditMode}>
             {avatarBlock}
             <div className={styles.commentBody}>
-                {author}
+                {renderAuthor(comment.author)}
                 {dateBlock}
                 <TextField
                     className={styles.editInput}
@@ -137,15 +138,15 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
                     autoFocus
                 />
                 <div className={styles.buttonsContainer}>
-                    <Button 
+                    <Button
                         className={styles.cancelButton}
                         variant="contained"
                         onClick={handleCancelButtonClick}
                     >
                         Отменить
                     </Button>
-                    <Button 
-                        className={styles.saveButton} 
+                    <Button
+                        className={styles.saveButton}
                         variant="contained"
                         onClick={handleSaveButtonClick}
                     >

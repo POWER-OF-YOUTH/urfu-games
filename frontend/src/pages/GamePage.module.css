@@ -78,6 +78,7 @@
 
 .gameButtonsContainer {
     display: flex;
+    gap: 10px;
     margin-top: auto;
 }
 
@@ -94,7 +95,6 @@
 
 .settingsButtonLink {
     display: block;
-    margin-left: 10px;
     text-decoration: none;
 }
 
@@ -169,8 +169,6 @@
         display: none;
     }
     .gameButtonsContainer {
-        display: none;
-        margin-top: 20px;
     }
     .middle {
         padding: 20px;
