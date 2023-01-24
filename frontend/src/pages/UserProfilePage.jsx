@@ -22,33 +22,7 @@ function UserProfilePage({ history }) {
     const gamesStore = useLocalObservable(() => GamesStore.create());
     useEffect(() => { gamesStore.loadForUser(userId).catch(err => console.error(err)); }, []);
 
-    const competencies = [
-        {
-            id: "0",
-            name: "Логистика",
-            description: "Не одной факторией единой"
-        },
-        {
-            id: "1",
-            name: "Теория вероятности",
-            description: "Какова вероятность того, что это прочитают"
-        },
-        {
-            id: "2",
-            name: "Английский язык",
-            description: "На английском знаю только sprechen sie deutsch"
-        },
-        {
-            id: "3",
-            name: "Высшая математика",
-            description: "А где низшая?"
-        },
-        {
-            id: "4",
-            name: "Квантовая механика",
-            description: "А может и не механика"
-        }
-    ];
+    const competencies = [];
 
     const renderGames = useCallback((games) => (
         <div className={styles.games}>
