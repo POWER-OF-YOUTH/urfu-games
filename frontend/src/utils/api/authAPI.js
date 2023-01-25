@@ -24,15 +24,13 @@ async function signIn(data) {
     return response;
 }
 
-async function check() {
+function check() {
     const url = apiConfig.APIURL + "/auth/check";
 
-    const response = await fetch(url, {
+    return fetch(url, {
         ...apiConfig.getDefaultRequestInit(),
         method: "POST"
     });
-
-    return response;
 }
 
 const authAPI = {

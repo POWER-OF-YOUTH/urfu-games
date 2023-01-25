@@ -119,14 +119,9 @@ function GamePage({ history }) {
                                             </div>
                                             <div className={styles.gameButtonsContainer}>
                                                 {!game.isPublicated && auth.authenticated && auth.user.isAdmin() && (
-                                                    <NavLink
-                                                        className={styles.settingsButtonLink}
-                                                        to={`/games/${params.gameId}/settings`}
-                                                    >
-                                                        <PublishButton variant="contained" onClick={handlePublishButtonClick}>
-                                                            <CheckIcon />
-                                                        </PublishButton>
-                                                    </NavLink>
+                                                    <PublishButton variant="contained" onClick={handlePublishButtonClick}>
+                                                        <CheckIcon />
+                                                    </PublishButton>
                                                 )}
                                                 <NavLink
                                                     className={styles.playButtonLink} 

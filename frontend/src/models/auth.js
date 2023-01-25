@@ -47,7 +47,7 @@ const AuthStore = types
     .actions(self => ({
         check: flow(function* () {
             if (document.cookie.includes("logged_in=true")) {
-                const user = localStorage.getItem();
+                const user = localStorage.getItem("user");
                 if (user !== null)
                     applySnapshot(self.user, JSON.parse(localStorage.getItem("user")));
                 self.authenticated = true;
@@ -60,7 +60,7 @@ const AuthStore = types
             if (response.ok) {
                 self.errors.clear();
                 self.user = json;
-                localStorage.setItem("user", JSON.stringify(response.body));
+                localStorage.setItem("user", JSON.stringify(json));
                 self.authenticated = true;
             }
             else {
