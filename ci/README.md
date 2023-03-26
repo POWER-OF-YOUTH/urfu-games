@@ -24,7 +24,7 @@ git clone https://github.com/power-of-youth/urfu-games
 Для запуска проекта перейдите в папку `urfu-games/ci` и выполните следующую команду:
 
 ```bash
-sudo ./build.sh && ./deploy.sh && sudo \
+sudo ./build.sh && sudo ./deploy.sh && sudo \
 POSTGRES_PASSWORD={POSTGRES_PASSWORD} \
 ADMIN_PASSWORD={ADMIN_PASSWORD} \
 JWT_SECRET={JWT_SECRET} \
