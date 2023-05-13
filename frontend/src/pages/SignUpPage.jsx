@@ -17,9 +17,7 @@ function SignUpPage({ history }) {
         if (auth.errors.length === 0) {
             await auth.signIn({ login: values.login, password: values.password });
             history.goBack();
-        }
-        else
-            console.error(auth.errors);
+        } else console.error(auth.errors);
     };
     const handleFormChange = () => auth.clearErrors();
 
@@ -68,11 +66,11 @@ function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
             <div className={styles.signUpFormBody}>
                 <div className={styles.fieldsContainer}>
                     <TextField
-                        id="outlined-basic"
+                        id="filled-basic"
                         className={styles.field}
                         name="login"
                         variant="outlined"
-                        label="Логин"
+                        label="LOGIN"
                         onChange={handleFieldChange}
                     />
                     <TextField
