@@ -1,18 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+
 :root {
-    --header-height: 45px;
-    --header-color: #4B4E6D;
-    --header-box-shadow: 0 2px 2px 0px #bfbfbf;
+    --header-height: 106px;
+    --header-color: #ffffff;
+    /* --header-box-shadow: 0 2px 2px 0px #bfbfbf; */
+    /* Logo */
     --logo-color: white;
-    --logo-font-family: "Roboto", sans-serif;
-    --logo-font-size: 30px;
+    --logo-font-family: "Nunito";
+    --logo-font-size: 32px;
+    --main-font-weight: normal;
+    --text-font-size: 16px;
     --block-box-shadow: 0 0 10px -5px black;
     --block-color: white;
     --block-padding: 10px;
     --block-spacing: 10px;
     --block-border-radius: 5px;
-    --main-font-family: "Roboto", "Arial", sans-serif;
+    --main-font-family: "Open Sans", sans-serif;    
+    --main-font-size: 16px;
     --page-width: 1000px;
     --page-padding: 60px;
+    --menu-font-size: 16px;
+    --menu-font-size: 16px;
+    /* Title */
+    --title-font-size: 24px;
+    --title-font-weight: 600; 
+    --title-font-family: 'Open Sans', sans-serif;
     /* Colors */
-    --grey-01: #F2F2F2;
+    /* --grey-color: #D9D9D9; */
+    --grey-color: #F2F2F2;
+    --main-disabled-color: #797979;
+    --add-disabled-color: #dadada;
+    --main-color : #0463EA;
+}
+
+h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 24px;
 }

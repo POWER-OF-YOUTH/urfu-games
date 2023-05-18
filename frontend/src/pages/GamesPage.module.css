@@ -52,6 +52,9 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--gamesSectionCaption-spacing);
+    font-family: var(--title-font-family);
+
+
 }
 
 .gamesSectionCaption {

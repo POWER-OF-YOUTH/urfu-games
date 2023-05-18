@@ -1,14 +1,6 @@
 import React from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import {
-    Slide,
-    Popper,
-    Button,
-    MenuList,
-    MenuItem,
-    ListItemIcon,
-    ClickAwayListener
-} from "@mui/material";
+import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener, Menu } from "@mui/material";
 import { styled } from "@mui/material";
 import {
     Logout as LogoutIcon,
@@ -20,6 +12,10 @@ import { observer } from "mobx-react-lite";
 
 import { useStore, useIsMobile } from "../hooks";
 
+import panelButton from "../components/svg/panelButton.svg";
+import buttonBells from "../components/svg/buttonBells.svg";
+import NavButton from "./NavButton.jsx";
+import NavMainButton from "./NavMainButton.jsx";
 import styles from "./Header.module.css";
 
 /*
@@ -36,16 +32,13 @@ function Header({ variant = "standard" }) {
     if (variant === "standard") {
         showAuthButtons = true;
         showUser = true;
-    }
-    else if (variant === "hidebuttons") {
+    } else if (variant === "hidebuttons") {
         showAuthButtons = false;
         showUser = true;
-    }
-    else if (variant === "hideall") {
+    } else if (variant === "hideall") {
         showAuthButtons = false;
         showUser = false;
-    }
-    else {
+    } else {
         showAuthButtons = true;
         showUser = true;
     }
@@ -61,57 +54,87 @@ function Header({ variant = "standard" }) {
         auth.logout();
         setIsMenuOpen(false);
     };
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <>
             <div className={styles.spacer}>
                 <header>
                     <Logo />
-                    {auth.authenticated ? (
-                        showUser && <User user={auth.user} onClick={handleUserClick} /> 
-                    ) : (
-                        showAuthButtons && (
+                    {auth.authenticated
+                        ? 
+                        // <NavMainButton text={'Стать'}></NavMainButton> :<></>
+                        <NavButton  text={'Стать разработчиком'}></NavButton> :<></>
+                        // <Button  className={styles.developerButton} variant="outlined" style={{textTransform: 'none', color: 'black', fontWeight: 'bold', borderRadius: '8px', border: '2px solid rgba(4, 99, 234, 1)'}}>Стать разработчиком</Button>: <></>
+                    }  
+                    <Button id="basic-button" className={styles.popupButton}>
+                        <img src={buttonBells} />
+                    </Button>                   
+                    {auth.authenticated
+                        ? showUser && <User user={auth.user} onClick={handleUserClick}/>
+                        : showAuthButtons && (
                             <div className={styles.authButtonsContainer}>
-                                <NavLink 
-                                    className={styles.signInLink} 
+                                <NavLink
+                                    className={styles.signInLink}
                                     to={{
-                                        pathname: "/signin", 
-                                        state: { redirectTo: location.pathname }
+                                        pathname: "/signin",
+                                        state: { redirectTo: location.pathname },
                                     }}
                                 >
-                                    <SignInButton variant="contained" size="small">
-                                        Войти
+                                    <SignInButton variant="contained" size="small" style={{ textTransform: "none" }}>
+                                        Вход и регистрация
                                     </SignInButton>
                                 </NavLink>
-                                <NavLink 
-                                    className={styles.signUpLink} 
-                                    to={{
-                                        pathname: "/signup", 
-                                        state: { redirectTo: location.pathname }
-                                    }}
-                                >
-                                    Зарегистрироваться
-                                </NavLink>
                             </div>
-                        )
-                    )
-                    }
+                        )}                      
+                    <Button
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        className={styles.menuButton}
+                    >
+                        <img src={panelButton} />
+                    </Button>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem onClick={handleClose}>Настройки</MenuItem>
+                        <MenuItem onClick={handleClose}>Язык: Русский</MenuItem>
+                        <MenuItem onClick={handleClose}>Тема: светлая</MenuItem>
+                        <MenuItem onClick={handleClose}>Выйти</MenuItem>
+                    </Menu>
+
                     <Popper
                         open={isMenuOpen}
                         anchorEl={menuAnchorElement}
                         onClose={handleMenuClose}
-                        menulistprops={{"aria-labelledby": "basic-button"}}
+                        menulistprops={{ "aria-labelledby": "basic-button" }}
                         placement="bottom-end"
                         transition
                     >
-                        {({ TransitionProps }) => 
+                        {({ TransitionProps }) => (
                             <Slide {...TransitionProps}>
                                 <div className={styles.menuListContainer}>
                                     <ClickAwayListener onClickAway={handleMenuClose}>
                                         <MenuList>
                                             <MenuItem component={Link} to={"/users/" + auth.user.id}>
                                                 <ListItemIcon>
-                                                    <UserProfileIcon/>
+                                                    <UserProfileIcon />
                                                 </ListItemIcon>
                                                 <span className={styles.userProfileText}>Профиль</span>
                                             </MenuItem>
@@ -131,7 +154,7 @@ function Header({ variant = "standard" }) {
                                     </ClickAwayListener>
                                 </div>
                             </Slide>
-                        }
+                        )}
                     </Popper>
                 </header>
             </div>
@@ -144,27 +167,30 @@ function Logo() {
 
     return (
         <div className={styles.logoContainer}>
-            <Link to="/" className={styles.logo}>
-                { isMobile ? "UG" : "UrFU Games" }
+            <Link to="/" className={styles.leftSideLogo}>
+                {isMobile ? "U" : "UrFU"}
+            </Link>
+            <Link to="/" className={styles.rightSideLogo}>
+                {isMobile ? "G" : "Games"}
             </Link>
         </div>
     );
 }
 
 const SignInButton = styled(Button)({
-    backgroundColor: "#84DCC6",
-    color: "black",
+    backgroundColor: "var(--main-color)",
+    color: "white",
     fontWeight: "bold",
-    "&:hover": {
-        backgroundColor: "white"
-    }
+    // "&:hover": {
+    //     backgroundColor: "white"
+    // }
 });
 
 function User({ user, onClick }) {
     const handleClick = (evt) => onClick(evt);
 
     const Login = styled("span")({
-        color: user.isAdmin() ? "red" : (user.isModerator() ? "green" : "white")
+        color: user.isAdmin() ? "red" : user.isModerator() ? "green" : "black",
     });
 
     return (
@@ -172,9 +198,6 @@ function User({ user, onClick }) {
             <Login className={`${styles.login}`}>{user.login}</Login>
             <div className={styles.avatar}>
                 <img alt="avatar" src={user.avatar} />
-            </div>
-            <div className={styles.menu}>
-                <ArrowDropDownIcon className={styles.menuIcon} />
             </div>
         </div>
     );

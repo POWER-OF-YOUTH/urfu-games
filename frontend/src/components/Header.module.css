@@ -1,3 +1,4 @@
+
 :root {
     --avatar-size: 28px;
     --avatar-border-radius: 50%;
@@ -17,16 +18,34 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--header-color);
+    background-color: white;
     width: 100%;
     height: var(--header-height);
-    box-shadow: var(--header-box-shadow);
+    /* padding-top: 30px;
+    padding-bottom: 42px; */
+    /* box-shadow: var(--header-box-shadow); */
 }
 
 .spacer {
     width: 100%;
     height: var(--header-height);
 }
+
+
+
+.logoContainer {
+    flex-grow: 20;
+    padding-left: 70px;
+
+}
+
+.developerButton{
+    border-radius: 8px;
+    margin-right: 10px;
+    font-family: var(--main-font-family);
+    font-size: var(--main-font-size); 
+}
+
 
 .logo {
     margin-left: 15px;
@@ -35,9 +54,28 @@ header {
     font-size: var(--logo-font-size);
     font-weight: bold;
     text-decoration: none;
-    color: var(--logo-color);
+    /* color: var(--logo-color); */
+}
+.leftSideLogo{
+    margin-left: 15px;
+    margin-right: 6px;
+    font-family: var(--logo-font-family);
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 55px;
+    text-decoration: none;
+    color: var(--main-color);
 }
 
+.rightSideLogo{    
+    margin-right: auto;
+    font-family: var(--logo-font-family);
+    font-size: 32px;
+    line-height: 44px;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+}
 .userContainer {
     display: flex;
     padding: 5px 10px;
@@ -56,10 +94,11 @@ header {
     font-size: var(--login-font-size);
     font-weight: bold;
     margin-right: 10px;
+    color: black;
 }
 
 .avatar {
-    margin-right: 5px;
+    margin-right: 8px;
     width: var(--avatar-size);
     height: var(--avatar-size);
     border-radius: var(--avatar-border-radius);
@@ -86,6 +125,18 @@ header {
     transition: 100ms linear !important;
     color: var(--menuIcon-color);
 }
+
+.popupButton{
+    margin-right: 8px;
+    margin-left: 8px;
+}
+
+
+.menuButton {
+    margin-right: 90px;
+    margin-left: 8px;
+}
+
 
 .userContainer:hover .menuIcon {
     transform: scale(1.5, 1.5);
@@ -114,7 +165,7 @@ header {
 }
 
 .signUpLink {
-    color: white;
+    color: rgb(110, 11, 11);
 }
 
 .signUpLink:hover {
