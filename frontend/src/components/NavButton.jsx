@@ -2,13 +2,13 @@ import React from "react";
 import styles from "./NavButton.module.css";
 import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener, Menu } from "@mui/material";
 
-function NavButton({ text, className }) {
+function NavButton({ text, className, href }) {
     return (
-        <button
+        <div
             className={`
         ${styles.main}
         ${className ?? ""} `}
-            
+
             // style={{
             //     textTransform: "none",
             //     color: "black",
@@ -19,8 +19,8 @@ function NavButton({ text, className }) {
             //     heigh: "34px"
             // }}
         >
-            {text}
-        </button>
+            <div className={styles.btntext}><a className={styles.btnlink} href={href}>{text}</a></div> 
+        </div>
     );
 }
 

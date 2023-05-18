@@ -31,10 +31,14 @@ header {
     height: var(--header-height);
 }
 
-
+/* .test{
+    margin: 0px 20px 0px 20px;
+    width: 82px;
+    
+} */
 
 .logoContainer {
-    flex-grow: 20;
+    /* flex-grow: 2; */
     padding-left: 70px;
 
 }
@@ -170,4 +174,50 @@ header {
 
 .signUpLink:hover {
     text-decoration: underline;
+}
+
+/* .search{
+    
+
+    
+}
+
+.searchForm{
+    
+} */
+
+/* .search{
+    flex-grow: 20;
+    background-color: #F2F2F2;
+    color: #797979;
+    
+} */
+
+.searchInput{
+    /* width: 487px; */
+    min-height: 34px;
+    background-color: #F2F2F2;
+    color: #797979;
+    font-family: var(--main-font-family);
+    font-size: var(--main-font-size); 
+    border: 2px solid rgba(242, 242, 242, 1); 
+    border-radius: 8px;
+    padding: 6px 16px 6px 16px;
+    /* flex-grow: 30; */
+    text-transform: none;
+    white-space: nowrap;
+    width: 30vw;
+    
+    outline:none;
+}
+
+.searchInput:active{ 
+    color: #F2F2F2;
+  }
+/* .searchInput{
+    width: ;
+} */
+
+.navButton{
+    display: flex;
 }

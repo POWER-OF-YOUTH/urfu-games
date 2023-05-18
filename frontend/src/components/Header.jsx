@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener, Menu } from "@mui/material";
+import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener, Menu, Autocomplete, TextField } from "@mui/material";
 import { styled } from "@mui/material";
 import {
     Logout as LogoutIcon,
@@ -63,99 +63,94 @@ function Header({ variant = "standard" }) {
         setAnchorEl(null);
     };
 
+    const top100Films = [
+        { label: 'The Shawshank Redemption', year: 1994 },
+        { label: 'The Godfather', year: 1972 },
+        { label: 'The Godfather: Part II', year: 1974 },
+        { label: 'The Dark Knight', year: 2008 },
+        { label: '12 Angry Men', year: 1957 },
+        { label: "Schindler's List", year: 1993 },
+        { label: 'Pulp Fiction', year: 1994 },
+    ];
+    
+
     return (
         <>
             <div className={styles.spacer}>
                 <header>
                     <Logo />
-                    {auth.authenticated
-                        ? 
-                        // <NavMainButton text={'Стать'}></NavMainButton> :<></>
-                        <NavButton  text={'Стать разработчиком'}></NavButton> :<></>
-                        // <Button  className={styles.developerButton} variant="outlined" style={{textTransform: 'none', color: 'black', fontWeight: 'bold', borderRadius: '8px', border: '2px solid rgba(4, 99, 234, 1)'}}>Стать разработчиком</Button>: <></>
-                    }  
-                    <Button id="basic-button" className={styles.popupButton}>
-                        <img src={buttonBells} />
-                    </Button>                   
-                    {auth.authenticated
-                        ? showUser && <User user={auth.user} onClick={handleUserClick}/>
-                        : showAuthButtons && (
-                            <div className={styles.authButtonsContainer}>
-                                <NavLink
-                                    className={styles.signInLink}
-                                    to={{
-                                        pathname: "/signin",
-                                        state: { redirectTo: location.pathname },
-                                    }}
-                                >
-                                    <SignInButton variant="contained" size="small" style={{ textTransform: "none" }}>
-                                        Вход и регистрация
-                                    </SignInButton>
-                                </NavLink>
-                            </div>
-                        )}                      
-                    <Button
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        className={styles.menuButton}
-                    >
-                        <img src={panelButton} />
-                    </Button>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                        }}
-                    >
-                        <MenuItem onClick={handleClose}>Настройки</MenuItem>
-                        <MenuItem onClick={handleClose}>Язык: Русский</MenuItem>
-                        <MenuItem onClick={handleClose}>Тема: светлая</MenuItem>
-                        <MenuItem onClick={handleClose}>Выйти</MenuItem>
-                    </Menu>
-
-                    <Popper
-                        open={isMenuOpen}
-                        anchorEl={menuAnchorElement}
-                        onClose={handleMenuClose}
-                        menulistprops={{ "aria-labelledby": "basic-button" }}
-                        placement="bottom-end"
-                        transition
-                    >
-                        {({ TransitionProps }) => (
-                            <Slide {...TransitionProps}>
-                                <div className={styles.menuListContainer}>
-                                    <ClickAwayListener onClickAway={handleMenuClose}>
-                                        <MenuList>
-                                            <MenuItem component={Link} to={"/users/" + auth.user.id}>
-                                                <ListItemIcon>
-                                                    <UserProfileIcon />
-                                                </ListItemIcon>
-                                                <span className={styles.userProfileText}>Профиль</span>
-                                            </MenuItem>
-                                            <MenuItem>
-                                                <ListItemIcon>
-                                                    <SettingsIcon />
-                                                </ListItemIcon>
-                                                <span className={styles.settingsText}>Настройки</span>
-                                            </MenuItem>
-                                            <MenuItem onClick={handleLogoutClick}>
-                                                <ListItemIcon>
-                                                    <LogoutIcon />
-                                                </ListItemIcon>
-                                                <span className={styles.exitText}>Выйти</span>
-                                            </MenuItem>
-                                        </MenuList>
-                                    </ClickAwayListener>
+                    {/* <Autocomplete className={styles.search}                        
+                        id="free-solo-demo"
+                        freeSolo
+                        options={top100Films}
+                        sx={{ width: 490 }}
+                        renderInput={(params) => <TextField {...params} variant="standard" sx={{ height: '34px'}} label="калич"/>}
+                        // renderInput={(params) => <TextField sx={{ }} {...params} label="Поиск" />}
+                    /> */}
+                    <div className={styles.seatch}>
+                        <form className={styles.searchForm}>
+                            <input  
+                                type="text"
+                                placeholder="Поиск"
+                                className={styles.searchInput}
+                                onChange={(event) => console.log(event)}
+                            />
+                        </form>
+                    </div>  
+                    <div className={styles.navButton}>             
+                        <NavMainButton text={'Найти'} className={styles.test}> </NavMainButton> <></>
+                        {
+                            auth.authenticated ? 
+                                <NavButton text={'Стать разработчиком'} href={"/games/new "}  > </NavButton> :<></>
+                                // <NavMainButton text={"Стать разработчиком"}></NavMainButton>:<></>
+                            // <Button  className={styles.developerButton} variant="outlined" style={{textTransform: 'none', color: 'black', fontWeight: 'bold', borderRadius: '8px', border: '2px solid rgba(4, 99, 234, 1)'}}>Стать разработчиком</Button>: <></>
+                        }
+                        {auth.authenticated
+                            ? showUser && <User user={auth.user} onClick={handleUserClick} />
+                            : showAuthButtons && (
+                                <div className={styles.authButtonsContainer}>
+                                    <NavLink
+                                        className={styles.signInLink}
+                                        to={{
+                                            pathname: "/signin",
+                                            state: { redirectTo: location.pathname },
+                                        }}
+                                    >                                    
+                                    </NavLink>     
+                                    <NavMainButton 
+                                        text={'Вход и регистрация'}  href={"/signin"}  className={styles.signUpButton} >        
+                                    </NavMainButton>                          
                                 </div>
-                            </Slide>
-                        )}
-                    </Popper>
+                            )}
+
+                        <Button id="basic-button" className={styles.popupButton}>
+                            <img src={buttonBells} />
+                        </Button>   
+                        <Button
+                            id="basic-button"
+                            aria-controls={open ? "basic-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={handleClick}
+                            className={styles.menuButton}
+                        >
+                            <img src={panelButton} />
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                "aria-labelledby": "basic-button",
+                            }}
+                        >
+                            <MenuItem onClick={handleClose}>Настройки</MenuItem>
+                            <MenuItem onClick={handleClose}>Язык: Русский</MenuItem>
+                            <MenuItem onClick={handleClose}>Тема: светлая</MenuItem>
+                            <MenuItem onClick={handleLogoutClick}>Выйти</MenuItem>
+                        </Menu>
+                    </div>
                 </header>
             </div>
         </>
@@ -192,13 +187,14 @@ function User({ user, onClick }) {
     const Login = styled("span")({
         color: user.isAdmin() ? "red" : user.isModerator() ? "green" : "black",
     });
-
     return (
-        <div className={styles.userContainer} onClick={handleClick}>
+        <div className={styles.userContainer} onClick={handleClick} >            
             <Login className={`${styles.login}`}>{user.login}</Login>
-            <div className={styles.avatar}>
-                <img alt="avatar" src={user.avatar} />
-            </div>
+            <Link to={"/users/" + user.id}>            
+                <div className={styles.avatar}>
+                    <img alt="avatar" src={user.avatar} />
+                </div>
+            </Link>
         </div>
     );
 }

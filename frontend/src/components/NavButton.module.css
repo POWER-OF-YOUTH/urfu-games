@@ -3,15 +3,20 @@
 
 .main {
     text-transform: none;
-    color: rgb(255, 255, 255);
+    color: black;
     font-weight: bold;
     border-radius: 8px;
     border: 2px solid rgba(4, 99, 234, 1);
-    width: 200px;
-    height:  34px;
+    max-height: 34px;
     align-items: center;
     justify-content: center;
-    background-color: #0463EA;
+    background-color: white;
+    text-align: center;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 0;
+    margin: 0 20px 0 20px;
+
     /* margin: 20px 50px 20px 20px; */
     
 }    
@@ -23,6 +28,17 @@
 
 .main:active{ 
   color: #0463EA;
+}
+
+.btntext{  
+  padding: 6px 16px;  
+
+}
+
+.btnlink{
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+
 }
 
 
