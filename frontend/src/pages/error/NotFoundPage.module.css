@@ -9,21 +9,24 @@
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: var(--content-background-color);
+    /* background-color: var(--content-background-color); */
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
 }
 
 .errorCode, .errorMessage {
-    margin: 0;
+    margin: 48px 0 48px 0;
+    font-family: 'Open Sans';
+    font-style: bold;
+    font-weight: 600;
+    font-size: 24px;
+
 }
 
 .errorCode {
-    font-size: var(--errorCode-font-size);
+    /* font-size: var(--errorCode-font-size); */
     font-weight: bold;
-}
-
-.goToMain {
-    text-decoration: none;
+    
+    
 }

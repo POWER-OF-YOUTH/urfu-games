@@ -1,19 +1,26 @@
+@import "../styles/variables.css";
+
+
+
 .card {
     position: relative;
-    min-width: 300px;
+    min-width: 310px;
     overflow: hidden;
-    border-radius: 5px;
+    height: 269px;
+    border-radius: 20px;
 }
 
 .coverLink {
     display: block;
+    text-decoration: none;
 }
 
 .cover {
-    display: block;
     width: 100%;
-    transition: transform 500ms;
+    height: 269px;
+    
 }
+
 
 .card:hover .cover {
     transform: scale(1.06, 1.06);
@@ -25,9 +32,6 @@
     flex-flow: column-reverse;
     top: 0;
     right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 5px;
 }
 
 .info {
@@ -35,17 +39,82 @@
     width: 100%;
     height: fit-content;
     padding: 5px;
-    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     transition: background 500ms;
+    background-color: aqua;
+    
 }
 
-.card:hover .info {
+/* .card:hover .info {
     background-color: rgba(0, 0, 0, 0.8);
-}
+} */
 
 .name { 
     margin: 0;
-    color: white;
+    color: rgba(0, 0, 0, 1);      
 }
 
+.ratingContainer {
+    color: #0000;
+    border-radius: 0px 0px 0px 20px;
+    background-color: #F2F2F2;
+    width: 71px;
+    height: 33px;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: center;
+    align-items: stretch;
+}
+
+.ratingText{
+    color: #0000;
+}
+
+.banner{
+    position: relative; 
+    width: 100%; 
+}
+
+.blockTitle{
+    position: absolute; 
+      z-index: 1000; 
+      width: 100%;  
+      height: 103px; 
+      background: #F2F2F2; 
+      bottom: 0;
+      padding-top: 9px;
+}
+
+.text{
+    color: rgba(0, 0, 0, 1);
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.blockName{
+    margin-left: 22px;
+    color: rgba(0, 0, 0, 1);
+    font-family: var(--main-font-family);
+}
+.blockCompetence{
+    position: absolute; 
+    z-index: 1000; 
+    width: 100%;  
+    height: 62px;     
+    bottom: 0;    
+    color: rgba(101, 101, 101, 1);
+    font-family: var(--main-font-family);
+    padding-left: 22px;
+    margin-right: 20px;
+    display: flex;
+    flex-wrap: wrap
+}
+
+.blockText{
+    padding: 0px 10px 6px 0px;
+}

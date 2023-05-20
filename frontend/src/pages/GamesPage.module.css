@@ -13,16 +13,23 @@
     min-height: 100%;
 }
 
+.titleText {
+    font-weight: 600;
+    font-size: 16px;
+    font-family: var(--main-font-family);
+    padding: 10px 0px 0px 45px;    
+}
+
 @media (min-width: 1000px) {
     .pageGrid {
-        grid-template-columns: 230px 1fr;
+        grid-template-columns: 220px 1fr;
     }
 }
 
 .sideBar {
     display: flex;
     gap: 10px;
-    flex-flow: column nowrap;
+    flex-flow: column nowrap;    
 }
 
 @media (max-width: 1000px) {
@@ -34,6 +41,8 @@
 .competenciesList {
     position: sticky;
     top: 0;
+    background-color: #F2F2F2;
+    border-radius: 20px;     
 }
 
 .content {

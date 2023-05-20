@@ -13,6 +13,7 @@ import CompetenciesList from "../components/CompetenciesList";
 import { GamesStore } from "../models/game";
 import { CompetenciesStore } from "../models/competence";
 
+
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 import { useStore } from "../hooks";
@@ -34,27 +35,18 @@ function GamesPage() {
             </Helmet>
             <div className={styles.pageGrid}>
                 <div className={styles.sideBar}>
+                    <span className={styles.titleText} >Навигация</span>
                     <CompetenciesList className={styles.competenciesList}>
                         {competencies.array().map((c, i) => (
                             <Competence key={i} competence={c} enablePopup />
                         ))}
                     </CompetenciesList>
-                    {store.auth.authenticated && (
-                        <NavLink to="/games/new">
-                            <AddGameButton variant="contained">Загрузить игру</AddGameButton>
-                        </NavLink>
-                    )}
-                    {store.auth.authenticated && store.auth.user.isModerator() && (
-                        <NavLink to="/games/unpublicated">
-                            <AddGameButton variant="contained">Неопубликованные игры</AddGameButton>
-                        </NavLink>
-                    )}
                 </div>
                 <Block className={styles.content}>
                     <div className={styles.gamesWrapper}>
                         <div className={styles.gamesSection}>
                             <div className={styles.gamesSectionCaptionWrapper}>
-                                <h2 className={styles.gamesSectionCaption}>Рекомендуемые</h2>
+                                <h2 className={styles.gamesSectionCaption}>Популярные игры</h2>
                             </div>
                             <GamesCardsCarousel>
                                 { games.array().map((game, i) => (

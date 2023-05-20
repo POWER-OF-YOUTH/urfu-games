@@ -3,8 +3,7 @@
 .block {
     box-sizing: border-box;
     padding: var(--block-padding);
-    background-color: var(--block-color);
+    background-color: #FFFFFF;
     overflow: hidden;
     border-radius: var(--block-border-radius);
-    box-shadow: var(--block-box-shadow);
 }

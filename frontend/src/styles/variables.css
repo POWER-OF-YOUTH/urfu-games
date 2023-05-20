@@ -40,3 +40,12 @@ h1 {
     font-weight: 600;
     font-size: 24px;
 }
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    
+}
+p{
+    text-decoration: none;
+}

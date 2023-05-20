@@ -186,16 +186,11 @@ header {
     
 } */
 
-/* .search{
-    flex-grow: 20;
-    background-color: #F2F2F2;
-    color: #797979;
-    
-} */
+
 
 .searchInput{
     /* width: 487px; */
-    min-height: 34px;
+    max-height: 34px;
     background-color: #F2F2F2;
     color: #797979;
     font-family: var(--main-font-family);

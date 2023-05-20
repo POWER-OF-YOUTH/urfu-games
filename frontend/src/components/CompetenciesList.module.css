@@ -3,6 +3,7 @@
 .competencies {
     width: 100%;
     height: fit-content;
+    margin-top: 16px;
 }
 
 .titleContainer {
@@ -16,9 +17,52 @@
 }
 
 .competenciesContainer {
-    margin-top: 5px;
+    /* margin-top: 5px;
     display: flex;
     flex-flow: row wrap;
-    gap: 5px;
+    flex-direction: column;
+    align-content: flex-start;
+    gap: 5px; */
     width: 100%;
+    background-color: #F2F2F2;
+    display: flex;
+    flex-direction: column;
+    
+    
+    
 }
+.cover{
+    margin-top: 10px;
+}
+.coverText{
+    font-size: var(--main-font-size);
+    font-family: var(--main-font-family);
+    padding: 0px 20px 20px 20px;
+    vertical-align: super
+    
+}
+.coverBlock{
+    background-color: #F2F2F2;
+}
+
+.coverlink{
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+  .coverText:active{ 
+    color: #0463EA;
+    
+  }
+
+.coverText:hover:not(.disabled) {
+    color: #0463EA;
+    
+    
+  }
+  .cover:hover:not(.disabled) {
+    
+    border-left: 3px solid #0463EA;
+    
+    
+  }
+  
