@@ -6,8 +6,8 @@
     height: 100%;
 }
 
-.signInForm {
-    background-color: white;
+.signUpForm {
+    /* background-color: rgb(216, 216, 216); */
     width: 400px;
     max-width: 100%;
     align-content: center;
@@ -15,18 +15,20 @@
     /* border: 2px solid rgb(224, 224, 224); */
 }
 
-.signInFormBody {
+.signUpFormBody {
     padding: 10px;
 }
 
 .field {
-    width: 100%;
+    width: 100%;  
+    /* border-bottom: none;   */
 }
 
 .fieldsContainer {
     display: grid;
     grid-row-gap: 24px;
     width: 395px;
+   
 }
 
 /* .title {

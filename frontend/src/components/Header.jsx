@@ -18,7 +18,7 @@ import NavButton from "./NavButton.jsx";
 import NavMainButton from "./NavMainButton.jsx";
 import styles from "./Header.module.css";
 
-/*
+/*  
  * @param {{ variant: "standard" | "hidebuttons" | "hideall" }}
  */
 function Header({ variant = "standard" }) {
@@ -162,7 +162,7 @@ function Logo() {
 
     return (
         <div className={styles.logoContainer}>
-            <a href={"/"} className={styles.leftSideLogo}>
+            <a href={"/"} className={styles.leftSideLogo} >
                 {isMobile ? "U" : "UrFU"}
             </a>
             <a href={"/"} className={styles.rightSideLogo}>

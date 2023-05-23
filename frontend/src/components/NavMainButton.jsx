@@ -19,7 +19,7 @@ function NavMainButton({ text, className, href, onClick }) {
             //     heigh: "34px"
             // }}
         >
-            <div className={styles.btntext} onClick={onClick}><a className={styles.btnlink} href={href}>{text}</a></div> 
+            <div className={styles.btntext}><a className={styles.btnlink} onClick={onClick} href={href}>{text}</a></div> 
         </div>
     );
 }

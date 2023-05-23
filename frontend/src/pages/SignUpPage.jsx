@@ -7,6 +7,8 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../hooks";
 
 import styles from "./SignUpPage.module.css";
+import NavButton from "../components/NavButton";
+import NavMainButton from "../components/NavMainButton";
 
 function SignUpPage({ history }) {
     const { auth } = useStore();
@@ -67,18 +69,19 @@ function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
         <div className={styles.signUpForm}>
             <div className={styles.signUpFormBody}>
                 <div className={styles.fieldsContainer}>
-                    <Typography variant="h5" className={styles.title}>
+                    {/* <Typography variant="h5" className={styles.title}>
                         Регистрация
-                    </Typography>
+                    </Typography> */}
+                    <h2 className={styles.title}>Регистрация</h2>
                     <TextField
                         id="filled-basic"
                         className={styles.field}
                         name="login"
-                        variant="filled"
-                        InputProps={{ disableUnderline: true }}
-                        label="Логин"
+                        variant="filled"                        
+                        label="Логин"                        
                         onChange={handleFieldChange}
                         onClick={clickChange}
+                        InputProps={{ disableUnderline: true }}
                         size="small"
                     />
                     <TextField
@@ -113,9 +116,8 @@ function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
                         InputProps={{ disableUnderline: true }}
                         size="small"
                     />
-                    <Button className={styles.registerButton} variant="contained" onClick={handleSubmit} style={{textTransform: 'none'}} >
-                        Регистрация
-                    </Button>
+                    <NavMainButton text={"Регистрация"} href={"/signup"}></NavMainButton>
+                    {/* <NavButton text={"Регистрация"} href={"/signup"}></NavButton> */}
                 </div>
             </div>
         </div>

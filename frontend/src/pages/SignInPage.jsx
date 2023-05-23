@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
@@ -7,6 +8,8 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../hooks";
 
 import styles from "./SignInPage.module.css";
+import NavMainButton from "../components/NavMainButton";
+import NavButton from "../components/NavButton";
 
 function SignInPage({ history }) {
     const { auth } = useStore();
@@ -14,7 +17,8 @@ function SignInPage({ history }) {
     const handleFormSubmit = async (values) => {
         await auth.signIn(values);
 
-        if (auth.errors.length === 0) history.goBack();
+        if (auth.errors.length === 0)
+            history.goBack();
     };
     const handleFormChange = () => auth.clearErrors();
 
@@ -62,11 +66,12 @@ function SignInForm({ onSubmit = (f) => f, onChange = (f) => f }) {
 
     return (
         <div className={styles.signInForm}>
+            {/* <Typography variant="h5" className={styles.title}>
+                Вход
+            </Typography> */}            
             <div className={styles.signInFormBody}>
                 <div className={styles.fieldsContainer}>
-                    <Typography variant="h5" className={styles.title}>
-                        Вход
-                    </Typography>
+                    <h2 className={styles.title}>Вход</h2>
                     <TextField
                         id="outlined-basic"
                         className={styles.field}
@@ -81,19 +86,18 @@ function SignInForm({ onSubmit = (f) => f, onChange = (f) => f }) {
                         id="outlined-basic"
                         className={styles.field}
                         variant="filled"
-                        name="passwordRepeat"
+                        name="password"
                         label="Пароль"
                         type="password"
                         onChange={handleFieldChange}
                         InputProps={{ disableUnderline: true }}
                         size="small"
-                    />
-                    <Button className={styles.registerButton} variant="contained" onClick={handleSubmit}  style={{textTransform: 'none'}}>
-                        Вход
-                    </Button>
-                    <Button className={styles.registerButton} variant="outlined" onClick={handleSubmit}  style={{textTransform: 'none', color: 'black', border: '2px solid rgba(4, 99, 234, 1)'}}>
-                        Регистрация
-                    </Button>
+                    />                
+                    {/* <Button className={styles.registerButton} variant="contained" onClick={handleSubmit}>
+                        Войти   
+                    </Button> */}
+                    <NavMainButton text={"Вход"} onClick={handleSubmit}></NavMainButton>
+                    <NavButton text={"Регистрация"} href={"/signup"}></NavButton>
                 </div>
             </div>
         </div>
