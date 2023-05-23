@@ -12,7 +12,7 @@
     max-width: 100%;
     align-content: center;
     text-align: center;
-    border: 2px solid rgb(224, 224, 224);
+    /* border: 2px solid rgb(224, 224, 224); */
 }
 
 .signInFormBody {
@@ -25,12 +25,13 @@
 
 .fieldsContainer {
     display: grid;
-    grid-row-gap: 10px;
+    grid-row-gap: 24px;
+    width: 395px;
 }
 
-.title {
+/* .title {
     border-bottom: 2px solid rgb(224, 224, 224);
-}
+} */
 
 .registerButton {
     width: 100%;

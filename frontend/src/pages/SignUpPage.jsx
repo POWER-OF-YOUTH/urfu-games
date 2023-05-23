@@ -54,55 +54,69 @@ function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
     const handleFieldChange = (evt) => {
         setValues({ ...values, [evt.target.name]: evt.target.value });
     };
+
+    const clickChange = (evt) => {
+        console.log("скрыть");
+    };
+
     const handleSubmit = () => onSubmit(values);
 
     useEffect(() => onChange({ ...values }), [values]);
 
     return (
         <div className={styles.signUpForm}>
-            <Typography variant="h5" className={styles.title}>
-                Регистрация
-            </Typography>
             <div className={styles.signUpFormBody}>
                 <div className={styles.fieldsContainer}>
+                    <Typography variant="h5" className={styles.title}>
+                        Регистрация
+                    </Typography>
                     <TextField
                         id="filled-basic"
                         className={styles.field}
                         name="login"
-                        variant="outlined"
-                        label="LOGIN"
+                        variant="filled"
+                        InputProps={{ disableUnderline: true }}
+                        label="Логин"
                         onChange={handleFieldChange}
+                        onClick={clickChange}
+                        size="small"
                     />
                     <TextField
                         id="outlined-basic"
-                        variant="outlined"
+                        variant="filled"
                         className={styles.field}
                         name="email"
                         label="Email"
                         onChange={handleFieldChange}
+                        InputProps={{ disableUnderline: true }}
+                        size="small"
                     />
                     <TextField
                         id="outlined-basic"
                         className={styles.field}
-                        variant="outlined"
+                        variant="filled"
                         name="password"
-                        label="Пароль"
                         type="password"
+                        label="Пароль"
                         onChange={handleFieldChange}
+                        InputProps={{ disableUnderline: true }}
+                        size="small"
                     />
                     <TextField
                         id="outlined-basic"
                         className={styles.field}
-                        variant="outlined"
+                        variant="filled"
                         name="passwordRepeat"
-                        label="Повтор пароля"
+                        label="Повторите пароль"
                         type="password"
                         onChange={handleFieldChange}
+                        InputProps={{ disableUnderline: true }}
+                        size="small"
                     />
+                    <Button className={styles.registerButton} variant="contained" onClick={handleSubmit} style={{textTransform: 'none'}} >
+                        Регистрация
+                    </Button>
                 </div>
-                <Button className={styles.registerButton} variant="contained" onClick={handleSubmit}>
-                    Зарегистрироваться
-                </Button>
             </div>
         </div>
     );
