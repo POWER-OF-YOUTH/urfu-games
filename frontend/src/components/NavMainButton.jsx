@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./NavMainButton.module.css";
 import { Slide, Popper, Button, MenuList, MenuItem, ListItemIcon, ClickAwayListener, Menu } from "@mui/material";
 
-function NavMainButton({ text, className, href }) {
+function NavMainButton({ text, className, href, onClick }) {
     return (
         <div
             className={`
@@ -19,7 +19,7 @@ function NavMainButton({ text, className, href }) {
             //     heigh: "34px"
             // }}
         >
-            <div className={styles.btntext}><a className={styles.btnlink} href={href}>{text}</a></div> 
+            <div className={styles.btntext} onClick={onClick}><a className={styles.btnlink} href={href}>{text}</a></div> 
         </div>
     );
 }

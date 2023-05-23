@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-flow: column wrap;
-    align-items: flex-end;
+    flex-direction: column;
 }
 
 .sendButton {
@@ -9,5 +9,28 @@
 }
 
 .buttonsContainer {
-    margin-top: 10px;
+    margin: 20px 0 20px 0;
 }
+
+
+.searchInput{
+    /* width: 487px; */
+    max-height: 34px;
+    background-color: #F2F2F2;
+    color: #797979;
+    font-family: var(--main-font-family);
+    font-size: var(--main-font-size); 
+    border: 2px solid rgba(242, 242, 242, 1); 
+    border-radius: 8px;
+    padding: 6px 16px 6px 16px;
+    /* flex-grow: 30; */
+    text-transform: none;
+    white-space: nowrap;
+    width: 30vw;
+    
+    outline:none;
+}
+
+.searchInput:active{ 
+    color: #F2F2F2;
+  }

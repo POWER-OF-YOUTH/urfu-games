@@ -1,0 +1,157 @@
+@import "../styles/variables.css";
+
+:root {
+    --gamesSection-spacing: 10px;
+    --gamesSectionCaption-spacing: 10px;
+    --gamesGrid-minCardSize: 300px;
+    --carouselCard-width: 500px;
+}
+
+.leftSideLogo{
+    margin-left: 15px;
+    margin-right: 6px;
+    font-family: var(--logo-font-family);
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 55px;
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+.pageGrid {
+    display: grid;
+    grid-gap: var(--block-spacing);
+    min-height: 100%;
+    
+}
+
+.games {
+    width: 100%;
+}
+
+.GridBox{
+    display: grid;
+}
+
+.textLogin{
+    padding: 5px 0 0 0;
+    font-size: 20px;
+    --subtitle-font-weight: 600; 
+    --subtitletle-font-family: 'Open Sans', sans-serif;
+}
+
+.textUsual{
+    --main-font-family: "Open Sans", sans-serif;    
+    --main-font-size: 16px;
+    --main-font-weight: 400;
+    padding: 0px 0 20px 0;
+}
+
+
+.games__list {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--gamesGrid-minCardSize), 1fr));
+}
+
+.avatarImage {
+    width: 245px;
+    height: 245px;
+}
+
+.personTitle {
+    padding-left: 16px;
+    padding-bottom: 14px;
+
+}
+.gameTitle{
+    padding: 24px 0 20px 16px;
+}
+
+.avatarContainer {
+    width: 80px;
+    display: table-row;
+}
+
+.avatar {
+    padding: 10px;
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.infoContainer {
+    width: 100%;
+}
+
+
+.info {    
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cContainer {
+    width: 50%;
+    max-height: fit-content;
+    min-height: 60px;
+    margin: 10px;
+    flex: 0 0 47%;
+}
+
+.createdAndCompetenceTable {
+    width: 100%;
+}
+
+.cWrapper {
+    margin-top: 5px;
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    width: 100%;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    max-height: calc(100vh - 320px - 80px);
+}
+
+.cWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.cRow {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    min-width: 100%;
+}
+
+.cTitle {
+    margin: 0;
+    text-align: center;
+}
+
+.deleteButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    color: red;
+}
+
+.bnt{
+    display: flex;
+    padding: 0 14px 0 14px;
+}
+
+.gamesGrid {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--gamesGrid-minCardSize), 1fr));
+}
+
+.content {
+    display: grid;
+    grid-row-gap: 24px;
+    margin-bottom: 20px;
+}

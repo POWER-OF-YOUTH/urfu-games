@@ -27,7 +27,7 @@ function UnpublicatedGamesPage() {
                 <title>Неопубликованные игры</title>
             </Helmet>
             <PageLayout>
-                <PageTitle style={{margin: "20px 0"}}>Неопубликованные игры</PageTitle>
+                <h2>Неопубликованные игры</h2>
                 <div className={styles.gamesWrapper}>
                     <div className={styles.gamesSection}>
                         <div className={styles.gamesGrid}>

@@ -33,6 +33,8 @@ function Competence({ competence, enablePopup = false, size = "medium" }) {
 }
 
 const CompetenceContainer = styled("div")(({ color, size }) => ({
+    
+
     cursor: "pointer",
     height: "23px",
     display: "inline-block",

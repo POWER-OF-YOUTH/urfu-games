@@ -12,7 +12,7 @@
 
 @import "../styles/variables.css";
 
-header {
+.blockHeader {
     z-index: 99;
     position: fixed;
     display: flex;
@@ -21,10 +21,28 @@ header {
     background-color: white;
     width: 100%;
     height: var(--header-height);
+    flex-wrap: wrap;
     /* padding-top: 30px;
     padding-bottom: 42px; */
     /* box-shadow: var(--header-box-shadow); */
 }
+
+@media (max-width: 1440px) {
+    .logoContainer{   
+        margin-right: 30px;
+    }
+
+    .blockHeader {
+        display: flex;
+        justify-content: normal;
+        
+    }
+
+
+
+}
+
+
 
 .spacer {
     width: 100%;
@@ -36,6 +54,11 @@ header {
     width: 82px;
     
 } */
+
+.test{
+    margin-left: 20px;
+    margin-right: 20px;
+}
 
 .logoContainer {
     /* flex-grow: 2; */
@@ -82,9 +105,8 @@ header {
 }
 .userContainer {
     display: flex;
-    padding: 5px 10px;
     align-items: center;
-    margin-right: 5px;
+    margin-left: 15px;
     border-radius: 50px;
     transition: background 200ms linear;
 }
@@ -215,4 +237,6 @@ header {
 
 .navButton{
     display: flex;
+    justify-content: center;
+    align-items: center;
 }

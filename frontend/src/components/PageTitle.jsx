@@ -3,9 +3,9 @@ import classNames from "classnames";
 
 function PageTitle({ className, children, ...props }) {
     return (
-        <h1 className={classNames(className)} {...props}>
+        <span className={classNames(className)}  {...props}>
             {children}
-        </h1>
+        </span>
     );
 }
 

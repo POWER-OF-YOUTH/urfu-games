@@ -17,6 +17,7 @@ import { CompetenciesStore } from "../models/competence";
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 import { useStore } from "../hooks";
+import GameSliderBlock from "../components/GameSliderBlock";
 
 function GamesPage() {
     const store = useStore();
@@ -48,6 +49,11 @@ function GamesPage() {
                             <div className={styles.gamesSectionCaptionWrapper}>
                                 <h2 className={styles.gamesSectionCaption}>Популярные игры</h2>
                             </div>
+                            {/* <div>                                
+                                { games.array().map((game) => (                                    
+                                    <GameSliderBlock key={1} className={styles.carouselCard} game={game} />
+                                ))}
+                            </div> */}
                             <GamesCardsCarousel>
                                 { games.array().map((game, i) => (
                                     <GameCard key={i} className={styles.carouselCard} game={game} />

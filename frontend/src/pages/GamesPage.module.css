@@ -11,6 +11,7 @@
     display: grid;
     grid-gap: var(--block-spacing);
     min-height: 100%;
+    grid-column-gap: 90px;
 }
 
 .titleText {
@@ -22,21 +23,22 @@
 
 @media (min-width: 1000px) {
     .pageGrid {
-        grid-template-columns: 220px 1fr;
+        grid-template-columns: 298px 1fr;
     }
 }
 
 .sideBar {
     display: flex;
     gap: 10px;
-    flex-flow: column nowrap;    
+    flex-flow: column nowrap;  
+    margin-left: 68px;  
 }
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) {
     .sideBar {
         order: 99;
     }
-}
+} */
 
 .competenciesList {
     position: sticky;
@@ -58,10 +60,10 @@
 }
 
 .gamesSectionCaptionWrapper {
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
     margin-bottom: var(--gamesSectionCaption-spacing);
-    font-family: var(--title-font-family);
+    font-family: var(--title-font-family); */
 
 
 }
@@ -72,7 +74,7 @@
 
 .gamesGrid {
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(var(--gamesGrid-minCardSize), 1fr));
 }
 

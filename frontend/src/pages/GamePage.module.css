@@ -14,6 +14,40 @@
 
 @import "../styles/variables.css";
 
+
+.pageGrid {
+    display: grid;
+    grid-gap: var(--block-spacing);
+    min-height: 100%;    
+}
+
+.titleText {
+    font-weight: 600;
+    font-size: 16px;
+    font-family: var(--main-font-family);
+    padding: 10px 0px 0px 45px;    
+}
+
+@media (min-width: 1000px) {
+    .pageGrid {
+        grid-template-columns: 280px 1fr;
+    }
+}
+
+.sideBar {
+    display: flex;
+    gap: 10px;
+    flex-flow: column nowrap;   
+    padding-left: 68px;
+     
+}
+.competenciesList {
+    position: sticky;
+    top: 0;
+    background-color: #F2F2F2;
+    border-radius: 20px;     
+}
+
 .wrapper {
     display: flex;
     max-width: var(--wrapper-max-width);
@@ -22,18 +56,19 @@
 }
 
 .contentWrapper {
-    padding: 60px;
+    padding-left: 90px;
 }
 
 .content {
     display: grid;
-    row-gap: 20px;
+    grid-row-gap: 24px;
+    margin-bottom: 20px;
 }
 
 .topBlock {
     display: grid;
-    grid-template-columns: 520px minmax(0, 340px);
-    grid-column-gap: 20px;
+    grid-template-columns: 520px minmax(0, 240px);
+    grid-column-gap: 90px;
     height: fit-content;
     overflow-wrap: break-word;
 }
@@ -42,7 +77,15 @@
     color: var(--caption-color);
 }
 
-.cover {
+/* .cover {
+} */
+
+.button{
+    width: 200px;
+}
+
+.addButton{
+    width: 244px;
 }
 
 .cover img {
@@ -62,10 +105,25 @@
     gap: 5px;
 }
 
+.contentGrid{
+    display: grid;
+}
+
 .ratingContainer {
     display: flex;
-    align-items: center;
-    margin-top: auto;
+    
+}
+
+
+.gameTitle{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 24px;
+    font-family: var(--title-font-family);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);;
+
 }
 
 .ratingContainer .rating:nth-child(1) {
@@ -74,6 +132,7 @@
 
 .ratingCaption {
     margin-left: 10px;
+    padding-top: 24px;
 }
 
 .gameButtonsContainer {
@@ -104,15 +163,21 @@
 }
 
 .blockCaption {
-    color: var(--block-caption-color);
-    font-family: var(--caption-font);
-    font-size: var(--caption-font-size);
-    font-weight: bold;
+    color: var(--black-color);
+    font-family: var(--main-font-family);
+    font-size: var(--main-font-size);
+    font-weight: var(--main-font-weight);;
     margin: 0;
-    margin-bottom: 5px;
 }
 
-.descriptionContainer {
+/* .descriptionContainer {
+} */
+
+.blockSubtitile{
+    --subtitle-font-size: 16px;
+    --subtitle-font-weight: 600;
+    --subtitletle-font-family: 'Open Sans', sans-serif;
+    color: black;
 }
 
 .description {
@@ -120,6 +185,15 @@
     overflow-wrap: break-word;
     text-overflow: ellipsis;
 }
+
+
+.gameContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+} 
 
 .name {
     position: relative;
@@ -136,6 +210,7 @@
 
 @media (max-width: 1000px) {
     .content {
+        height: 100%;
     }
     .contentWrapper {
         padding: 0;
@@ -152,14 +227,17 @@
         margin-top: 20px;
         flex-basis: initial;
     }
+    .blockProfile{
+        display: flex;
+        justify-content: center;
+        padding-bottom: 20px;
+    }
+
     .name {
         line-height: initial;
     }
     .ratingContainer { 
-        position: absolute;
-        left: 18px;
-        margin: 0;
-        margin-top: 30px;
+        padding-bottom: 20px;
     }
     .ratingCaption {
         margin-left: 0;
@@ -168,8 +246,8 @@
     .gameButtonContainerPlay {
         display: none;
     }
-    .gameButtonsContainer {
-    }
+    /* .gameButtonsContainer {
+    } */
     .middle {
         padding: 20px;
     }

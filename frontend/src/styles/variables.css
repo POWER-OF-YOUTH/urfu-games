@@ -9,16 +9,17 @@
     /* Logo */
     --logo-color: white;
     --logo-font-family: "Nunito";
-    --logo-font-size: 32px;
-    --main-font-weight: normal;
+    --logo-font-size: 32px;    
     --text-font-size: 16px;
     --block-box-shadow: 0 0 10px -5px black;
     --block-color: white;
     --block-padding: 10px;
     --block-spacing: 10px;
     --block-border-radius: 5px;
+    /* Usual text */
     --main-font-family: "Open Sans", sans-serif;    
     --main-font-size: 16px;
+    --main-font-weight: 400;
     --page-width: 1000px;
     --page-padding: 60px;
     --menu-font-size: 16px;
@@ -27,12 +28,18 @@
     --title-font-size: 24px;
     --title-font-weight: 600; 
     --title-font-family: 'Open Sans', sans-serif;
+    /* Subtitle */
+    --subtitle-font-size: 16px;
+    --subtitle-font-weight: 600; 
+    --subtitletle-font-family: 'Open Sans', sans-serif;
+
     /* Colors */
     /* --grey-color: #D9D9D9; */
     --grey-color: #F2F2F2;
     --main-disabled-color: #797979;
     --add-disabled-color: #dadada;
     --main-color : #0463EA;
+    --black-color: #0000;    
 }
 
 h1 {
@@ -41,10 +48,12 @@ h1 {
     font-size: 24px;
 }
 h2 {
+    margin: 0;
+    padding: 0;
     font-size: 24px;
     font-weight: 600;
     font-family: 'Open Sans', sans-serif;
-    
+    color: black;    
 }
 p{
     text-decoration: none;

@@ -7,6 +7,9 @@ import {
 } from "@mui/material";
 
 import styles from "./CommentForm.module.css";
+import NavButton from "../NavButton";
+import NavMainButton from "../NavMainButton";
+import NavDeleteButton from "../NavDeleteButton";
 
 function CommentForm({ onSubmit }) {
     const inputRef = React.useRef(null);
@@ -31,27 +34,14 @@ function CommentForm({ onSubmit }) {
         <div className={styles.container}>
             <TextField
                 id="outlined-multiline-static"
-                placeholder="Оставьте комментарий"
-                style={{width: "100%"}}
+                placeholder="Введите текст комментария"
+                style={{width: "75%", backgroundColor: "#F2F2F2", outline: 0}}
                 rows={2}
                 inputRef={inputRef}
                 multiline
             />
-            <div className={styles.buttonsContainer}>
-                <IconButton 
-                    className={styles.cancelButton} 
-                    variant="contained" 
-                    onClick={handleClearButtonClick}
-                >
-                    <DeleteIcon />
-                </IconButton>
-                <Button 
-                    className={styles.sendButton} 
-                    variant="contained"
-                    onClick={handleSendButtonClick}
-                >
-                    Отправить
-                </Button>
+            <div className={styles.buttonsContainer}>               
+                <NavMainButton  onClick={handleSendButtonClick} text={"Отправить"}></NavMainButton>
             </div>
         </div>
     );

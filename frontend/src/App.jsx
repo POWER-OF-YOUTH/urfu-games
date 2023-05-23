@@ -12,6 +12,8 @@ import GamePage from "./pages/GamePage";
 import PlayPage from "./pages/PlayPage";
 import GamePublishPage from "./pages/GamePublishPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import LibraryPage from "./pages/LibraryPage";
+import ProjectPage from "./pages/ProjectPage";
 import { NotFoundPage } from "./pages/error";
 import { MainLayout } from "./layouts";
 import useStore from "./hooks/useStore";
@@ -40,7 +42,7 @@ function App() {
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/signin" component={SignInPage} />
                     <Route exact path="/signup" component={SignUpPage} />
-                    <Route exact path="/games" component={GamesPage} />
+                    <Route exact path="/games" component={GamesPage} />              
                     <Route exact path="/games/new">
                         <GamePublishPage history={history} />
                     </Route>
@@ -48,11 +50,13 @@ function App() {
                         <UnpublicatedGamesPage history={history} />
                     </Route>
                     <Route exact path="/games/:gameId" component={GamePage} />
-                    <Route exact path="/games/:gameId/play" component={PlayPage} />
+                    <Route exact path="/games/:gameId/play" component={PlayPage} />               
                     <Route exact path="/users/:userId">
-                        <UserProfilePage history={history} />
+                        <UserProfilePage history={history}/>
                     </Route>
                     <Route exact path="/404" component={NotFoundPage} />
+                    <Route exact path="/project" component={ProjectPage} />      
+                    <Route exact path="/library" component={LibraryPage} /> 
                 </Switch>
             </MainLayout>
         </Router>

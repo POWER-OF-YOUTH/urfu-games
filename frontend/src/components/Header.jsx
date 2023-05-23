@@ -77,7 +77,7 @@ function Header({ variant = "standard" }) {
     return (
         <>
             <div className={styles.spacer}>
-                <header>
+                <div className={styles.blockHeader}>
                     <Logo />
                     {/* <Autocomplete className={styles.search}                        
                         id="free-solo-demo"
@@ -87,7 +87,7 @@ function Header({ variant = "standard" }) {
                         renderInput={(params) => <TextField {...params} variant="standard" sx={{ height: '34px'}} label="калич"/>}
                         // renderInput={(params) => <TextField sx={{ }} {...params} label="Поиск" />}
                     /> */}
-                    <div className={styles.seatch}>
+                    <div className={styles.search}>
                         <form className={styles.searchForm}>
                             <input  
                                 type="text"
@@ -101,7 +101,7 @@ function Header({ variant = "standard" }) {
                         <NavMainButton text={'Найти'} className={styles.test}> </NavMainButton> <></>
                         {
                             auth.authenticated ? 
-                                <NavButton text={'Стать разработчиком'} href={"/games/new "}  > </NavButton> :<></>
+                                <NavButton text={'Стать разработчиком'} href={"/games/new "}  className={styles.createrButton}> </NavButton>:<></>
                                 // <NavMainButton text={"Стать разработчиком"}></NavMainButton>:<></>
                             // <Button  className={styles.developerButton} variant="outlined" style={{textTransform: 'none', color: 'black', fontWeight: 'bold', borderRadius: '8px', border: '2px solid rgba(4, 99, 234, 1)'}}>Стать разработчиком</Button>: <></>
                         }
@@ -151,7 +151,7 @@ function Header({ variant = "standard" }) {
                             <MenuItem onClick={handleLogoutClick}>Выйти</MenuItem>
                         </Menu>
                     </div>
-                </header>
+                </div>
             </div>
         </>
     );
@@ -162,12 +162,12 @@ function Logo() {
 
     return (
         <div className={styles.logoContainer}>
-            <Link to="/" className={styles.leftSideLogo}>
+            <a href={"/"} className={styles.leftSideLogo}>
                 {isMobile ? "U" : "UrFU"}
-            </Link>
-            <Link to="/" className={styles.rightSideLogo}>
+            </a>
+            <a href={"/"} className={styles.rightSideLogo}>
                 {isMobile ? "G" : "Games"}
-            </Link>
+            </a>
         </div>
     );
 }

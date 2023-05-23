@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Rating as MUIRating } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Star from "../components/svg/Star.svg";
 import styles from "./GameCard.module.css";
+import Competence from "../components/Competence";
+import CompetenciesList from "../components/CompetenciesList";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useStore } from "../hooks";
+
+// const store = useStore();
+// const competencies = useLocalObservable(() => CompetenciesStore.create());
+
+// useEffect(() => {
+//     game.load().catch(err => console.error(err));
+//     competencies.load().catch(err => console.error(err));
+// }, []);
+
 
 function GameCard({ className = "", game }) {
     return (
@@ -14,10 +27,10 @@ function GameCard({ className = "", game }) {
                     <div className={styles.blockTitle}>
                         <span className={styles.blockName}>{game.name}</span> 
                     </div>
-                    <div className={styles.blockCompetence}>                        
-                        <span className={styles.blockText}>Математика</span>
-                        <span className={styles.blockText}>Геометрия</span>
-                        <span className={styles.blockText}>Пространственное мышление</span> 
+                    <div className={styles.blockCompetence}>
+                        <span className={styles.blockText}>
+                            123qwerty                            
+                        </span>
                     </div>
                     <div className={styles.infoWrapper}>
                         <div className={styles.ratingContainer}>
@@ -43,4 +56,4 @@ const Rating = styled(MUIRating)({
     },
 });
 
-export default GameCard;
+export default observer(GameCard);

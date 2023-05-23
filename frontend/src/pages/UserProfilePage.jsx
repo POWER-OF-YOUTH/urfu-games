@@ -11,6 +11,9 @@ import GameCard from "../components/GameCard";
 import { GamesStore } from "../models/game";
 import Competence from "../components/Competence";
 import { Button } from "@mui/material";
+import PhotoProfile from "../components/images/BigPhotoProfile.png";
+import NavMainButton from "../components/NavMainButton";
+import NavButton from "../components/NavButton";
 
 function UserProfilePage({ history }) {
 
@@ -26,7 +29,7 @@ function UserProfilePage({ history }) {
 
     const renderGames = useCallback((games) => (
         <div className={styles.games}>
-            <h2>Загруженные игры</h2>
+            <h2 className={styles.gameTitle}>Последние запущеные игры</h2>
             <div className={styles.games__list}>
                 {games.map((g, i) =>
                     (<GameCard key={i} game={g} />)
@@ -55,7 +58,8 @@ function UserProfilePage({ history }) {
             {
                 user.loaded && (
                     <PageLayout>
-                        <PageTitle style={{margin: "20px 0"}}>{`Профиль пользователя ${user.login}`}</PageTitle>
+                        <h2 className={styles.personTitle}>{`Аккаунт пользователя ${user.login}`}
+                        </h2>
                         <div className={styles.personInfoLabel}>
                             {
                                 1 === 0 && auth.user && auth.user.isAdmin() && (
@@ -66,30 +70,31 @@ function UserProfilePage({ history }) {
                                         }}>Удалить</Button>
                                     </div>
                                 )
-                            }
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td className={styles.avatarContainer}>
-                                            <div className={styles.avatar}>
-                                                <img src={user.avatar} className={styles.avatarImage} />
-                                            </div>
-                                        </td>
-                                        <td className={styles.infoContainer}>
-                                            <div className={styles.info}>
-                                                <div>Email: {user.email}</div>
-                                                <div>Login: {user.login}</div>
-                                                <div>ФИО: {user.surname == null ? "" : user.surname} {user.name == null ? "" : user.name} {user.patronymic == null ? "" : user.patronymic}</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            }                            
                         </div>
+                        <div className={styles.GridBox}> 
 
-                        {gamesStore.array().length > 0 && renderGames(gamesStore.array())}
-                        {competencies.length > 0 && renderCompetencies(competencies)}
-
+                            <div>
+                                <img src={user.avatar} className={styles.avatarImage} />
+                            </div>    
+                            <div>
+                                <div className={styles.textLogin}>Login: {user.login}</div>
+                                <div className={styles.textUsual}>Email: {user.email}</div>
+                                <div className={styles.textUsual}>ФИО: {user.surname == null ? "" : user.surname} {user.name == null ? "" : user.name} {user.patronymic == null ? "" : user.patronymic}</div>
+                                <div className={styles.btn}>
+                                    <p>
+                                        <NavButton  text={"Редактировать"}></NavButton>
+                                    </p>
+                                    <p>
+                                        <NavButton  text={"Сменить пароль"}></NavButton>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            {gamesStore.array().length > 0 && renderGames(gamesStore.array())}
+                            {competencies.length > 0 && renderCompetencies(competencies)}
+                        </div>
                     </PageLayout>
                 )
             }
