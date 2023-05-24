@@ -193,12 +193,13 @@ function GamePublishFormField({
     );
 }
 
+
 const PublishButton = styled(Button)({
-    backgroundColor: "#B0FF9D",
-    color: "black",
+    backgroundColor: "#0463EA",
+    color: "white",
     boxShadow: "none",
     "&:hover": {
-        backgroundColor: "#B0FF9D",
+        backgroundColor: "#4D96FF",
         boxShadow: "none",
     },
 });

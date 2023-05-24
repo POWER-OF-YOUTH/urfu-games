@@ -65,8 +65,7 @@ function CompetenciesSelector({
                 />
                 <div className={styles.newButtonContainer}>
                     <NewCompetenceButton
-                        variant="contained"
-                        color="success"
+                        variant="contained"                        
                         onClick={handleNewCompetenceButtonClick}
                     >
                         <AddIcon />

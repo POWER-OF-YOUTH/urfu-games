@@ -29,7 +29,7 @@ function GameCard({ className = "", game }) {
                     </div>
                     <div className={styles.blockCompetence}>
                         <span className={styles.blockText}>
-                            123qwerty                            
+                            Логика Комбинаторика                           
                         </span>
                     </div>
                     <div className={styles.infoWrapper}>
