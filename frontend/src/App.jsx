@@ -55,7 +55,7 @@ function App() {
                         <UserProfilePage history={history}/>
                     </Route>
                     <Route exact path="/404" component={NotFoundPage} />
-                    <Route exact path="/project" component={ProjectPage} />      
+                    <Route exact path="/project/:userId" component={ProjectPage} />      
                     <Route exact path="/library" component={LibraryPage} /> 
                 </Switch>
             </MainLayout>

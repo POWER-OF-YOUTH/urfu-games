@@ -41,6 +41,15 @@
     vertical-align: super
     
 }
+
+.textGroup{
+    font-size: var(--main-font-size);
+    font-family: var(--main-font-family);
+    padding: 0px 20px 20px 20px;
+    vertical-align: super
+    
+}
+
 .coverBlock{
     background-color: #F2F2F2;
 }
@@ -59,10 +68,3 @@
     
     
   }
-  .cover:hover:not(.disabled) {
-    
-    border-left: 3px solid #0463EA;
-    
-    
-  }
-  

@@ -9,8 +9,11 @@ import * as progressAPI from "../utils/api/progressAPI";
 import Block from "../components/Block";
 import { Game } from "../models/game";
 import { useStore } from "../hooks";
-
+import leftArrow from "../components/svg/leftArrow.svg";
 import styles from "./PlayPage.module.css";
+import NavMainButton from "../components/NavMainButton";
+import NavButton from "../components/NavButton";
+import Header from "../components/Header";
 
 const defaultProgress = { data: "" };
 
@@ -86,12 +89,9 @@ function PlayPage() {
             <Helmet>
                 <title>{game.loaded ? `${game.name} | Играть` : "Загурзка"}</title>
             </Helmet>
+            <Header/>
             <main className={styles.content}>
-                <NavLink className={styles.back} to={`/games/${params.gameId}`}>
-                    <Button size="large">
-                        Назад
-                    </Button>
-                </NavLink>
+                <NavButton className={styles.back} text={"назад"} href={`/games/${params.gameId}`}></NavButton>            
                 <Block className={styles.gameBlock}>
                     {!gameDownloaded && (
                         <p>{`Загрузка ${Math.round(gameDownloadingProgress * 100)}%...`}</p>

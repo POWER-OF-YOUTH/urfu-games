@@ -6,10 +6,9 @@ import styles from "./MainLayout.module.css";
 
 function MainLayout({ children }) {
     return (
-        <>
-            <Header />
+        <>            
             <div className={styles.wrapper}>
-                {children}
+                {children}                
             </div>
         </>
     );

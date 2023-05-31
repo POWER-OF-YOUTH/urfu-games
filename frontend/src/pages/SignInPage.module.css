@@ -50,3 +50,8 @@
 .alert {
     margin-top: 20px;
 }
+
+.title {
+    align-content: center;
+    text-align: center;
+}

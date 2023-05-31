@@ -228,6 +228,20 @@
     outline:none;
 }
 
+.autocomplete{
+    /* width: 100%; */
+    background-color: #F2F2F2;
+    position: absolute;
+    width: 30vw;        
+    margin: 0;
+    padding-bottom: 50px;
+    list-style: 0;
+    
+    
+    
+    
+}
+
 .searchInput:active{ 
     color: #F2F2F2;
   }

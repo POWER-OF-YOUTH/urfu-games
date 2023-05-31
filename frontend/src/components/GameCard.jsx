@@ -18,7 +18,18 @@ import { useStore } from "../hooks";
 // }, []);
 
 
+
 function GameCard({ className = "", game }) {
+
+    // const { auth }  = useStore();
+   
+    // const competencies = useLocalObservable(() => CompetenciesStore.create());
+
+    // useEffect(() => {
+        
+    //     competencies.load().catch(err => console.error(err));
+    // }, []);
+
     return (
         <div className={`${styles.card} ${className}`}>
             <div  className={styles.banner}>
@@ -29,7 +40,7 @@ function GameCard({ className = "", game }) {
                     </div>
                     <div className={styles.blockCompetence}>
                         <span className={styles.blockText}>
-                            Логика Комбинаторика                           
+                            {game.competencies.map((c, i) => (<p key={c.id}>{c.name}</p>))}                            
                         </span>
                     </div>
                     <div className={styles.infoWrapper}>

@@ -9,44 +9,56 @@ import styles from "./ProjectPage.module.css";
 import PageLayout from "../layouts/PageLayout";
 import GameCard from "../components/GameCard";
 import Competence from "../components/Competence";
+import { GamesStore } from "../models/game";
 import { Button } from "@mui/material";
 import PhotoProfile from "../components/images/BigPhotoProfile.png";
 import NavMainButton from "../components/NavMainButton";
 import NavButton from "../components/NavButton";
-import { CompetenciesStore } from "../models/competence";
-import { GamesStore } from "../models/game";
-import Block from "../components/Block";
+import Header from "../components/Header";
+
 
 function ProjectPage({ history }) {
-    const store = useStore();
-    const games = useLocalObservable(() => GamesStore.create());
-    const competencies = useLocalObservable(() => CompetenciesStore.create());
 
-    useEffect(() => {
-        games.load().catch(err => console.error(err));
-        competencies.load().catch(err => console.error(err));
-    }, []);
+    const { userId } = useParams();
+    const { auth } = useStore();
 
-    // Библиотека
+    const user = useLocalObservable(() => User.create({ id: userId }));
+    useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
+    const gamesStore = useLocalObservable(() => GamesStore.create());
+    useEffect(() => { gamesStore.loadForUser(userId).catch(err => console.error(err)); }, []);
+   
+
+    const renderGames = useCallback((games) => (
+        <div className={styles.games}>            
+            <div className={styles.games__list}>
+                {games.map((g, i) =>
+                    (<GameCard key={i} game={g} />)
+                )}
+            </div>
+        </div>
+    ), []);
+
+    
+
     return (
         <>
             <Helmet>
                 <title></title>
             </Helmet>
+            <Header/>
             <PageLayout>
                 <h2 className={styles.personTitle}>{"Мои проекты"}</h2>
                 {/* <div className={styles.gamesGrid}>
                     {games.array().map((game, i) => <GameCard key={i} game={game} />)} 
                 </div> */}
-                <div  className={styles.gamesGrid}>
-                    {games.array().map((game, i) => <GameCard key={i} game={game} />)} 
+                <div >
+                    {gamesStore.array().length > 0 && renderGames(gamesStore.array())}  
                 </div>
-            </PageLayout>
-            <Block className={styles.content}>
+            </PageLayout>           
 
-            </Block>
+            
             {/* <div className={styles.gamesGrid}>
-                {games.array().map((game, i) => <GameCard key={i} game={game} className={styles.gamesSyle} />)} 
+                {gamesStore.array().length > 0 && renderGames(gamesStore.array())}  
             </div> */}
         </>
     );

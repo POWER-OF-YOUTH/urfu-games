@@ -16,6 +16,7 @@ import NavButton from "../components/NavButton";
 import { CompetenciesStore } from "../models/competence";
 import { GamesStore } from "../models/game";
 import Block from "../components/Block";
+import Header from "../components/Header";
 
 function LibraryPage({ history }) {
     const store = useStore();
@@ -33,6 +34,7 @@ function LibraryPage({ history }) {
             <Helmet>
                 <title></title>
             </Helmet>
+            <Header/>
             <PageLayout>
                 <h2 className={styles.personTitle}>{"Библиотека"}</h2>
                 {/* <div className={styles.gamesGrid}>

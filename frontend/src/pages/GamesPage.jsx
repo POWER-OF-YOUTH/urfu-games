@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
@@ -8,16 +8,17 @@ import { Helmet } from "react-helmet";
 
 import Block from "../components/Block";
 import GameCard from "../components/GameCard";
+import Header from "../components/Header";
 import Competence from "../components/Competence";
 import CompetenciesList from "../components/CompetenciesList";
 import { GamesStore } from "../models/game";
 import { CompetenciesStore } from "../models/competence";
 
-
 import "flickity/css/flickity.css";
 import styles from "./GamesPage.module.css";
 import { useStore } from "../hooks";
 import GameSliderBlock from "../components/GameSliderBlock";
+import FilterSelector from "../components/FilterSelector";
 
 function GamesPage() {
     const store = useStore();
@@ -25,18 +26,25 @@ function GamesPage() {
     const competencies = useLocalObservable(() => CompetenciesStore.create());
 
     useEffect(() => {
-        games.load().catch(err => console.error(err));
-        competencies.load().catch(err => console.error(err));
+        games.load().catch((err) => console.error(err));
+        competencies.load().catch((err) => console.error(err));
     }, []);
+
+    const [value, setValue] = useState('');
+
+    const filtredGame = games.array().filter((game) => {
+        return game.name.toLowerCase().includes(value.toLowerCase());
+    });
 
     return (
         <>
             <Helmet>
                 <title>Игры</title>
             </Helmet>
+            <Header onChange={(event) => setValue(event.target.value)}></Header>
             <div className={styles.pageGrid}>
                 <div className={styles.sideBar}>
-                    <span className={styles.titleText} >Навигация</span>
+                    <span className={styles.titleText}>Навигация</span>
                     <CompetenciesList className={styles.competenciesList}>
                         {competencies.array().map((c, i) => (
                             <Competence key={i} competence={c} enablePopup />
@@ -55,7 +63,7 @@ function GamesPage() {
                                 ))}
                             </div> */}
                             <GamesCardsCarousel>
-                                { games.array().map((game, i) => (
+                                {games.array().map((game, i) => (
                                     <GameCard key={i} className={styles.carouselCard} game={game} />
                                 ))}
                             </GamesCardsCarousel>
@@ -64,8 +72,11 @@ function GamesPage() {
                             <div className={styles.gamesSectionCaptionWrapper}>
                                 <h2 className={styles.gamesSectionCaption}>Все игры</h2>
                             </div>
+                            {/* <FilterSelector></FilterSelector> */}
                             <div className={styles.gamesGrid}>
-                                {games.array().map((game, i) => <GameCard key={i} game={game} />)} 
+                                {filtredGame.map((game, i) => (
+                                    <GameCard key={i} game={game} />
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -76,7 +87,7 @@ function GamesPage() {
 }
 
 const AddGameButton = styled(Button)({
-    width: "100%"
+    width: "100%",
 });
 
 function GamesCardsCarousel({ children }) {
@@ -91,11 +102,7 @@ function GamesCardsCarousel({ children }) {
         cellAlign: "center",
     };
 
-    return (
-        <Flickity options={flickityOptions}>
-            {children}
-        </Flickity>
-    );
+    return <Flickity options={flickityOptions}>{children}</Flickity>;
 }
 
 export default observer(GamesPage);

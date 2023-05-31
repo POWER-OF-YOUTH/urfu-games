@@ -8,12 +8,13 @@ import { useStore } from "../hooks";
 import styles from "./UserProfilePage.module.css";
 import PageLayout from "../layouts/PageLayout";
 import GameCard from "../components/GameCard";
-import { GamesStore } from "../models/game";
 import Competence from "../components/Competence";
+import { GamesStore } from "../models/game";
 import { Button } from "@mui/material";
 import PhotoProfile from "../components/images/BigPhotoProfile.png";
 import NavMainButton from "../components/NavMainButton";
 import NavButton from "../components/NavButton";
+import Header from "../components/Header";
 
 function UserProfilePage({ history }) {
 
@@ -24,12 +25,11 @@ function UserProfilePage({ history }) {
     useEffect(() => { user.load(userId).catch(err => console.error(err)); }, []);
     const gamesStore = useLocalObservable(() => GamesStore.create());
     useEffect(() => { gamesStore.loadForUser(userId).catch(err => console.error(err)); }, []);
-
-    const competencies = [];
+   
 
     const renderGames = useCallback((games) => (
         <div className={styles.games}>
-            <h2 className={styles.gameTitle}>Последние запущеные игры</h2>
+            <h2 className={styles.gameTitle}>Загруженные игры</h2>
             <div className={styles.games__list}>
                 {games.map((g, i) =>
                     (<GameCard key={i} game={g} />)
@@ -37,16 +37,8 @@ function UserProfilePage({ history }) {
             </div>
         </div>
     ), []);
-    const renderCompetencies = useCallback((competencies) => (
-        <div>
-            <h2>Компетенции</h2>
-            <div className={styles.cWrapper}>
-                {competencies.map((c) => (
-                    <Competence key={c.id} competence={c} enablePopup={true} />
-                ))}
-            </div>
-        </div>
-    ), []);
+
+    
 
     return (
         <>
@@ -55,6 +47,7 @@ function UserProfilePage({ history }) {
                     {user.loaded ? `${user.login} | Профиль` : "Загрузка"}
                 </title>
             </Helmet>
+            <Header/>
             {
                 user.loaded && (
                     <PageLayout>
@@ -81,19 +74,21 @@ function UserProfilePage({ history }) {
                                 <div className={styles.textLogin}>Login: {user.login}</div>
                                 <div className={styles.textUsual}>Email: {user.email}</div>
                                 <div className={styles.textUsual}>ФИО: {user.surname == null ? "" : user.surname} {user.name == null ? "" : user.name} {user.patronymic == null ? "" : user.patronymic}</div>
-                                <div className={styles.btn}>
-                                    <p>
-                                        <NavButton  text={"Редактировать"}></NavButton>
-                                    </p>
-                                    <p>
-                                        <NavButton  text={"Сменить пароль"}></NavButton>
-                                    </p>
-                                </div>
+                                
+                                {auth.authenticated &&  (
+                                    <div className={styles.btn}>
+                                        <p>
+                                            <NavButton  text={"Редактировать"}></NavButton>
+                                        </p>
+                                        <p>
+                                            <NavButton  text={"Сменить пароль"}></NavButton>
+                                        </p>
+                                    </div>               
+                                )}     
                             </div>
                         </div>
                         <div>
-                            {gamesStore.array().length > 0 && renderGames(gamesStore.array())}
-                            {competencies.length > 0 && renderCompetencies(competencies)}
+                            {gamesStore.array().length > 0 && renderGames(gamesStore.array())}                            
                         </div>
                     </PageLayout>
                 )

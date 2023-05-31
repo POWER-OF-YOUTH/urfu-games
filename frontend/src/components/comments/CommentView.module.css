@@ -60,10 +60,9 @@
     justify-content: right;
 }
 
-.cancelButton {
-}
+/* .cancelButton {
+} */
 
-.saveButton {
-    background-color: green !important;
+.saveButton {    
     margin-left: 10px !important;
 }

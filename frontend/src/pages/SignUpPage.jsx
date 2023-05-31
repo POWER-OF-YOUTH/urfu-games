@@ -116,7 +116,7 @@ function SignUpForm({ onSubmit = (f) => f, onChange = (f) => f }) {
                         InputProps={{ disableUnderline: true }}
                         size="small"
                     />
-                    <NavMainButton text={"Регистрация"} href={"/signup"}></NavMainButton>
+                    <NavMainButton text={"Регистрация"} onClick={handleSubmit}></NavMainButton>
                     {/* <NavButton text={"Регистрация"} href={"/signup"}></NavButton> */}
                 </div>
             </div>

@@ -12,6 +12,7 @@ import { GamesStore } from "../models/game";
 
 import styles from "./UnpublicatedGamesPage.module.css";
 import { useStore } from "../hooks";
+import Header from "../components/Header";
 
 function UnpublicatedGamesPage() {
     const store = useStore();
@@ -25,7 +26,8 @@ function UnpublicatedGamesPage() {
         <>
             <Helmet>
                 <title>Неопубликованные игры</title>
-            </Helmet>
+            </Helmet>            
+            <Header/>
             <PageLayout>
                 <h2>Неопубликованные игры</h2>
                 <div className={styles.gamesWrapper}>

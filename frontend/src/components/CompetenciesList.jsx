@@ -50,7 +50,7 @@ function CompetenciesList({ className = "", children }) {
 
                 {auth.authenticated && (
                     <div className={styles.coverBlock}>
-                        <a className={styles.coverlink} href={"/project"}><img src={IconSettings} className={styles.cover}></img>
+                        <a className={styles.coverlink} href={"/project/" + auth.user.id }><img src={IconSettings} className={styles.cover}></img>
                             <span className={styles.coverText}>Мои проекты</span>
                         </a>                     
                     </div>        
@@ -64,8 +64,8 @@ function CompetenciesList({ className = "", children }) {
                 )}
                 {auth.authenticated && (
                     <div className={styles.coverBlock}>
-                        <a className={styles.coverlink} href={"/games/unpublicated"}><img src={IconGroup} className={styles.cover}></img>
-                            <span className={styles.coverText}>Группы</span>
+                        <a className={styles.coverlink} href={"/404"}><img src={IconGroup} className={styles.cover}></img>
+                            <span className={styles.textGroup}>Группы</span>
                         </a>      
                     </div>                
                 )}

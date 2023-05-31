@@ -19,6 +19,8 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../hooks";
 
 import styles from "./CommentView.module.css";
+import NavMainButton from "../NavMainButton";
+import NavButton from "../NavButton";
 
 function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
     const { auth } = useStore();
@@ -78,17 +80,19 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
     );
     const menuBlock = (
         <div>
-            <IconButton
-                className={styles.moreButton}
-                size="small"
-                id="basic-button"
-                aria-controls="basic-menu"
-                aria-haspopup="true"
-                aria-expanded={isMenuOpen ? "true" : undefined}
-                onClick={handleMenuButtonClick}
-            >
-                <MoreHorizIcon className={styles.moreIcon}/>
-            </IconButton>
+            { auth.authenticated && auth.user.id == comment.author.id || auth.user.isAdmin()
+                ?  <IconButton
+                    className={styles.moreButton}
+                    size="small"
+                    id="basic-button"
+                    aria-controls="basic-menu"
+                    aria-haspopup="true"
+                    aria-expanded={isMenuOpen ? "true" : undefined}
+                    onClick={handleMenuButtonClick}>
+                    <MoreHorizIcon className={styles.moreIcon}/>
+                </IconButton>
+                : <></>
+            }           
             <Menu
                 id="basic-menu"
                 anchorEl={menuAnchorElement}
@@ -138,7 +142,7 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
                     autoFocus
                 />
                 <div className={styles.buttonsContainer}>
-                    <Button
+                    {/* <Button
                         className={styles.cancelButton}
                         variant="contained"
                         onClick={handleCancelButtonClick}
@@ -151,7 +155,9 @@ function CommentView({ comment, onUpdate = f => f, onDelete = f => f }) {
                         onClick={handleSaveButtonClick}
                     >
                         Сохранить
-                    </Button>
+                    </Button> */}
+                    <NavMainButton text={"Отменить"} onClick={handleCancelButtonClick}></NavMainButton>
+                    <NavButton text={"Сохранить"} className={styles.saveButton} onClick={handleSaveButtonClick}></NavButton>
                 </div>
             </div>
         </div>

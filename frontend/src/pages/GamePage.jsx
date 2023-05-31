@@ -23,6 +23,9 @@ import NavDeleteButton from "../components/NavDeleteButton";
 import PhotoProfile from "../components/images/PhotoProfile.png";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { AspectRatio } from 'react-aspect-ratio';
+import Header from "../components/Header";
+
+
 
 function GamePage({ history }) {
     const CorodedStar = (props) => {
@@ -97,6 +100,7 @@ function GamePage({ history }) {
             <Helmet>
                 <title>{game.loaded ? game.name : "Загрузка"}</title>
             </Helmet>
+            <Header/>
             <div className={styles.pageGrid}>
                 <div className={styles.sideBar}>
                     <span className={styles.titleText}>Навигация</span>
@@ -123,11 +127,11 @@ function GamePage({ history }) {
                                                         <div className={styles.ratingContainer}>
                                                             <StyledRating
                                                                 name="customized-color"
-                                                                defaultValue={2}
+                                                                defaultValue={0}
                                                                 getLabelText={(value) =>
                                                                     `${value} Heart${value !== 1 ? "s" : ""}`
                                                                 }
-                                                                precision={0.5}
+                                                                precision={1}
                                                                 icon={<CorodedStar fontSize="inherit" />}
                                                                 emptyIcon={<StarIcon fontSize="inherit" />}
                                                                 onChange={handleRatingChange}
@@ -181,7 +185,7 @@ function GamePage({ history }) {
                                                         <div>
                                                             <div>
                                                                 <NavMainButton
-                                                                    className={styles.button}
+                                                                    className={styles.gamebutton}
                                                                     text={"Играть"}
                                                                     href={`/games/${params.gameId}/play`}
                                                                 ></NavMainButton>
@@ -201,13 +205,12 @@ function GamePage({ history }) {
                                                             {!game.isPublicated &&
                                                                 auth.authenticated &&
                                                                 auth.user.isAdmin() && (
-                                                                <PublishButton
-                                                                    variant="contained"
+                                                                <NavMainButton
+                                                                    className={styles.gamebutton}
+                                                                    text={"Одобрить публикацию"}                                                                
                                                                     onClick={handlePublishButtonClick}
-                                                                >
-                                                                    <CheckIcon />
-                                                                </PublishButton>
-                                                            )}
+                                                                ></NavMainButton>
+                                                            )}                                                           
                                                         </div>
                                                     </div>
                                                 </div>
