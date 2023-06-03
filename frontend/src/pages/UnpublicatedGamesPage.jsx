@@ -29,7 +29,7 @@ function UnpublicatedGamesPage() {
             </Helmet>            
             <Header/>
             <PageLayout>
-                <h2>Неопубликованные игры</h2>
+                <h2 className={styles.personTitle}>{"Неопубликованные игры"}</h2>
                 <div className={styles.gamesWrapper}>
                     <div className={styles.gamesSection}>
                         <div className={styles.gamesGrid}>

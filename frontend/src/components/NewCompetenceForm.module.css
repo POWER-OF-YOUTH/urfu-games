@@ -2,3 +2,12 @@
     display: flex;
     flex-flow: column nowrap;
 }
+
+.createButton{
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.textTitle{
+    margin: 5px 0 5px 0;
+}

@@ -1,3 +1,6 @@
+@import "../../styles/variables.css";
+
+
 .gamePublishForm__wrapper {
     display: grid;
     grid-gap: 30px;
@@ -27,21 +30,17 @@
     }
 }
 
-.gamePublishForm__label {
-    font-family: "Roboto", sans-serif;
-    font-weight: bold;
+.gamePublishForm__label {    
+    font-family: var(--subtitletle-font-family);
+    font-weight: var(--subtitletle-font-weight);
 }
+
+
 
 .gamePublishForm__caption {
     text-align: justify;
     color: grey;
 }
 
-.publishButtonContainer {
-    margin-top: 30px;
-}
 
-.publishButton {
-    width: 100%;
-}
 

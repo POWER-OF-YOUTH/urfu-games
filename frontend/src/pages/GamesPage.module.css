@@ -59,17 +59,18 @@
     color: black;
 }
 
-.gamesSectionCaptionWrapper {
-    /* display: flex;
+/* .gamesSectionCaptionWrapper {
+    display: flex;
     justify-content: space-between;
     margin-bottom: var(--gamesSectionCaption-spacing);
-    font-family: var(--title-font-family); */
+    font-family: var(--title-font-family);
 
 
-}
+} */
 
 .gamesSectionCaption {
     margin: 0;
+    padding-bottom: 16px;
 }
 
 .gamesGrid {

@@ -97,7 +97,7 @@ function Header({ variant = "standard", onChange }) {
                         </div> 
                     </div>
                     <div className={styles.navButton}>             
-                        <NavMainButton text={'Найти'} className={styles.test}> </NavMainButton> <></>
+                        <NavMainButton text={'Найти'} href={"/games"} className={styles.test}> </NavMainButton> <></>
                         {
                             auth.authenticated ? 
                                 <NavButton text={'Стать разработчиком'} href={"/games/new "}  className={styles.createrButton}> </NavButton>:<></>

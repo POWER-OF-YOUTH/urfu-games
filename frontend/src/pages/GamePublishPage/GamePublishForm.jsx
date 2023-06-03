@@ -17,6 +17,8 @@ import ParticipantsSelector from "../../components/ParticipantsSelector";
 import * as gamesAPI from "../../utils/api/gamesAPI";
 
 import styles from "./GamePublishForm.module.css";
+import NavMainButton from "../../components/NavMainButton";
+import NavButton from "../../components/NavButton";
 
 /**
  * Форма для публикации игры.
@@ -144,25 +146,24 @@ function GamePublishForm({className, ...props}) {
                         />
                     </GamePublishFormField>
                 </div>
-
                 {
-                /*
-                    <GamePublishFormField className={styles.gamePublishForm__field_checkpoints} label="Чекпоинты">
-                        <CheckpointsMaker
-                            className={classNames(styles.checkpointsMaker)}
-                            name="checkpoints"
-                            competencies={values.competencies}
-                            onChange={(checkpoints) => setValues({...values, checkpoints })}
-                        />
-                    </GamePublishFormField>
-                */
+                
+                    // <GamePublishFormField className={styles.gamePublishForm__field_checkpoints} label="Чекпоинты">
+                    //     <CheckpointsMaker
+                    //         className={classNames(styles.checkpointsMaker)}
+                    //         name="checkpoints"
+                    //         competencies={values.competencies}
+                    //         onChange={(checkpoints) => setValues({...values, checkpoints })}
+                    //     />
+                    // </GamePublishFormField>                
                 }
             </div>
 
             <div className={classNames(styles.publishButtonContainer)}>
-                <PublishButton className={styles.publishButton} variant="contained" type="submit">
+                <PublishButton  variant="contained" type="submit">
                     Опубликовать
                 </PublishButton>
+                <NavButton className={styles.button} text={"Видео-инструкция"} href={"https://www.youtube.com/watch?v=bbbMyl4sEs4"}></NavButton>
             </div>
         </form>
     );
@@ -194,14 +195,41 @@ function GamePublishFormField({
 }
 
 
-const PublishButton = styled(Button)({
-    backgroundColor: "#0463EA",
+const PublishButton = styled(Button)({    
+    textTransform: "none",
+    whiteSpace: "nowrap",
     color: "white",
+    borderRadius: "8px",
+    border: "2px solid rgba(4, 99, 234, 1)",
+    backgroundColor: "#0463EA",
+    padding: "3px 16px",
+    marginBottom: "4px",
+    marginRight: "30px",
+    fontSize: "16px",
+    maxHeight: "40px", 
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    display: "inline-block",
+    fontFamily: "var(--subtitletle-font-family)",
+    fontWeight: "var(--subtitletle-font-weight)",
     boxShadow: "none",
+    
     "&:hover": {
         backgroundColor: "#4D96FF",
         boxShadow: "none",
-    },
+        cursor: "pointer",
+        borderColor: "#4D96FF",
+
+    }, 
+    "&:hover:not(.disabled)":{
+        
+    }  
+
+
+
+
+
 });
 
 export default GamePublishForm;

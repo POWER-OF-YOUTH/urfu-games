@@ -8,17 +8,20 @@ import {
 } from "@mui/material";
 
 import NewCompetenceForm from "./NewCompetenceForm";
+import NavMainButton from "./NavMainButton";
+import NavButton from "./NavButton";
 
 function NewCompetenceDialog({onClose, ...props}) {
     const handleClose = onClose;
 
     return (
         <Dialog {...props}>
-            <DialogTitle>Создание компетенции</DialogTitle>
+            <DialogTitle><h2>Cоздание компетенции</h2></DialogTitle>
             <DialogContent>
                 <NewCompetenceForm />
                 <DialogActions>
-                    <Button onClick={handleClose}>Готово</Button>
+                    {/* <Button onClick={handleClose}>Готово</Button> */}
+                    <NavButton text={"Готово"} onClick={handleClose}></NavButton>                    
                 </DialogActions>
             </DialogContent>
         </Dialog>

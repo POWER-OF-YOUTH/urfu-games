@@ -2,9 +2,9 @@
     --block-caption-color: black;
     --caption-color: grey;
     --caption-font-size: 30px;
-    --caption-font: "Roboto" sans-serif;
+    --caption-font: "Open Sans", sans-serif;
     --description-color: #403E3F;
-    --name-font-family: "Roboto", sans-serif;
+    --name-font-family: "Open Sans", sans-serif;
     --paper-box-shadow: 0 0 10px -4px black;
     --paper-width: 1000px;
     --playButton-color: green;

@@ -9,6 +9,7 @@ import {
 import * as competenciesAPI from "../utils/api/competenciesAPI";
 
 import styles from "./NewCompetenceForm.module.css";
+import NavMainButton from "./NavMainButton";
 
 const initialValues = {
     name: "",
@@ -95,6 +96,7 @@ function NewCompetenceForm({
                     onFocus={resetFieldsProps}
                     required
                     {...nameProps}
+                    className={styles.textTitle}
                 />
                 <TextField
                     name="description"
@@ -106,8 +108,10 @@ function NewCompetenceForm({
                     multiline
                     required
                     {...descriptionProps}
+                    className={styles.textTitle}
                 />
-                <button type="button" onClick={handleSubmit}>Создать</button>
+                {/* <button type="button" onClick={handleSubmit}>Создать</button> */}
+                <NavMainButton  className={styles.createButton} text={"Создать"} onClick={handleSubmit}></NavMainButton>
             </div>
             <Snackbar
                 open={successSnackbarOpen}

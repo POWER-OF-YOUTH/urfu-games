@@ -16,6 +16,12 @@
     display: inline-block;
     margin: 0;
     padding: 0 20px 0 20px;
+    /* fontFamily: "var(--subtitletle-font-family)",
+    fontWeight: "var(--subtitletle-font-weight)", */
+
+    /* --title-font-size: 24px;
+    --title-font-weight: 600; 
+    --title-font-family: 'Open Sans', sans-serif; */
 
     /* margin: 20px 50px 20px 20px; */
     
@@ -34,6 +40,9 @@
    
   .btntext{  
     padding: 6px 16px;  
+    font-family : var(--subtitletle-font-family);
+    font-weight:  var(--subtitletle-font-weight);
+    font-size:    var(--subtitletle-font-size);
   
   }
   
