@@ -10,6 +10,7 @@ import { useStore } from "../hooks";
 import styles from "./SignInPage.module.css";
 import NavMainButton from "../components/NavMainButton";
 import NavButton from "../components/NavButton";
+import HeaderReg from "../components/HeaderReg";
 
 function SignInPage({ history }) {
     const { auth } = useStore();
@@ -43,6 +44,7 @@ function SignInPage({ history }) {
             <Helmet>
                 <title>Вход</title>
             </Helmet>
+            <HeaderReg></HeaderReg>
             <div className={styles.wrapper}>
                 <SignInForm onSubmit={handleFormSubmit} onChange={handleFormChange} />
                 {renderAlert()}

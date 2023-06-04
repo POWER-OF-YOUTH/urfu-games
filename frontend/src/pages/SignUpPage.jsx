@@ -9,6 +9,7 @@ import { useStore } from "../hooks";
 import styles from "./SignUpPage.module.css";
 import NavButton from "../components/NavButton";
 import NavMainButton from "../components/NavMainButton";
+import HeaderReg from "../components/HeaderReg";
 
 function SignUpPage({ history }) {
     const { auth } = useStore();
@@ -37,6 +38,7 @@ function SignUpPage({ history }) {
             <Helmet>
                 <title>Регистрация</title>
             </Helmet>
+            <HeaderReg></HeaderReg>
             <div className={styles.wrapper}>
                 <SignUpForm onSubmit={handleFormSubmit} onChange={handleFormChange} />
                 {renderAlert()}
