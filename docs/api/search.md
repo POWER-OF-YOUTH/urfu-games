@@ -27,7 +27,7 @@ GET /search/users?q=a
     {
         "id": "beb8c2a0-0868-46ee-89fd-04d317d5b5db",
         "login": "admin",
-        "email": "admin@158.160.20.41.com",
+        "email": "admin@89.223.124.186.com",
         "role": 0,
         "avatar": "https://i.ibb.co/C9VKrMC/default-avatar.png",
         "createdAt": "2022-04-14T11:19:09.004Z"
@@ -75,7 +75,7 @@ GET /search/games?q=test
         "author": {
             "id": "dad9ee6b-3d87-41ed-ae1a-bbd0b1705d20",
             "login": "admin",
-            "email": "admin@158.160.20.41.com",
+            "email": "admin@89.223.124.186.com",
             "role": 1,
             "name": null,
             "surname": null,
