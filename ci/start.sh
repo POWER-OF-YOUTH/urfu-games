@@ -19,9 +19,9 @@ if [[ -z $USER_PWD_SALT ]]; then
     exit 1
 fi
 
-FRONTEND_URI="https://89.223.124.186.com"
-API_URI="https://api.89.223.124.186.com"
-FILES_URI="https://files.89.223.124.186.com"
+FRONTEND_URI="https://trajector.ru.com"
+API_URI="https://api.trajector.ru.com"
+FILES_URI="https://files.trajector.ru.com"
 DATABASE_URI="postgres://postgres:$POSTGRES_PASSWORD@postgres:5432/main"
 YM_ID=${YM_ID:-0}
 
@@ -85,6 +85,6 @@ start_nginx() {
 reset
 start_postgres "/var/lib/postgresql/data" 5432
 start_api 3000
-start_files "/var/www/files.89.223.124.186.com" 3001
+start_files "/var/www/files.trajector.ru.com" 3001
 start_nginx
 
