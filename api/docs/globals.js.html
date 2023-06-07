@@ -47,7 +47,7 @@ checkEnvVariableDefined("ADMIN_PASSWORD");
 checkEnvVariableDefined("DATABASE_URI");
 
 /** API URI. */
-export const API_URI = "https://api.trajector.ru.com";
+export const API_URI = "https://api.trajector.ru";
 /** Адрес к которому будет прикреплен сервер. */
 export const HOSTNAME = process.env.HOSTNAME ?? "localhost";
 /** Порт, который будет использоваться сервером. */
@@ -55,7 +55,7 @@ export const PORT = Number(process.env.PORT ?? 3000);
 /** Логин администратора. */
 export const ADMIN_LOGIN = "admin";
 /** Адрес электронной почты администратора. */
-export const ADMIN_EMAIL = "admin@trajector.ru.com";
+export const ADMIN_EMAIL = "admin@trajector.ru";
 /** Пароль администратора. */
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 /** Секрет, который будет использоваться для подписи JWT. */

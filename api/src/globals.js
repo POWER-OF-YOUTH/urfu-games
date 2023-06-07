@@ -28,7 +28,7 @@ export const PORT = Number(process.env.PORT ?? 3000);
 /** Логин администратора. */
 export const ADMIN_LOGIN = "admin";
 /** Адрес электронной почты администратора. */
-export const ADMIN_EMAIL = "admin@trajector.ru.com";
+export const ADMIN_EMAIL = "admin@trajector.ru";
 /** Пароль администратора. */
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 /** Секрет, который будет использоваться для подписи JWT. */
