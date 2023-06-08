@@ -30,7 +30,7 @@ $ npm install
 
 ### Linux/Windows
 
-Чтобы запустить development версию проекта установите [Python](https://www.python.org/) и [Docker](https://www.docker.com/), после чего выполните скрипт `up-all.py` в корневой директории проекта:
+Чтобы запустить development версию проекта настоятельно ознакомтесь с README в папке urfu-games/ci установите [Python](https://www.python.org/) и [Docker](https://www.docker.com/), после чего выполните скрипт `up-all.py` в корневой директории проекта:
 
 Linux:
 
